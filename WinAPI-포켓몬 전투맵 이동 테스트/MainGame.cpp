@@ -17,7 +17,10 @@ HRESULT MainGame::Init()
 	GameNode::Init();
 	isDebug = false;
 
-
+	IMAGE->AddImage("Player", "images/trainer.bmp", WINSIZEX / 2, WINSIZEY / 2,
+		70 * 3, 100 * 4, 3, 4, true, RGB(255, 200, 106));
+	IMAGE->AddImage("Forest", "images/forest.bmp", 0, 0,
+		WINSIZEX * 2, WINSIZEY * 2, 1, 1, false, RGB(255, 0, 255));
 
 	SCENE->AddScene("Test", new TestScene);
 
