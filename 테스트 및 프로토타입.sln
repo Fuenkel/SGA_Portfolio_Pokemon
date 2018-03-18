@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬 상점 픽셀 충돌 테스트", "WinAPI-포켓몬 상점 픽셀 충돌 테스트\WinAPI-포켓몬 상점 픽셀 충돌 테스트.vcxproj", "{967982C9-A8B4-45C8-B930-032412AC6226}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-상점 픽셀 충돌", "WinAPI-포켓몬 상점 픽셀 충돌 테스트\WinAPI-포켓몬 상점 픽셀 충돌 테스트.vcxproj", "{967982C9-A8B4-45C8-B930-032412AC6226}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬 전투씬 프로토타입", "WinAPI-포켓몬 전투씬 프로토타입\WinAPI-포켓몬 전투씬 프로토타입.vcxproj", "{1D81A78E-C98F-4C6A-A447-F70283FD32FC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prototype-전투", "WinAPI-포켓몬 전투씬 프로토타입\WinAPI-포켓몬 전투씬 프로토타입.vcxproj", "{1D81A78E-C98F-4C6A-A447-F70283FD32FC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬스터+", "WinAPI-포켓몬스터+\WinAPI-포켓몬스터+.vcxproj", "{6E2AE89B-D1E4-494F-B988-51CA9640CC53}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-전투맵 이동", "WinAPI-포켓몬 전투맵 이동 테스트\WinAPI-포켓몬 전투맵 이동 테스트.vcxproj", "{62ED17D5-AF49-4939-A988-95AF6884039F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x64.Build.0 = Release|x64
 		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x86.ActiveCfg = Release|Win32
 		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x86.Build.0 = Release|Win32
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x64.ActiveCfg = Debug|x64
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x64.Build.0 = Debug|x64
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x86.ActiveCfg = Debug|Win32
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x86.Build.0 = Debug|Win32
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x64.ActiveCfg = Release|x64
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x64.Build.0 = Release|x64
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x86.ActiveCfg = Release|Win32
-		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x86.Build.0 = Release|Win32
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Debug|x64.ActiveCfg = Debug|x64
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Debug|x64.Build.0 = Debug|x64
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Debug|x86.ActiveCfg = Debug|Win32
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Debug|x86.Build.0 = Debug|Win32
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x64.ActiveCfg = Release|x64
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x64.Build.0 = Release|x64
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x86.ActiveCfg = Release|Win32
+		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
