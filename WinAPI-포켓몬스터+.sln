@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬스터+", "WinAPI-포켓몬스터+\WinAPI-포켓몬스터+.vcxproj", "{FF16FF20-F439-4A4A-A24A-2156C15CB81C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬 상점 픽셀 충돌 테스트", "WinAPI-포켓몬 상점 픽셀 충돌 테스트\WinAPI-포켓몬 상점 픽셀 충돌 테스트.vcxproj", "{967982C9-A8B4-45C8-B930-032412AC6226}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬 전투씬 프로토타입", "WinAPI-포켓몬 전투씬 프로토타입\WinAPI-포켓몬 전투씬 프로토타입.vcxproj", "{1D81A78E-C98F-4C6A-A447-F70283FD32FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-포켓몬스터+", "WinAPI-포켓몬스터+\WinAPI-포켓몬스터+.vcxproj", "{6E2AE89B-D1E4-494F-B988-51CA9640CC53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,30 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Debug|x64.ActiveCfg = Debug|x64
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Debug|x64.Build.0 = Debug|x64
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Debug|x86.ActiveCfg = Debug|Win32
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Debug|x86.Build.0 = Debug|Win32
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Release|x64.ActiveCfg = Release|x64
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Release|x64.Build.0 = Release|x64
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Release|x86.ActiveCfg = Release|Win32
-		{FF16FF20-F439-4A4A-A24A-2156C15CB81C}.Release|x86.Build.0 = Release|Win32
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Debug|x64.ActiveCfg = Debug|x64
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Debug|x64.Build.0 = Debug|x64
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Debug|x86.ActiveCfg = Debug|Win32
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Debug|x86.Build.0 = Debug|Win32
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Release|x64.ActiveCfg = Release|x64
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Release|x64.Build.0 = Release|x64
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Release|x86.ActiveCfg = Release|Win32
+		{967982C9-A8B4-45C8-B930-032412AC6226}.Release|x86.Build.0 = Release|Win32
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Debug|x64.ActiveCfg = Debug|x64
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Debug|x64.Build.0 = Debug|x64
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Debug|x86.ActiveCfg = Debug|Win32
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Debug|x86.Build.0 = Debug|Win32
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x64.ActiveCfg = Release|x64
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x64.Build.0 = Release|x64
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x86.ActiveCfg = Release|Win32
+		{1D81A78E-C98F-4C6A-A447-F70283FD32FC}.Release|x86.Build.0 = Release|Win32
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x64.ActiveCfg = Debug|x64
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x64.Build.0 = Debug|x64
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Debug|x86.Build.0 = Debug|Win32
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x64.ActiveCfg = Release|x64
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x64.Build.0 = Release|x64
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x86.ActiveCfg = Release|Win32
+		{6E2AE89B-D1E4-494F-B988-51CA9640CC53}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
