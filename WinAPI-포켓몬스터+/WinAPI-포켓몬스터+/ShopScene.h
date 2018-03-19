@@ -6,19 +6,18 @@
 
 #define PLAYER_SPEED 5.0f
 
-enum ChangeSceneStatus2 {
-	SCENE2_EXIT,
-	SCENE2_SHOP,
-	SCENE2_END
+enum ChangeSceneStatus3 {
+	SCENE3_EXIT,
+	SCENE3_END
 };
 
-struct tagChangeSceneInfo2 {
+struct tagChangeSceneInfo3 {
 	RECT rc;
 	float x, y;
 	float width, height;
 };
 
-class Town2Scene : public GameNode
+class ShopScene : public GameNode
 {
 private:
 	bool isDebug;
@@ -29,14 +28,15 @@ private:
 
 	Player playerInfo;
 
-	tagChangeSceneInfo2 sceneInfo[SCENE2_END];
-
 	float bgX, bgY;
+
 	char str[128];
 	RECT temp;
+
+	tagChangeSceneInfo3 sceneInfo[SCENE3_END];
 public:
-	Town2Scene();
-	~Town2Scene();
+	ShopScene();
+	~ShopScene();
 
 	virtual HRESULT Init() override;
 	virtual void Release() override;

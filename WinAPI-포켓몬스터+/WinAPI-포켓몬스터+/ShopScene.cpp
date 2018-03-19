@@ -1,56 +1,52 @@
 #include "stdafx.h"
-#include "Town1Scene.h"
+#include "ShopScene.h"
 
 
-Town1Scene::Town1Scene()
+ShopScene::ShopScene()
 {
 }
 
 
-Town1Scene::~Town1Scene()
+ShopScene::~ShopScene()
 {
 }
 
-HRESULT Town1Scene::Init()
+HRESULT ShopScene::Init()
 {
-	isDebug = false;
-
-	bg = IMAGE->FindImage("Town1");
-	bgPixel = IMAGE->FindImage("Town1Pixel");
+	bg = IMAGE->FindImage("Shop");
+	bgPixel = IMAGE->FindImage("ShopPixel");
 	player = IMAGE->FindImage("Player");
 
-	playerInfo.Init(DIRECTION_DOWN, WINSIZEX / 2, WINSIZEY / 2, 70, 100);
+	playerInfo.Init(DIRECTION_UP, 487, 494, 70, 100);
 	playerInfo.SetMoveFrame(PLAYER_IDLE);
 
-	bgX = -80;
-	bgY = -114;
+	bgX = 0;
+	bgY = 0;
 
-	sceneInfo[SCENE_EXIT].x = WINSIZEX / 2 + 75;
-	sceneInfo[SCENE_EXIT].y = -270;
-	sceneInfo[SCENE_EXIT].width = 180;
-	sceneInfo[SCENE_EXIT].height = 50;
-	sceneInfo[SCENE_EXIT].rc = RectMake(
-		sceneInfo[SCENE_EXIT].x, sceneInfo[SCENE_EXIT].y, 
-		sceneInfo[SCENE_EXIT].width, sceneInfo[SCENE_EXIT].height);
+	sceneInfo[SCENE3_EXIT].x = 460;
+	sceneInfo[SCENE3_EXIT].y = 600;
+	sceneInfo[SCENE3_EXIT].width = 105;
+	sceneInfo[SCENE3_EXIT].height = 65;
+	sceneInfo[SCENE3_EXIT].rc = RectMake(
+		sceneInfo[SCENE3_EXIT].x, sceneInfo[SCENE3_EXIT].y,
+		sceneInfo[SCENE3_EXIT].width, sceneInfo[SCENE3_EXIT].height);
 
 	return S_OK;
 }
 
-void Town1Scene::Release()
+void ShopScene::Release()
 {
 }
 
-void Town1Scene::Update()
+void ShopScene::Update()
 {
 	PlayerMove();
-	playerInfo.Probe(bgPixel, bgX, bgY, WINSIZEX / 2 + bgX, WINSIZEY / 2 + bgY);
+	playerInfo.Probe(bgPixel, bgX, bgY, bgX, bgY);
 
-	if (IntersectRect(&temp, &sceneInfo[SCENE_EXIT].rc, &playerInfo.GetRect())) {
-		bgX = 45;
-		bgY = -384;
-		playerInfo.SetX(512);
-		playerInfo.SetY(59);
-		playerInfo.SetDirection(DIRECTION_DOWN);
+	if (IntersectRect(&temp, &sceneInfo[SCENE3_EXIT].rc, &playerInfo.GetRect())) {
+		playerInfo.SetX(487);
+		playerInfo.SetY(494);
+		playerInfo.SetDirection(DIRECTION_UP);
 		SCENE->ChangeScene("Town2");
 	}
 
@@ -61,19 +57,19 @@ void Town1Scene::Update()
 	//==================================================//
 }
 
-void Town1Scene::Render()
+void ShopScene::Render()
 {
 	//=================================================
 	{
 		//bg->Render(GetMemDC());
-		bg->Render(GetMemDC(), 0, 0, 
-			WINSIZEX / 2 + bgX, WINSIZEY / 2 + bgY, WINSIZEX, WINSIZEY);
+		bg->Render(GetMemDC(), 0, 0,
+			bgX, bgY, WINSIZEX, WINSIZEY);
 	}
 	//==================   Debug   ====================
 	if (isDebug)
 	{
 		bgPixel->Render(GetMemDC(), 0, 0,
-			WINSIZEX / 2 + bgX, WINSIZEY / 2 + bgY, WINSIZEX, WINSIZEY);
+			bgX, bgY, WINSIZEX, WINSIZEY);
 		sprintf_s(str, "bg x,y %f %f", bgX, bgY);
 		TextOut(GetMemDC(), 10, 10, str, strlen(str));
 		sprintf_s(str, "player x,y %f %f", playerInfo.GetX(), playerInfo.GetY());
@@ -81,7 +77,7 @@ void Town1Scene::Render()
 		sprintf_s(str, "mouse : %d %d", g_ptMouse.x, g_ptMouse.y);
 		TextOut(GetMemDC(), 10, 50, str, strlen(str));
 
-		RectangleMake(GetMemDC(), sceneInfo[SCENE_EXIT].rc);
+		RectangleMake(GetMemDC(), sceneInfo[SCENE3_EXIT].rc);
 		RectangleMake(GetMemDC(), playerInfo.GetRect());
 	}
 	//=================================================
@@ -90,7 +86,7 @@ void Town1Scene::Render()
 		playerInfo.GetMoveFrame(), playerInfo.GetDirection());
 }
 
-void Town1Scene::PlayerMove()
+void ShopScene::PlayerMove()
 {
 	// left
 	if (INPUT->GetKeyDown(VK_LEFT)) {
@@ -102,19 +98,19 @@ void Town1Scene::PlayerMove()
 			playerInfo.SetDirection(DIRECTION_LEFT);
 
 		playerInfo.AddMoveFrame(0.1f);
-		
+
 		//playerInfo.AddX(-2.5f);
-		
+
 		if (playerInfo.GetX() > WINSIZEX / 2) {
 			playerInfo.AddX(-PLAYER_SPEED);
 		}
 		else {
 			bgX -= PLAYER_SPEED;
-			if (bgX > -WINSIZEX / 2)
+			if (bgX > 0)
 				OtherMove(DIRECTION_RIGHT);
 		}
-		if (bgX < -WINSIZEX / 2) {
-			bgX = -WINSIZEX / 2;
+		if (bgX < 0) {
+			bgX = 0;
 			playerInfo.AddX(-PLAYER_SPEED);
 		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
@@ -134,19 +130,19 @@ void Town1Scene::PlayerMove()
 			playerInfo.SetDirection(DIRECTION_RIGHT);
 
 		playerInfo.AddMoveFrame(0.1f);
-		
+
 		//playerInfo.AddX(2.5f);
-		
+
 		if (playerInfo.GetX() < WINSIZEX / 2) {
 			playerInfo.AddX(PLAYER_SPEED);
 		}
 		else {
 			bgX += PLAYER_SPEED;
-			if (bgX < WINSIZEX / 2)
+			if (bgX < 0)
 				OtherMove(DIRECTION_LEFT);
 		}
-		if (bgX > WINSIZEX / 2) {
-			bgX = WINSIZEX / 2;
+		if (bgX > 0) {
+			bgX = 0;
 			playerInfo.AddX(PLAYER_SPEED);
 		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
@@ -173,11 +169,11 @@ void Town1Scene::PlayerMove()
 		}
 		else {
 			bgY -= PLAYER_SPEED;
-			if (bgY > -WINSIZEY / 2)
+			if (bgY > 0)
 				OtherMove(DIRECTION_DOWN);
 		}
-		if (bgY < -WINSIZEY / 2) {
-			bgY = -WINSIZEY / 2;
+		if (bgY < 0) {
+			bgY = 0;
 			playerInfo.AddY(-PLAYER_SPEED);
 		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
@@ -204,11 +200,11 @@ void Town1Scene::PlayerMove()
 		}
 		else {
 			bgY += PLAYER_SPEED;
-			if (bgY < WINSIZEY / 2)
+			if (bgY < 0)
 				OtherMove(DIRECTION_UP);
 		}
-		if (bgY > WINSIZEY / 2) {
-			bgY = WINSIZEY / 2;
+		if (bgY > 0) {
+			bgY = 0;
 			playerInfo.AddY(PLAYER_SPEED);
 		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
@@ -219,25 +215,25 @@ void Town1Scene::PlayerMove()
 	}
 }
 
-void Town1Scene::OtherMove(Direction dir)
+void ShopScene::OtherMove(Direction dir)
 {
-	switch (dir)
-	{
-	case DIRECTION_DOWN:
-		sceneInfo[SCENE_EXIT].y += PLAYER_SPEED;
-		break;
-	case DIRECTION_UP:
-		sceneInfo[SCENE_EXIT].y -= PLAYER_SPEED;
-		break;
-	case DIRECTION_LEFT:
-		sceneInfo[SCENE_EXIT].x -= PLAYER_SPEED;
-		break;
-	case DIRECTION_RIGHT:
-		sceneInfo[SCENE_EXIT].x += PLAYER_SPEED;
-		break;
-	}
-	
-	sceneInfo[SCENE_EXIT].rc = RectMake(
-		sceneInfo[SCENE_EXIT].x, sceneInfo[SCENE_EXIT].y,
-		sceneInfo[SCENE_EXIT].width, sceneInfo[SCENE_EXIT].height);
+	//switch (dir)
+	//{
+	//case DIRECTION_DOWN:
+	//	sceneInfo[SCENE3_EXIT].y += PLAYER_SPEED;
+	//	break;
+	//case DIRECTION_UP:
+	//	sceneInfo[SCENE3_EXIT].y -= PLAYER_SPEED;
+	//	break;
+	//case DIRECTION_LEFT:
+	//	sceneInfo[SCENE3_EXIT].x -= PLAYER_SPEED;
+	//	break;
+	//case DIRECTION_RIGHT:
+	//	sceneInfo[SCENE3_EXIT].x += PLAYER_SPEED;
+	//	break;
+	//}
+
+	//sceneInfo[SCENE3_EXIT].rc = RectMake(
+	//	sceneInfo[SCENE3_EXIT].x, sceneInfo[SCENE3_EXIT].y,
+	//	sceneInfo[SCENE3_EXIT].width, sceneInfo[SCENE3_EXIT].height);
 }

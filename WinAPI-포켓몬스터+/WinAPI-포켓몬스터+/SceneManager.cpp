@@ -55,6 +55,8 @@ GameNode * SceneManager::AddScene(string sceneName, GameNode * scene)
 	if (_mSceneList.count(sceneName) > 0) return NULL;
 
 	_mSceneList[sceneName] = scene;
+	
+	_mSceneList[sceneName]->Init();
 
 	return _mSceneList[sceneName];
 }
@@ -65,14 +67,17 @@ HRESULT SceneManager::ChangeScene(string sceneName)
 	if (_mSceneList.count(sceneName) < 1) return E_FAIL;
 	if (_mSceneList[sceneName] == _currentScene) return E_FAIL;
 
-	// 여기까지 왔으면 씬 변경
-	if (SUCCEEDED(_mSceneList[sceneName]->Init())) {
-		// 기존 씬이 존재 하면 기존 씬 릴리즈
-		if (_currentScene) _currentScene->Release();
-		_currentScene = _mSceneList[sceneName];
+	//// 여기까지 왔으면 씬 변경
+	//if (SUCCEEDED(_mSceneList[sceneName]->Init())) {
+	//	// 기존 씬이 존재 하면 기존 씬 릴리즈
+	//	if (_currentScene) _currentScene->Release();
+	//	_currentScene = _mSceneList[sceneName];
 
-		return S_OK;
-	}
+	//	return S_OK;
+	//}
 
-	return E_FAIL;
+	//return E_FAIL;
+
+	_currentScene = _mSceneList[sceneName];
+	return S_OK;
 }

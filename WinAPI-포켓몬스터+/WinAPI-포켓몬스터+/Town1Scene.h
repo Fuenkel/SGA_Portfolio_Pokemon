@@ -4,7 +4,18 @@
 
 #include "Player.h"
 
-#define PLAYER_SPEED 2.5f
+#define PLAYER_SPEED 5.0f
+
+enum ChangeSceneStatus {
+	SCENE_EXIT,
+	SCENE_END
+};
+
+struct tagChangeSceneInfo {
+	RECT rc;
+	float x, y;
+	float width, height;
+};
 
 class Town1Scene : public GameNode
 {
@@ -18,7 +29,11 @@ private:
 	Player playerInfo;
 
 	float bgX, bgY;
+
 	char str[128];
+	RECT temp;
+
+	tagChangeSceneInfo sceneInfo[SCENE_END];
 public:
 	Town1Scene();
 	~Town1Scene();

@@ -40,6 +40,9 @@
     <Filter Include="GameScene\Town2">
       <UniqueIdentifier>{d29f3725-cfa1-49d1-be2e-8f24a1ccc422}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameScene\Shop">
+      <UniqueIdentifier>{404d0e52-8c1c-4baf-a133-c2cca75b0edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="Town2Scene.h">
       <Filter>GameScene\Town2</Filter>
     </ClInclude>
+    <ClInclude Include="ShopScene.h">
+      <Filter>GameScene\Shop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -139,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Town2Scene.cpp">
       <Filter>GameScene\Town2</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopScene.cpp">
+      <Filter>GameScene\Shop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
