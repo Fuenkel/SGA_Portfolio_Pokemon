@@ -13,7 +13,7 @@ TestScene::~TestScene()
 
 HRESULT TestScene::Init()
 {
-	isDebug = false;
+	isDebug = true;
 
 	bg = IMAGE->FindImage("Forest");
 	player = IMAGE->FindImage("Player");
@@ -22,6 +22,10 @@ HRESULT TestScene::Init()
 	playerInfo.SetMoveFrame(PLAYER_IDLE);
 
 	x = y = 0;
+
+	testX = WINSIZEX / 2;
+	testY = WINSIZEY / 2 - 200;
+	test = RectMake(testX, testY, 50, 50);
 
 	return S_OK;
 }
@@ -46,15 +50,18 @@ void TestScene::Update()
 
 void TestScene::Render()
 {
-	//bg->Render(GetMemDC());
+	//bg->Render(GetMemDC());'
 	bg->Render(GetMemDC(), 0, 0, WINSIZEX / 2 + x, WINSIZEY / 2 + y, WINSIZEX, WINSIZEY);
 	//bg->Render(GetMemDC(), 0, 0, playerInfo.GetX(), playerInfo.GetY(), WINSIZEX, WINSIZEY);
 
-	sprintf_s(str, "%f %f", x, y);
+	sprintf_s(str, "bg : %f %f", x, y);
 	TextOut(GetMemDC(), 10, 10, str, strlen(str));
 
-	if (isDebug) {
+	sprintf_s(str, "player : %f %f", playerInfo.GetX(), playerInfo.GetY());
+	TextOut(GetMemDC(), 10, 30, str, strlen(str));
 
+	if (isDebug) {
+		RectangleMake(GetMemDC(), test);
 	}
 
 	player->FrameRender(GetMemDC(), playerInfo.GetX(), playerInfo.GetY(),
@@ -70,10 +77,19 @@ void TestScene::PlayerMove()
 	}
 	if (INPUT->GetKey(VK_LEFT)) {
 		playerInfo.AddMoveFrame(0.1f);
-		playerInfo.AddX(-2.5f);
-		x -= 2.5f;
-		if (x < -WINSIZEX / 2)
+		//playerInfo.AddX(-2.5f);
+		if (playerInfo.GetX() > WINSIZEX / 2) {
+			playerInfo.AddX(-2.5f);
+		}
+		else {
+			x -= SPEED;
+			if (x > -WINSIZEX / 2)
+				OtherMove(DIRECTION_RIGHT);
+		}
+		if (x < -WINSIZEX / 2) {
 			x = -WINSIZEX / 2;
+			playerInfo.AddX(-2.5f);
+		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
 			playerInfo.SetMoveFrame(0);
 	}
@@ -88,10 +104,19 @@ void TestScene::PlayerMove()
 	}
 	if (INPUT->GetKey(VK_RIGHT)) {
 		playerInfo.AddMoveFrame(0.1f);
-		playerInfo.AddX(2.5f);
-		x += 2.5f;
-		if (x > WINSIZEX / 2)
+		//playerInfo.AddX(2.5f);
+		if (playerInfo.GetX() < WINSIZEX / 2) {
+			playerInfo.AddX(2.5f);
+		}
+		else {
+			x += SPEED;
+			if (x < WINSIZEX / 2)
+				OtherMove(DIRECTION_LEFT);
+		}
+		if (x > WINSIZEX / 2) {
 			x = WINSIZEX / 2;
+			playerInfo.AddX(2.5f);
+		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
 			playerInfo.SetMoveFrame(0);
 	}
@@ -106,10 +131,19 @@ void TestScene::PlayerMove()
 	}
 	if (INPUT->GetKey(VK_UP)) {
 		playerInfo.AddMoveFrame(0.1f);
-		playerInfo.AddY(-2.5f);
-		y -= 2.5f;
-		if (y < -WINSIZEY / 2)
+		//playerInfo.AddY(-2.5f);
+		if (playerInfo.GetY() > WINSIZEY / 2) {
+			playerInfo.AddY(-2.5f);
+		}
+		else {
+			y -= SPEED;
+			if (y > -WINSIZEY / 2)
+				OtherMove(DIRECTION_DOWN);
+		}
+		if (y < -WINSIZEY / 2) {
 			y = -WINSIZEY / 2;
+			playerInfo.AddY(-2.5f);
+		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
 			playerInfo.SetMoveFrame(0);
 	}
@@ -124,15 +158,45 @@ void TestScene::PlayerMove()
 	}
 	if (INPUT->GetKey(VK_DOWN)) {
 		playerInfo.AddMoveFrame(0.1f);
-		playerInfo.AddY(2.5f);
-		y += 2.5f;
-		if (y > WINSIZEY / 2)
+		//playerInfo.AddY(2.5f);
+		if (playerInfo.GetY() < WINSIZEY / 2) {
+			playerInfo.AddY(2.5f);
+		}
+		else {
+			y += SPEED;
+			if (y < WINSIZEY / 2)
+				OtherMove(DIRECTION_UP);
+		}
+		if (y > WINSIZEY / 2) {
 			y = WINSIZEY / 2;
+			playerInfo.AddY(2.5f);
+		}
 		if ((int)playerInfo.GetMoveFrame() > 2)
 			playerInfo.SetMoveFrame(0);
 	}
 	if (INPUT->GetKeyUp(VK_DOWN)) {
 		playerInfo.SetMoveFrame(PLAYER_IDLE);
 	}
+}
+
+void TestScene::OtherMove(Direction dir)
+{
+	switch (dir)
+	{
+	case DIRECTION_DOWN:
+		testY += SPEED;
+		break;
+	case DIRECTION_UP:
+		testY -= SPEED;
+		break;
+	case DIRECTION_LEFT:
+		testX -= SPEED;
+		break;
+	case DIRECTION_RIGHT:
+		testX += SPEED;
+		break;
+	}
+
+	test = RectMake(testX, testY, 50, 50);
 }
 

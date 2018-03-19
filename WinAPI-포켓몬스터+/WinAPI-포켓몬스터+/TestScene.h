@@ -5,7 +5,7 @@
 class TestScene : public GameNode
 {
 private:
-
+	bool isDebug;
 public:
 	TestScene();
 	~TestScene();

@@ -31,6 +31,15 @@
     <Filter Include="GameFrameWork\Image">
       <UniqueIdentifier>{335315f4-caca-4fbf-b95b-7f6ce47666df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameScene">
+      <UniqueIdentifier>{d0da899e-ebdc-4029-8905-7ee10aa24e34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameScene\Town1">
+      <UniqueIdentifier>{efb46a8a-fa61-4bd4-ae93-31def96876db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameScene\Town2">
+      <UniqueIdentifier>{d29f3725-cfa1-49d1-be2e-8f24a1ccc422}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,6 +87,18 @@
     <ClInclude Include="TestScene.h">
       <Filter>GameMain</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Town1Scene.h">
+      <Filter>GameScene\Town1</Filter>
+    </ClInclude>
+    <ClInclude Include="Town2Scene.h">
+      <Filter>GameScene\Town2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -109,6 +130,15 @@
     </ClCompile>
     <ClCompile Include="TestScene.cpp">
       <Filter>GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Town1Scene.cpp">
+      <Filter>GameScene\Town1</Filter>
+    </ClCompile>
+    <ClCompile Include="Town2Scene.cpp">
+      <Filter>GameScene\Town2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
