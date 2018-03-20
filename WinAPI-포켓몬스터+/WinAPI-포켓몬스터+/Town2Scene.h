@@ -3,6 +3,7 @@
 #include "GameNode.h"
 
 #include "Player.h"
+#include "Item.h"
 
 #define PLAYER_SPEED 5.0f
 
@@ -27,13 +28,23 @@ private:
 	Image* bgPixel;
 	Image* player;
 
+	Image * ball;
+	Image * potion;
+	Image * potion2;
+	Image * booster;
+
+	Image * inventory;
+
 	Player playerInfo;
 
 	tagChangeSceneInfo2 sceneInfo[SCENE2_END];
 
 	float bgX, bgY;
+
 	char str[128];
 	RECT temp;
+	HFONT hFont;
+	HFONT oldFont;
 public:
 	Town2Scene();
 	~Town2Scene();

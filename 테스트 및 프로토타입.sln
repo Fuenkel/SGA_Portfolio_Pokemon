@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prototype-전투", "WinAPI-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-전투맵 이동", "WinAPI-포켓몬 전투맵 이동 테스트\WinAPI-포켓몬 전투맵 이동 테스트.vcxproj", "{62ED17D5-AF49-4939-A988-95AF6884039F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-인벤토리와 장비착용", "WinAPI-포켓몬 인벤토리와 장비착용 프로토파팁\WinAPI-인벤토리와 장비착용.vcxproj", "{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x64.Build.0 = Release|x64
 		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x86.ActiveCfg = Release|Win32
 		{62ED17D5-AF49-4939-A988-95AF6884039F}.Release|x86.Build.0 = Release|Win32
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Debug|x64.ActiveCfg = Debug|x64
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Debug|x64.Build.0 = Debug|x64
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Debug|x86.ActiveCfg = Debug|Win32
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Debug|x86.Build.0 = Debug|Win32
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Release|x64.ActiveCfg = Release|x64
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Release|x64.Build.0 = Release|x64
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Release|x86.ActiveCfg = Release|Win32
+		{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

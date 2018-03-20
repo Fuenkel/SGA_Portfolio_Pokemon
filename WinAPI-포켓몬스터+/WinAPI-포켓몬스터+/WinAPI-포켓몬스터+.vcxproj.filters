@@ -105,6 +105,18 @@
     <ClInclude Include="ShopScene.h">
       <Filter>GameScene\Shop</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>GameFrameWork\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -148,6 +160,15 @@
     </ClCompile>
     <ClCompile Include="ShopScene.cpp">
       <Filter>GameScene\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>GameFrameWork\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

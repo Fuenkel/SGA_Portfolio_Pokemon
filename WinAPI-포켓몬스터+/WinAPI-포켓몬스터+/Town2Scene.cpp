@@ -19,6 +19,13 @@ HRESULT Town2Scene::Init()
 	bgPixel = IMAGE->FindImage("Town2Pixel");
 	player = IMAGE->FindImage("Player");
 
+	ball = IMAGE->FindImage("Item_ball");
+	potion = IMAGE->FindImage("Item_potion");
+	potion2 = IMAGE->FindImage("Item_potion2");
+	booster = IMAGE->FindImage("Item_battleBooster");
+
+	inventory = IMAGE->FindImage("Inventory");
+
 	playerInfo.Init(DIRECTION_UP, WINSIZEX / 2, 550, 70, 100);
 	playerInfo.SetMoveFrame(PLAYER_IDLE);
 
@@ -50,8 +57,10 @@ void Town2Scene::Release()
 
 void Town2Scene::Update()
 {
-	PlayerMove();
-	playerInfo.Probe(bgPixel, bgX, bgY, WINSIZEX + bgX, WINSIZEY + bgY);
+	if (GAME->GetShowInven() == false) {
+		PlayerMove();
+		playerInfo.Probe(bgPixel, bgX, bgY, WINSIZEX + bgX, WINSIZEY + bgY);
+	}
 
 	if (IntersectRect(&temp, &sceneInfo[SCENE2_EXIT].rc, &playerInfo.GetRect())) {
 		bgX = 445;
@@ -71,6 +80,10 @@ void Town2Scene::Update()
 		SCENE->ChangeScene("Shop");
 	}
 
+	if (INPUT->GetKeyDown('I')) {
+		GAME->SetShowInven(!GAME->GetShowInven());
+	}
+
 	//====================== Debug =====================//
 	if (INPUT->GetKeyDown(VK_TAB)) {
 		isDebug = !isDebug;
@@ -85,12 +98,77 @@ void Town2Scene::Render()
 		//bg->Render(GetMemDC());
 		bg->Render(GetMemDC(), 0, 0,
 			WINSIZEX + bgX, WINSIZEY + bgY, WINSIZEX, WINSIZEY);
+		if (isDebug) {
+			bgPixel->Render(GetMemDC(), 0, 0,
+				WINSIZEX + bgX, WINSIZEY + bgY, WINSIZEX, WINSIZEY);
+		}
+
+		SetBkMode(GetMemDC(), TRANSPARENT);
+		SetTextColor(GetMemDC(), RGB(0, 0, 0));
+
+		if (GAME->GetShowInven()) {
+			inventory->AlphaRender(GetMemDC(),
+				WINSIZEX - inventory->GetWidth() - 50, 100, 225);
+
+			sprintf_s(str, "인벤토리");
+			TextOut(GetMemDC(), 670, 110, str, strlen(str));
+
+			sprintf_s(str, "Gold : %d원", GAME->GetInventory().GetGold());
+			TextOut(GetMemDC(), 820, 110, str, strlen(str));
+
+			for (int i = 0; i < ITEMCOUNT; i++) {
+				if (GAME->GetInvenInfo(i).item.itemKind == ITEM_EMPTY) continue;
+				switch (GAME->GetInvenInfo(i).item.itemKind)
+				{
+				case ITEM_MONSTERBALL:
+					ball->FrameRender(GetMemDC(),
+						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y);
+					break;
+				case ITEM_POTION:
+					potion->FrameRender(GetMemDC(),
+						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y);
+					break;
+				case ITEM_ANTIDOTE:
+				case ITEM_PARLYZEHEAL:
+				case ITEM_BURNHEAL:
+				case ITEM_ICEHEAL:
+				case ITEM_AWAKENING:
+				case ITEM_FULLHEAL:
+					potion2->FrameRender(GetMemDC(),
+						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y,
+						GAME->GetInvenInfo(i).item.itemKind - 3, 0);
+					break;
+				case BOOSTER_PLUSPOWER:
+				case BOOSTER_DEFENDUP:
+				case BOOSTER_SPECIALUP:
+				case BOOSTER_SPEEDUP:
+				case BOOSTER_SPECIALGUARD:
+				case BOOSTER_CRITICALCUTTER:
+				case BOOSTER_EFFECTGUARD:
+					booster->FrameRender(GetMemDC(),
+						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y,
+						GAME->GetInvenInfo(i).item.itemKind - 9, 0);
+					break;
+				}
+				TextOut(GetMemDC(),
+					GAME->GetInvenInfo(i).x + 50, GAME->GetInvenInfo(i).y + 10,
+					GAME->GetInvenInfo(i).item.name.c_str(),
+					strlen(GAME->GetInvenInfo(i).item.name.c_str()));
+				sprintf_s(str, "%d원", GAME->GetInvenInfo(i).item.price);
+				TextOut(GetMemDC(),
+					GAME->GetInvenInfo(i).x + 200, GAME->GetInvenInfo(i).y + 10,
+					str, strlen(str));
+				if (GAME->GetInvenInfo(i).item.count != 0)
+					sprintf_s(str, "%d개", GAME->GetInvenInfo(i).item.count);
+				TextOut(GetMemDC(),
+					GAME->GetInvenInfo(i).x + 275, GAME->GetInvenInfo(i).y + 10,
+					str, strlen(str));
+			}
+		}
 	}
 	//==================   Debug   ====================
 	if (isDebug)
 	{
-		bgPixel->Render(GetMemDC(), 0, 0,
-			WINSIZEX + bgX, WINSIZEY + bgY, WINSIZEX, WINSIZEY);
 		sprintf_s(str, "bg x,y %f %f", bgX, bgY);
 		TextOut(GetMemDC(), 10, 10, str, strlen(str));
 		sprintf_s(str, "player x,y %f %f", playerInfo.GetX(), playerInfo.GetY());

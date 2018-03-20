@@ -20,17 +20,18 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{6E2AE89B-D1E4-494F-B988-51CA9640CC53}</ProjectGuid>
+    <ProjectGuid>{D7EE6ED1-91CF-44C9-937A-DAF997A05F96}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>WinAPI</RootNamespace>
+    <RootNamespace>WinAPI인벤토리와장비착용</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>Prototype-인벤토리와 장비착용</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -43,7 +44,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -70,10 +71,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,20 +83,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -103,6 +90,20 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -148,60 +149,50 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CommonMacroFunction.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameNode.h" />
     <ClInclude Include="Image.h" />
-    <ClInclude Include="ImageManager.h" />
-    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Inventory3.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyManager.h" />
-    <ClInclude Include="MainGame.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="MainGame24.h" />
+    <ClInclude Include="Player3.h" />
     <ClInclude Include="RandomFunction.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Shop.h" />
-    <ClInclude Include="ShopScene.h" />
-    <ClInclude Include="SIngletonBase.h" />
+    <ClInclude Include="Shop4.h" />
+    <ClInclude Include="ShopScene2.h" />
+    <ClInclude Include="SingletonBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Town1Scene.h" />
-    <ClInclude Include="Town2Scene.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Util.h" />
-    <ClInclude Include="WinAPI.h" />
+    <ClInclude Include="WinAPI-인벤토리와 장비착용.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="ImageManager.cpp" />
-    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Inventory3.cpp" />
     <ClCompile Include="KeyManager.cpp" />
-    <ClCompile Include="MainGame.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="MainGame24.cpp" />
+    <ClCompile Include="Player3.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="ShopScene.cpp" />
+    <ClCompile Include="Shop4.cpp" />
+    <ClCompile Include="ShopScene2.cpp" />
     <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp" />
-    <ClCompile Include="Town1Scene.cpp" />
-    <ClCompile Include="Town2Scene.cpp" />
     <ClCompile Include="Util.cpp" />
-    <ClCompile Include="WinAPI.cpp" />
+    <ClCompile Include="WinAPI-인벤토리와 장비착용.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WinAPI.rc" />
+    <ResourceCompile Include="WinAPI-인벤토리와 장비착용.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico" />
-    <Image Include="WinAPI.ico" />
+    <Image Include="WinAPI-인벤토리와 장비착용.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
