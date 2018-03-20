@@ -74,13 +74,23 @@ void Town2Scene::Update()
 		GAME->SetShowStatus(!GAME->GetShowStatus());
 	}
 
+	// 아이템 구매와 드래그 시작
 	if (INPUT->GetKeyDown(VK_LBUTTON)) {
+		// 포켓몬 변경
+		if (GAME->GetShowStatus()) {
+			if (PtInRect(&GAME->GetNextPokemonRc(), g_ptMouse))
+				GAME->NextPokemonIndex();
+		}
+
 		if (GAME->GetShowStatus() && GAME->GetShowInven()) {
+			// 아이템 해제 시작
 			if (PtInRect(&GAME->GetStatusBox(), g_ptMouse)) {
 				isDrag = true;
-				GAME->GetCurrentItem() = GAME->GetInventory().GetEquipItem();
+				GAME->GetCurrentItem() =
+					GAME->GetPokemon(GAME->GetPokemonIndex()).GetEquipItem();
 			}
 
+			// 아이템 장착 시작
 			for (int i = 0; i < ITEMCOUNT; i++) {
 				if (PtInRect(&GAME->GetInvenInfo(i).invenBox, g_ptMouse)) {
 					if (GAME->GetInvenInfo(i).item.itemKind >= BOOSTER_CRITICALCUTTER) {
@@ -92,20 +102,24 @@ void Town2Scene::Update()
 		}
 	}
 
+	// 드래그 끝 아이템 장착 혹은 해제
 	if (INPUT->GetKeyUp(VK_LBUTTON) && GAME->GetShowStatus()
 		&& GAME->GetShowInven()) {
+		// 아이템 해제
 		if (PtInRect(&GAME->GetInvenRc(), g_ptMouse) &&
 			GAME->GetCurrentItem().name.compare(
-				GAME->GetInventory().GetEquipItem().name) == 0) {
-			GAME->GetInventory().EquipItem(-1);
+				GAME->GetPokemon(
+					GAME->GetPokemonIndex()).GetEquipItem().name) == 0) {
+			GAME->GetPokemon(GAME->GetPokemonIndex()).EquipItem(-1);
 			UpdateItem();
 		}
 
+		// 아이템 장착
 		if (PtInRect(&GAME->GetStatusBox(), g_ptMouse)) {
 			for (int i = 0; i < ITEMCOUNT; i++) {
 				if (GAME->GetInvenInfo(i).item.name.compare(
 					GAME->GetCurrentItem().name) == 0) {
-					GAME->GetInventory().EquipItem(i);
+					GAME->GetPokemon(GAME->GetPokemonIndex()).EquipItem(i);
 					UpdateItem();
 					break;
 				}
@@ -131,10 +145,6 @@ void Town2Scene::Update()
 		playerInfo.SetY(385);
 		playerInfo.SetDirection(DIRECTION_DOWN);
 		SCENE->ChangeScene("Shop");
-	}
-
-	if (INPUT->GetKeyDown('I')) {
-		GAME->SetShowInven(!GAME->GetShowInven());
 	}
 
 	//====================== Debug =====================//
@@ -169,39 +179,53 @@ void Town2Scene::Render()
 			SetTextColor(GetMemDC(), RGB(255, 255, 255));
 			status->AlphaRender(GetMemDC(), 50, 100, 225);
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetLevel());
+			GAME->GetPokemon(GAME->GetPokemonIndex()).
+				GetImage()->Render(GetMemDC(), 138, 236);
+
+			sprintf_s(str, "%d", GAME->GetPokemon(
+				GAME->GetPokemonIndex()).GetLevel());
 			TextOut(GetMemDC(), 85, 162, str, strlen(str));
 
-			sprintf_s(str, "%s", GAME->GetPokemon(0).GetName().c_str());
+			sprintf_s(str, "%s", GAME->GetPokemon(
+				GAME->GetPokemonIndex()).GetName().c_str());
 			TextOut(GetMemDC(), 140, 162, str, strlen(str));
 
 			SetTextColor(GetMemDC(), RGB(0, 0, 0));
 			sprintf_s(str, "%d / %d",
-				GAME->GetPokemon(0).GetHp(), GAME->GetPokemon(0).GetMaxHp());
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp(),
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp());
 			TextOut(GetMemDC(), 430, 165, str, strlen(str));
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetAtk());
+			sprintf_s(str, "%d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetAtk());
 			TextOut(GetMemDC(), 495, 225, str, strlen(str));
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetDef());
+			sprintf_s(str, "%d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetDef());
 			TextOut(GetMemDC(), 495, 265, str, strlen(str));
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpAtk());
+			sprintf_s(str, "%d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpAtk());
 			TextOut(GetMemDC(), 495, 305, str, strlen(str));
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpDef());
+			sprintf_s(str, "%d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpDef());
 			TextOut(GetMemDC(), 495, 345, str, strlen(str));
 
-			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpeed());
+			sprintf_s(str, "%d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpeed());
 			TextOut(GetMemDC(), 495, 385, str, strlen(str));
 
-			sprintf_s(str, "%8d", GAME->GetPokemon(0).GetExp());
+			sprintf_s(str, "%8d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetExp());
 			TextOut(GetMemDC(), 430, 425, str, strlen(str));
 
-			sprintf_s(str, "%8d", GAME->GetPokemon(0).GetMaxExp());
+			sprintf_s(str, "%8d",
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxExp());
 			TextOut(GetMemDC(), 430, 465, str, strlen(str));
 
-			tagItemInfo tempItem = GAME->GetInventory().GetEquipItem();
+			tagItemInfo tempItem =
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetEquipItem();
 
 			SetTextColor(GetMemDC(), RGB(255, 0, 0));
 

@@ -96,7 +96,7 @@ void Inventory::ItemSetup()
 
 	m_vItem.push_back(item);
 
-	this->m_equipItem.itemKind = ITEM_EMPTY;
+	//this->m_equipItem.itemKind = ITEM_EMPTY;
 }
 
 void Inventory::AddItem(tagItemInfo item)
@@ -139,27 +139,33 @@ tagItemInfo Inventory::SellItem(int num, int & gold)
 	return sellItem;
 }
 
-void Inventory::EquipItem(int num)
+void Inventory::DeleteItem(int num)
 {
-	if (num == -1) {
-		tagItemInfo beforeItem;
-		beforeItem = GetEquipItem();
-
-		tagItemInfo emptyItem;
-		emptyItem.itemKind = ITEM_EMPTY;
-		SetEquipItem(emptyItem);
-
-		if (beforeItem.itemKind != ITEM_EMPTY)
-			m_vItem.push_back(beforeItem);
-	}
-	else {
-		tagItemInfo beforeItem;
-		m_viItem = m_vItem.begin() + num;
-
-		beforeItem = GetEquipItem();
-		SetEquipItem(*m_viItem);
-		m_vItem.erase(m_viItem);
-		if (beforeItem.itemKind != ITEM_EMPTY)
-			m_vItem.push_back(beforeItem);
-	}
+	m_viItem = m_vItem.begin() + num;
+	m_vItem.erase(m_viItem);
 }
+
+//void Inventory::EquipItem(int num)
+//{
+//	if (num == -1) {
+//		tagItemInfo beforeItem;
+//		beforeItem = GetEquipItem();
+//
+//		tagItemInfo emptyItem;
+//		emptyItem.itemKind = ITEM_EMPTY;
+//		SetEquipItem(emptyItem);
+//
+//		if (beforeItem.itemKind != ITEM_EMPTY)
+//			m_vItem.push_back(beforeItem);
+//	}
+//	else {
+//		tagItemInfo beforeItem;
+//		m_viItem = m_vItem.begin() + num;
+//
+//		beforeItem = GetEquipItem();
+//		SetEquipItem(*m_viItem);
+//		m_vItem.erase(m_viItem);
+//		if (beforeItem.itemKind != ITEM_EMPTY)
+//			m_vItem.push_back(beforeItem);
+//	}
+//}

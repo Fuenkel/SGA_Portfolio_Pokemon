@@ -28,12 +28,15 @@ void GameManager::Init()
 	invenRc = RectMake(
 		WINSIZEX - 400 - 50, 100, 400, 500);
 	statusBox = RectMake(68, 214, 50, 50);
+	nextPokemonRc = RectMake(375, 100, 60, 40);
 
 	inventory.SetGold(10000);
 
 	showInven = false;
 	showStatus = false;
 	isDrag = false;
+
+	pokemonIndex = 0;
 }
 
 void GameManager::Release()
@@ -57,16 +60,32 @@ void GameManager::PokemonInit()
 	Pokemon temp;
 	
 	temp.SetName("파이리");
-	temp.SetLevel(8);
-	temp.SetMaxHp(24);
-	temp.SetHp(24);
-	temp.SetAtk(15);
-	temp.SetDef(14);
-	temp.SetSpAtk(15);
-	temp.SetSpDef(14);
-	temp.SetSpeed(15);
+	temp.SetLevel(5);
+	temp.SetMaxHp(39);
+	temp.SetHp(39);
+	temp.SetAtk(52);
+	temp.SetDef(43);
+	temp.SetSpAtk(60);
+	temp.SetSpDef(50);
+	temp.SetSpeed(65);
 	temp.SetExp(0);
-	temp.SetMaxExp(419);
+	temp.SetMaxExp(300);
+	temp.SetImage(IMAGE->FindImage("Charmander_img"));
+
+	this->pokemonList.push_back(temp);
+
+	temp.SetName("피카츄");
+	temp.SetLevel(5);
+	temp.SetMaxHp(35);
+	temp.SetHp(35);
+	temp.SetAtk(55);
+	temp.SetDef(40);
+	temp.SetSpAtk(50);
+	temp.SetSpDef(50);
+	temp.SetSpeed(90);
+	temp.SetExp(0);
+	temp.SetMaxExp(300);
+	temp.SetImage(IMAGE->FindImage("Pikachu_img"));
 
 	this->pokemonList.push_back(temp);
 }

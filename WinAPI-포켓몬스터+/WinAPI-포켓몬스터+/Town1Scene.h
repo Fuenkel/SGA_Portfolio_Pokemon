@@ -26,14 +26,26 @@ private:
 	Image* bgPixel;
 	Image* player;
 
+	Image * ball;
+	Image * potion;
+	Image * potion2;
+	Image * booster;
+
+	Image * inventory;
+	Image * status;
+
 	Player playerInfo;
 
 	float bgX, bgY;
 
 	char str[128];
 	RECT temp;
+	HFONT hFont;
+	HFONT oldFont;
 
 	tagChangeSceneInfo sceneInfo[SCENE_END];
+
+	bool isDrag;
 public:
 	Town1Scene();
 	~Town1Scene();
@@ -45,5 +57,7 @@ public:
 
 	void PlayerMove();
 	void OtherMove(Direction dir);
+
+	void UpdateItem();
 };
 

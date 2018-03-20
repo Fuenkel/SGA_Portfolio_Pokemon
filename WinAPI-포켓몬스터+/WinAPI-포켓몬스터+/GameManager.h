@@ -24,6 +24,8 @@ private:
 
 	tagItemInfo currentItem;
 
+	int pokemonIndex;
+
 	bool showInven;
 	bool showStatus;
 
@@ -31,6 +33,7 @@ private:
 
 	RECT invenRc;
 	RECT statusBox;
+	RECT nextPokemonRc;
 public:
 	GameManager();
 	~GameManager();
@@ -54,11 +57,23 @@ public:
 
 	RECT GetInvenRc() { return invenRc; }
 	RECT GetStatusBox() { return statusBox; }
+	RECT GetNextPokemonRc() { return nextPokemonRc; }
 
 	void PokemonInit();
 	void PokemonInput(Pokemon pokemon) { pokemonList.push_back(pokemon); }
 
 	Pokemon& GetPokemon(int i) { return pokemonList[i]; }
+
+
+	void SetPokemonIndex(int i) { pokemonIndex = i; }
+	int GetPokemonIndex() { return pokemonIndex; }
+	void NextPokemonIndex() {
+		int index = GetPokemonIndex();
+		index++;
+		if (this->pokemonList.size() == index)
+			index = 0;
+		SetPokemonIndex(index);
+	}
 };
 
 #define GAME GameManager::GetSingleton()

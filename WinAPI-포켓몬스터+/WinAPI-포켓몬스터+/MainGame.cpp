@@ -51,7 +51,6 @@ HRESULT MainGame::Init()
 		0, 0, 350, 50, 7, 1, true, RGB(0, 120, 192));
 
 	// window
-
 	IMAGE->AddImage("Menu", "images/item/menu.bmp", 
 		0, 0, 400, 500, 1, 1, false, RGB(255, 0, 255));
 	IMAGE->AddImage("Inventory","images/item/inventory.bmp", 
@@ -59,6 +58,11 @@ HRESULT MainGame::Init()
 	IMAGE->AddImage("Status", "images/item/status.bmp",
 		0, 0, 500, 500, 1, 1, false, RGB(255, 0, 255));
 
+	// pokemon
+	IMAGE->AddImage("Pikachu_img", "images/pikachu/pikachu_img.bmp",
+		0, 0, 90, 130, 1, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Charmander_img", "images/charmander/charmander_img.bmp",
+		0, 0, 90, 130, 1, 1, true, RGB(182, 185, 184));
 
 	//SCENE->AddScene("Test", new TestScene);
 	//SCENE->ChangeScene("Test");
@@ -67,9 +71,9 @@ HRESULT MainGame::Init()
 	SCENE->AddScene("Town2", new Town2Scene);
 	SCENE->AddScene("Shop", new ShopScene);
 
-	//SCENE->ChangeScene("Town1");
+	SCENE->ChangeScene("Town1");
 	//SCENE->ChangeScene("Town2");
-	SCENE->ChangeScene("Shop");
+	//SCENE->ChangeScene("Shop");
 
 	return S_OK;
 }
@@ -102,7 +106,10 @@ void MainGame::Render()
 	//==================   Debug   ====================
 	if (isDebug)
 	{
-
+		SetTextColor(GetMemDC(), RGB(255, 255, 255));
+		sprintf_s(str, "x : %d y : %d", g_ptMouse.x, g_ptMouse.y);
+		TextOut(GetMemDC(), 10, 10, str, strlen(str));		
+		SetTextColor(GetMemDC(), RGB(0, 0, 0));
 	}
 	//=================================================
 	this->SetBackBuffer()->Render(GetHDC());
