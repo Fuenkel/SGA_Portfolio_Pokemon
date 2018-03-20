@@ -82,17 +82,17 @@ void Player::Probe(Image * pixel, float bgX, float bgY, float winsizeX, float wi
 	}
 }
 
-void Player::InputPlayer()
-{
-	m_name = "파이리";
-	m_level = 8;
-	m_maxHp = 24;
-	m_hp = 24;
-	m_atk = 15;
-	m_def = 14;
-	m_spAtk = 15;
-	m_spDef = 14;
-	m_speed = 15;
-	m_exp = 0;
-	m_maxExp = 419;
-}
+//void Player::InputPlayer()
+//{
+//	m_name = "파이리";
+//	m_level = 8;
+//	m_maxHp = 24;
+//	m_hp = 24;
+//	m_atk = 15;
+//	m_def = 14;
+//	m_spAtk = 15;
+//	m_spDef = 14;
+//	m_speed = 15;
+//	m_exp = 0;
+//	m_maxExp = 419;
+//}

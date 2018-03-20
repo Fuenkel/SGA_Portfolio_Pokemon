@@ -34,6 +34,7 @@ private:
 	Image * booster;
 
 	Image * inventory;
+	Image * status;
 
 	Player playerInfo;
 
@@ -45,6 +46,8 @@ private:
 	RECT temp;
 	HFONT hFont;
 	HFONT oldFont;
+
+	bool isDrag;
 public:
 	Town2Scene();
 	~Town2Scene();
@@ -56,5 +59,7 @@ public:
 
 	void PlayerMove();
 	void OtherMove(Direction dir);
+
+	void UpdateItem();
 };
 

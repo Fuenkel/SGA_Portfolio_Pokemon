@@ -4,6 +4,7 @@
 
 #include "Inventory.h"
 #include "Item.h"
+#include "Pokemon.h"
 
 #define ITEMCOUNT 10
 
@@ -18,6 +19,8 @@ class GameManager : public SingletonBase<GameManager>
 private:
 	Inventory inventory;
 	tagInvenInfo invenInfo[ITEMCOUNT];
+
+	vector<Pokemon> pokemonList;
 
 	tagItemInfo currentItem;
 
@@ -51,6 +54,11 @@ public:
 
 	RECT GetInvenRc() { return invenRc; }
 	RECT GetStatusBox() { return statusBox; }
+
+	void PokemonInit();
+	void PokemonInput(Pokemon pokemon) { pokemonList.push_back(pokemon); }
+
+	Pokemon& GetPokemon(int i) { return pokemonList[i]; }
 };
 
 #define GAME GameManager::GetSingleton()

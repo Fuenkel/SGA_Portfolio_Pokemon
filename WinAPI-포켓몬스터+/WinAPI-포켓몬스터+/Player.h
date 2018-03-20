@@ -16,6 +16,6 @@ public:
 		m_dir = dir; m_x = x; m_y = y; m_width = width; m_height = height;
 	}
 	void Probe(Image* pixel, float bgX, float bgY, float winsizeX, float winsizeY);
-	void InputPlayer();
+	//void InputPlayer();
 };
 

@@ -14,6 +14,7 @@ Town2Scene::~Town2Scene()
 HRESULT Town2Scene::Init()
 {
 	isDebug = false;
+	isDrag = false;
 
 	bg = IMAGE->FindImage("Town2");
 	bgPixel = IMAGE->FindImage("Town2Pixel");
@@ -25,6 +26,7 @@ HRESULT Town2Scene::Init()
 	booster = IMAGE->FindImage("Item_battleBooster");
 
 	inventory = IMAGE->FindImage("Inventory");
+	status = IMAGE->FindImage("Status");
 
 	playerInfo.Init(DIRECTION_UP, WINSIZEX / 2, 550, 70, 100);
 	playerInfo.SetMoveFrame(PLAYER_IDLE);
@@ -48,6 +50,8 @@ HRESULT Town2Scene::Init()
 		sceneInfo[SCENE2_SHOP].x, sceneInfo[SCENE2_SHOP].y,
 		sceneInfo[SCENE2_SHOP].width, sceneInfo[SCENE2_SHOP].height);
 
+	UpdateItem();
+
 	return S_OK;
 }
 
@@ -60,6 +64,55 @@ void Town2Scene::Update()
 	if (GAME->GetShowInven() == false) {
 		PlayerMove();
 		playerInfo.Probe(bgPixel, bgX, bgY, WINSIZEX + bgX, WINSIZEY + bgY);
+	}
+
+	if (INPUT->GetKeyDown('I')) {
+		GAME->SetShowInven(!GAME->GetShowInven());
+	}
+
+	if (INPUT->GetKeyDown('C')) {
+		GAME->SetShowStatus(!GAME->GetShowStatus());
+	}
+
+	if (INPUT->GetKeyDown(VK_LBUTTON)) {
+		if (GAME->GetShowStatus() && GAME->GetShowInven()) {
+			if (PtInRect(&GAME->GetStatusBox(), g_ptMouse)) {
+				isDrag = true;
+				GAME->GetCurrentItem() = GAME->GetInventory().GetEquipItem();
+			}
+
+			for (int i = 0; i < ITEMCOUNT; i++) {
+				if (PtInRect(&GAME->GetInvenInfo(i).invenBox, g_ptMouse)) {
+					if (GAME->GetInvenInfo(i).item.itemKind >= BOOSTER_CRITICALCUTTER) {
+						isDrag = true;
+						GAME->GetCurrentItem() = GAME->GetInvenInfo(i).item;
+					}
+				}
+			}
+		}
+	}
+
+	if (INPUT->GetKeyUp(VK_LBUTTON) && GAME->GetShowStatus()
+		&& GAME->GetShowInven()) {
+		if (PtInRect(&GAME->GetInvenRc(), g_ptMouse) &&
+			GAME->GetCurrentItem().name.compare(
+				GAME->GetInventory().GetEquipItem().name) == 0) {
+			GAME->GetInventory().EquipItem(-1);
+			UpdateItem();
+		}
+
+		if (PtInRect(&GAME->GetStatusBox(), g_ptMouse)) {
+			for (int i = 0; i < ITEMCOUNT; i++) {
+				if (GAME->GetInvenInfo(i).item.name.compare(
+					GAME->GetCurrentItem().name) == 0) {
+					GAME->GetInventory().EquipItem(i);
+					UpdateItem();
+					break;
+				}
+			}
+		}
+
+		isDrag = false;
 	}
 
 	if (IntersectRect(&temp, &sceneInfo[SCENE2_EXIT].rc, &playerInfo.GetRect())) {
@@ -103,7 +156,99 @@ void Town2Scene::Render()
 				WINSIZEX + bgX, WINSIZEY + bgY, WINSIZEX, WINSIZEY);
 		}
 
+		player->FrameRender(GetMemDC(), playerInfo.GetX(), playerInfo.GetY(),
+			playerInfo.GetMoveFrame(), playerInfo.GetDirection());
+
 		SetBkMode(GetMemDC(), TRANSPARENT);
+		SetTextColor(GetMemDC(), RGB(0, 0, 0));
+
+		if (GAME->GetShowStatus()) {
+			BeginCreateFont(GetMemDC(), &hFont, 30);
+			oldFont = (HFONT)SelectObject(GetMemDC(), hFont);
+
+			SetTextColor(GetMemDC(), RGB(255, 255, 255));
+			status->AlphaRender(GetMemDC(), 50, 100, 225);
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetLevel());
+			TextOut(GetMemDC(), 85, 162, str, strlen(str));
+
+			sprintf_s(str, "%s", GAME->GetPokemon(0).GetName().c_str());
+			TextOut(GetMemDC(), 140, 162, str, strlen(str));
+
+			SetTextColor(GetMemDC(), RGB(0, 0, 0));
+			sprintf_s(str, "%d / %d",
+				GAME->GetPokemon(0).GetHp(), GAME->GetPokemon(0).GetMaxHp());
+			TextOut(GetMemDC(), 430, 165, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetAtk());
+			TextOut(GetMemDC(), 495, 225, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetDef());
+			TextOut(GetMemDC(), 495, 265, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpAtk());
+			TextOut(GetMemDC(), 495, 305, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpDef());
+			TextOut(GetMemDC(), 495, 345, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(0).GetSpeed());
+			TextOut(GetMemDC(), 495, 385, str, strlen(str));
+
+			sprintf_s(str, "%8d", GAME->GetPokemon(0).GetExp());
+			TextOut(GetMemDC(), 430, 425, str, strlen(str));
+
+			sprintf_s(str, "%8d", GAME->GetPokemon(0).GetMaxExp());
+			TextOut(GetMemDC(), 430, 465, str, strlen(str));
+
+			tagItemInfo tempItem = GAME->GetInventory().GetEquipItem();
+
+			SetTextColor(GetMemDC(), RGB(255, 0, 0));
+
+			if (tempItem.itemKind != ITEM_EMPTY) {
+				switch (tempItem.itemKind) {
+				case BOOSTER_PLUSPOWER:
+					sprintf_s(str, "+ %d", tempItem.attribute);
+					TextOut(GetMemDC(), 405, 225, str, strlen(str));
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				case BOOSTER_DEFENDUP:
+					sprintf_s(str, "+ %d", tempItem.attribute);
+					TextOut(GetMemDC(), 405, 265, str, strlen(str));
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				case BOOSTER_SPECIALUP:
+					sprintf_s(str, "+ %d", tempItem.attribute);
+					TextOut(GetMemDC(), 405, 305, str, strlen(str));
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				case BOOSTER_SPECIALGUARD:
+					sprintf_s(str, "+ %d", tempItem.attribute);
+					TextOut(GetMemDC(), 405, 345, str, strlen(str));
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				case BOOSTER_SPEEDUP:
+					sprintf_s(str, "+ %d", tempItem.attribute);
+					TextOut(GetMemDC(), 405, 385, str, strlen(str));
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				case BOOSTER_CRITICALCUTTER:
+				case BOOSTER_EFFECTGUARD:
+					booster->FrameRender(GetMemDC(), 68, 214,
+						tempItem.itemKind - 9, 0);
+					break;
+				}
+			}
+
+			SelectObject(GetMemDC(), oldFont);
+			DeleteObject(hFont);
+		}
+
 		SetTextColor(GetMemDC(), RGB(0, 0, 0));
 
 		if (GAME->GetShowInven()) {
@@ -165,6 +310,37 @@ void Town2Scene::Render()
 					str, strlen(str));
 			}
 		}
+
+		if (isDrag) {
+			switch (GAME->GetCurrentItem().itemKind)
+			{
+			case ITEM_MONSTERBALL:
+				ball->FrameRender(GetMemDC(), g_ptMouse.x - 25, g_ptMouse.y - 25);
+				break;
+			case ITEM_POTION:
+				potion->FrameRender(GetMemDC(), g_ptMouse.x - 25, g_ptMouse.y - 25);
+				break;
+			case ITEM_ANTIDOTE:
+			case ITEM_PARLYZEHEAL:
+			case ITEM_BURNHEAL:
+			case ITEM_ICEHEAL:
+			case ITEM_AWAKENING:
+			case ITEM_FULLHEAL:
+				potion2->FrameRender(GetMemDC(), g_ptMouse.x - 25, g_ptMouse.y - 25,
+					GAME->GetCurrentItem().itemKind - 3, 0);
+				break;
+			case BOOSTER_PLUSPOWER:
+			case BOOSTER_DEFENDUP:
+			case BOOSTER_SPECIALUP:
+			case BOOSTER_SPECIALGUARD:
+			case BOOSTER_SPEEDUP:
+			case BOOSTER_CRITICALCUTTER:
+			case BOOSTER_EFFECTGUARD:
+				booster->FrameRender(GetMemDC(), g_ptMouse.x - 25, g_ptMouse.y - 25,
+					GAME->GetCurrentItem().itemKind - 9, 0);
+				break;
+			}
+		}
 	}
 	//==================   Debug   ====================
 	if (isDebug)
@@ -179,11 +355,13 @@ void Town2Scene::Render()
 		RectangleMake(GetMemDC(), sceneInfo[SCENE2_EXIT].rc);
 		RectangleMake(GetMemDC(), sceneInfo[SCENE2_SHOP].rc);
 		RectangleMake(GetMemDC(), playerInfo.GetRect());
+
+		RectangleMake(GetMemDC(), GAME->GetInvenRc());
+		RectangleMake(GetMemDC(), GAME->GetStatusBox());
 	}
 	//=================================================
 
-	player->FrameRender(GetMemDC(), playerInfo.GetX(), playerInfo.GetY(),
-		playerInfo.GetMoveFrame(), playerInfo.GetDirection());
+	
 }
 
 void Town2Scene::PlayerMove()
@@ -342,4 +520,16 @@ void Town2Scene::OtherMove(Direction dir)
 	sceneInfo[SCENE2_SHOP].rc = RectMake(
 		sceneInfo[SCENE2_SHOP].x, sceneInfo[SCENE2_SHOP].y,
 		sceneInfo[SCENE2_SHOP].width, sceneInfo[SCENE2_SHOP].height);
+}
+
+void Town2Scene::UpdateItem()
+{
+	for (int i = 0; i < ITEMCOUNT; i++) {
+		if (i < GAME->GetInventory().GetItemCount()) {
+			GAME->GetInvenInfo(i).item = GAME->GetInventory().GetItem(i);
+		}
+		else {
+			GAME->GetInvenInfo(i).item.itemKind = ITEM_EMPTY;
+		}
+	}
 }
