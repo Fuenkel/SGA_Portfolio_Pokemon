@@ -62,7 +62,7 @@ void TravelScene::Update()
 	for (int i = 0; i < POKEMON_COUNT; i++) {
 		if (pokemon[i].GetDied() == false) {
 			// pokemon[i]
-			switch (pokemon[i].GetSatus()) {
+			switch (pokemon[i].GetStatus()) {
 			case STATUS_IDLE:
 				PokemonIdle(pokemon[i], 2);
 				break;
@@ -131,7 +131,7 @@ void TravelScene::Update()
 				player.GetY() + player.GetHeight() / 4,
 				player.GetWidth() / 2, player.GetHeight() / 2))
 			&& pokemon[i].GetDied() == false) {
-			if (pokemon[i].GetSatus() != STATUS_HURT) {
+			if (pokemon[i].GetStatus() != STATUS_HURT) {
 				switch (player.GetDirection())
 				{
 				case DIRECTION_DOWN:
@@ -193,7 +193,7 @@ void TravelScene::Render()
 
 		for (int i = 0; i < POKEMON_COUNT; i++) {
 			if (pokemon[i].GetDied() == true) continue;
-			pokemon[i].GetAni(pokemon[i].GetSatus())->FrameRender(GetMemDC(),
+			pokemon[i].GetAni(pokemon[i].GetStatus())->FrameRender(GetMemDC(),
 				pokemon[i].GetX(), pokemon[i].GetY(), (int)pokemon[i].GetMoveFrame(), 0,
 				pokemon[i].GetAlpha());
 			sprintf_s(str, "Lv%d %s", pokemon[i].GetLevel(), pokemon[i].GetName().c_str());
@@ -417,7 +417,7 @@ void TravelScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 	switch (pokemon.GetDirection())
 	{
 	case DIRECTION_DOWN:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(0);
 		}
@@ -428,7 +428,7 @@ void TravelScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_UP:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum);
 		}
@@ -440,7 +440,7 @@ void TravelScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_LEFT:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum * 2);
 		}
@@ -452,7 +452,7 @@ void TravelScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_RIGHT:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum * 3);
 		}
@@ -469,7 +469,7 @@ void TravelScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 void TravelScene::PokemonMove(Pokemon & pokemon, int maxNum, float speed, Direction dir, bool isStart)
 {
 	if (isStart) {
-		if (pokemon.GetSatus() != STATUS_MOVE)
+		if (pokemon.GetStatus() != STATUS_MOVE)
 			pokemon.SetStatus(STATUS_MOVE);
 		pokemon.SetDirection(dir);
 		switch (dir)

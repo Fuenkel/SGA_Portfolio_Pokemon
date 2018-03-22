@@ -400,7 +400,6 @@ void TestScene::PlayerMove() {
 	if(player.GetDirection() == DIRECTION_UP &&
 		(int)player.GetMoveFrame() > 2)
 		player.SetMoveFrame(0);
-
 }
 
 void TestScene::OtherMove(Direction dir) {

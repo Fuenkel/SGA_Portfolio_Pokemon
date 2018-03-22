@@ -44,7 +44,7 @@ HRESULT MainGame::Init()
 	IMAGE->AddImage("Player", "images/trainer.bmp", WINSIZEX / 2, WINSIZEY / 2,
 		70 * 3, 100 * 4, 3, 4, true, RGB(255, 200, 106));
 	IMAGE->AddImage("Player_travel", "images/trainer.bmp", WINSIZEX / 2, WINSIZEY / 2,
-		40 * 3, 50 * 4, 3, 4, true, RGB(255, 200, 106));
+		50 * 3, 60 * 4, 3, 4, true, RGB(255, 200, 106));
 
 	// item
 	IMAGE->AddImage("Item_ball", 

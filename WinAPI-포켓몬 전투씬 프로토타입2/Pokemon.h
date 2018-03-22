@@ -4,6 +4,15 @@
 
 #include "Item.h"
 
+/*
+	frame count
+	idle 1
+	attack 1
+	movement 3
+	special attack 2
+	hurt 2
+*/
+
 enum Status {
 	STATUS_IDLE,
 	STATUS_MOVE,
@@ -13,6 +22,21 @@ enum Status {
 	STATUS_ATTACK2
 };
 
+#define BULLETMAX 10
+
+struct tagBullet {
+	RECT rc;
+	Direction dir;
+	bool isFire;
+	float moveFrame;
+	float x, y;
+};
+
+struct tagMeleeAttack {
+	RECT rc;
+	Direction dir;
+	bool isAttack;
+};
 
 class Pokemon : public Unit
 {
@@ -20,6 +44,11 @@ private:
 	tagItemInfo m_equipItem;
 
 	Status m_status;
+
+	Status m_attackStatus;
+
+	tagBullet m_bullet[BULLETMAX];
+	tagMeleeAttack m_melee;
 
 	Image* img;
 	Image** ani;
@@ -36,8 +65,8 @@ public:
 	tagItemInfo GetEquipItem() { return m_equipItem; }
 	void SetEquipItem(tagItemInfo equipItem) { m_equipItem = equipItem; }
 
-	void SetStatus(Status status) { m_status = status; }
 	Status GetStatus() { return m_status; }
+	void SetStatus(Status status) { m_status = status; }
 
 	Image* GetImage() { return img; }
 	void SetImage(Image* img) { this->img = img; }
@@ -56,5 +85,16 @@ public:
 	void SetAlpha(float alpha) { this->alpha = alpha; }
 	float GetAlpha() { return alpha; }
 	void AddAlpha(float num) { alpha += num; }
+
+	Status GetAttackStatus() { return m_attackStatus; }
+	void SetAttackStatus(Status status) { m_attackStatus = status; }
+
+	void BulletFire();
+	void BulletMove();
+	tagBullet* GetBullet(int i) { return &m_bullet[i]; }
+
+	void MeleeAttack(bool isAttack);
+	tagMeleeAttack GetMeleeAttack() { return m_melee; }
 };
+
 

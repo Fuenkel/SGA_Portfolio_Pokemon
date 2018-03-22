@@ -36,7 +36,7 @@ public:
 	void SetEquipItem(tagItemInfo equipItem) { m_equipItem = equipItem; }
 
 	void SetStatus(Status status) { m_status = status; }
-	Status GetSatus() { return m_status; }
+	Status GetStatus() { return m_status; }
 
 	Image* GetImage() { return img; }
 	void SetImage(Image* img) { this->img = img; }
