@@ -17,6 +17,8 @@ HRESULT TestScene::Init()
 	//isToggle = false;
 	isExit = false;
 
+
+
 	bgY = 0;
 
 	bg = IMAGE->FindImage("Travel");
@@ -26,20 +28,26 @@ HRESULT TestScene::Init()
 	player.Init(DIRECTION_UP, WINSIZEX / 2, WINSIZEY - 100, 40, 50);
 	player.SetMoveFrame(PLAYER_IDLE);
 
-	rattata.InitAni(3);
-	rattata.SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
-	rattata.SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
-	rattata.SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
-	rattata.Init(DIRECTION_DOWN, WINSIZEX / 2, WINSIZEY / 2, 50, 50);
-	rattata.SetStatus(STATUS_IDLE);
-	rattata.SetMoveFrame(0);
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		pattern[i] = DIRECTION_LEFT;
 
-	PokemonMove(rattata, 3, 2.5f, DIRECTION_LEFT, true);
+		rattata[i].InitAni(3);
+		rattata[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+		rattata[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+		rattata[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+		rattata[i].Init(DIRECTION_DOWN, WINSIZEX + i * 100, i * 50, 50, 50);
+		rattata[i].SetStatus(STATUS_IDLE);
+		rattata[i].SetMoveFrame(0);
+		rattata[i].SetName("部房");
+		rattata[i].SetLevel(RND->GetFromInto(1,8));
 
+		PokemonMove(rattata[i], 3, 2.5f, pattern[i], true);
+	}
 	distance = 21000;
 	speed = 0;
 
 	exit = RectMake(WINSIZEX / 2 - 100, 0, 200, 30);
+
 
 	return S_OK;
 }
@@ -53,84 +61,102 @@ void TestScene::Update()
 	PlayerMove();
 	BgMove();
 
-	if (rattata.GetDied() == false) {
-		// rattata
-		switch (rattata.GetSatus()) {
-		case STATUS_IDLE:
-			PokemonIdle(rattata, 2);
-			break;
-		case STATUS_MOVE:
-			PokemonMove(rattata, 3, 2.5f, DIRECTION_LEFT);
-			break;
-		case STATUS_HURT:
-			rattata.AddAlpha(-1);
-			if (rattata.GetAlpha() <= 0) {
-				rattata.SetDied(true);
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		if (rattata[i].GetDied() == false) {
+			// rattata[i]
+			switch (rattata[i].GetSatus()) {
+			case STATUS_IDLE:
+				PokemonIdle(rattata[i], 2);
+				break;
+			case STATUS_MOVE:
+				PokemonMove(rattata[i], 3, 2.5f, pattern[i]);
+				break;
+			case STATUS_HURT:
+				rattata[i].AddAlpha(-1);
+				if (rattata[i].GetAlpha() <= 0) {
+					rattata[i].SetDied(true);
+				}
+				break;
 			}
-			break;
+
+
+			if (rattata[i].GetX() + rattata[i].GetWidth() < 0) {
+				if (distance > 0) {
+					rattata[i].SetX(i * 70);
+					rattata[i].SetY(-rattata[i].GetHeight());
+					pattern[i] = DIRECTION_DOWN;
+				}
+			}
+			if (rattata[i].GetY() > WINSIZEY) {
+				if (distance > 0) {
+					rattata[i].SetX(WINSIZEX);
+					rattata[i].SetY(i * 50);
+					pattern[i] = DIRECTION_LEFT;
+				}
+			}
 		}
-		
 
-		if (rattata.GetX() + rattata.GetWidth() < 0)
-			rattata.SetX(WINSIZEX);
+		// test
+		//if (INPUT->GetKeyDown('S')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_DOWN, true);
+		//}
+		//if (INPUT->GetKeyDown('W')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_UP, true);
+		//}
+		//if (INPUT->GetKeyDown('A')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_LEFT, true);
+		//}
+		//if (INPUT->GetKeyDown('D')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_RIGHT, true);
+		//}
+		//if (INPUT->GetKey('S')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_DOWN);
+		//}
+		//if (INPUT->GetKey('W')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_UP);
+		//}
+		//if (INPUT->GetKey('A')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_LEFT);
+		//}
+		//if (INPUT->GetKey('D')) { 
+		//	PokemonMove(rattata[i], 3, 2.5f, DIRECTION_RIGHT); 
+		//}
+		//if (INPUT->GetKeyUp('S')) { PokemonIdle(rattata[i], 2); }
+		//if (INPUT->GetKeyUp('W')) { PokemonIdle(rattata[i], 2); }
+		//if (INPUT->GetKeyUp('A')) { PokemonIdle(rattata[i], 2); }
+		//if (INPUT->GetKeyUp('D')) { PokemonIdle(rattata[i], 2); }
+
+		// 面倒 眉农
+		if (IntersectRect(&temp, &rattata[i].GetRect(), 
+			&RectMake(
+				player.GetX() + player.GetWidth()/4, 
+				player.GetY() + player.GetHeight()/4,
+				player.GetWidth()/2, player.GetHeight()/2))
+			&& rattata[i].GetDied() == false) {
+			if (rattata[i].GetSatus() != STATUS_HURT) {
+				switch (player.GetDirection())
+				{
+				case DIRECTION_DOWN:
+					rattata[i].SetDirection(DIRECTION_UP);
+					break;
+				case DIRECTION_UP:
+					rattata[i].SetDirection(DIRECTION_DOWN);
+					break;
+				case DIRECTION_LEFT:
+					rattata[i].SetDirection(DIRECTION_RIGHT);
+					break;
+				case DIRECTION_RIGHT:
+					rattata[i].SetDirection(DIRECTION_LEFT);
+					break;
+				}
+				rattata[i].SetMoveFrame(rattata[i].GetDirection());
+				rattata[i].SetStatus(STATUS_HURT);
+			}
+		}
 	}
-
-	// test
-	//if (INPUT->GetKeyDown('S')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_DOWN, true);
-	//}
-	//if (INPUT->GetKeyDown('W')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_UP, true);
-	//}
-	//if (INPUT->GetKeyDown('A')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_LEFT, true);
-	//}
-	//if (INPUT->GetKeyDown('D')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_RIGHT, true);
-	//}
-	//if (INPUT->GetKey('S')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_DOWN);
-	//}
-	//if (INPUT->GetKey('W')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_UP);
-	//}
-	//if (INPUT->GetKey('A')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_LEFT);
-	//}
-	//if (INPUT->GetKey('D')) { 
-	//	PokemonMove(rattata, 3, 2.5f, DIRECTION_RIGHT); 
-	//}
-	//if (INPUT->GetKeyUp('S')) { PokemonIdle(rattata, 2); }
-	//if (INPUT->GetKeyUp('W')) { PokemonIdle(rattata, 2); }
-	//if (INPUT->GetKeyUp('A')) { PokemonIdle(rattata, 2); }
-	//if (INPUT->GetKeyUp('D')) { PokemonIdle(rattata, 2); }
-
 	if (IntersectRect(&temp, &exit, &player.GetRect())
 		&& isExit) {
 		Init();
-	}
-
-	if (IntersectRect(&temp, &rattata.GetRect(), &player.GetRect())
-		&& rattata.GetDied() == false) {
-		if (rattata.GetSatus() != STATUS_HURT) {
-			switch (player.GetDirection())
-			{
-			case DIRECTION_DOWN:
-				rattata.SetDirection(DIRECTION_UP);
-				break;
-			case DIRECTION_UP:
-				rattata.SetDirection(DIRECTION_DOWN);
-				break;
-			case DIRECTION_LEFT:
-				rattata.SetDirection(DIRECTION_RIGHT);
-				break;
-			case DIRECTION_RIGHT:
-				rattata.SetDirection(DIRECTION_LEFT);
-				break;
-			}
-			rattata.SetMoveFrame(rattata.GetDirection());
-			rattata.SetStatus(STATUS_HURT);
-		}
 	}
 
 	//====================== Debug =====================//
@@ -153,10 +179,23 @@ void TestScene::Render()
 
 		//rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
 		//	rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0);
-		if (rattata.GetDied() == false) {
-			rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
-				rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0,
-				rattata.GetAlpha());
+		//if (rattata.GetDied() == false) {
+		//	rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
+		//		rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0,
+		//		rattata.GetAlpha());
+		//}
+
+		SetBkMode(GetMemDC(), TRANSPARENT);
+		SetTextColor(GetMemDC(), RGB(255, 255, 255));
+
+		for (int i = 0; i < POKEMON_COUNT; i++) {
+			if (rattata[i].GetDied() == true) continue;
+			rattata[i].GetAni(rattata[i].GetSatus())->FrameRender(GetMemDC(),
+				rattata[i].GetX(), rattata[i].GetY(), (int)rattata[i].GetMoveFrame(), 0,
+				rattata[i].GetAlpha());
+			sprintf_s(str, "Lv%d %s", rattata[i].GetLevel(), rattata[i].GetName().c_str());
+			TextOut(GetMemDC(), 
+				rattata[i].GetX() - 10, rattata[i].GetY() - 10, str, strlen(str));
 		}
 
 		sprintf_s(str, "distance : %dm", (int)distance);
@@ -164,12 +203,20 @@ void TestScene::Render()
 		
 		sprintf_s(str, "speed : %dkm/h", (int)speed+1);
 		TextOut(GetMemDC(), WINSIZEX - 200, WINSIZEY - 50, str, strlen(str));
+
+		SetTextColor(GetMemDC(), RGB(0, 0, 0));
 	}
 	//==================   Debug   ====================
 	if (isDebug)
 	{
 		RectangleMake(GetMemDC(), exit);
-		RectangleMake(GetMemDC(), player.GetRect());
+		//RectangleMake(GetMemDC(), player.GetRect());
+		RectangleMake(GetMemDC(), RectMake(
+			player.GetX() + player.GetWidth() / 4,
+			player.GetY() + player.GetHeight() / 4,
+			player.GetWidth() / 2, player.GetHeight() / 2));
+		for (int i = 0; i < POKEMON_COUNT; i++)
+			RectangleMake(GetMemDC(), rattata[i].GetRect());
 	}
 	//=================================================
 }

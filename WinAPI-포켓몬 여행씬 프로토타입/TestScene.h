@@ -6,6 +6,7 @@
 #include "Pokemon.h"
 
 #define PLAYER_SPEED 5.0f
+#define POKEMON_COUNT 15
 
 class TestScene : public GameNode
 {
@@ -25,8 +26,10 @@ private:
 
 	char str[128];
 
+	Direction pattern[POKEMON_COUNT];
+
 	Player player;
-	Pokemon rattata;
+	Pokemon rattata[POKEMON_COUNT];
 public:
 	TestScene();
 	~TestScene();
