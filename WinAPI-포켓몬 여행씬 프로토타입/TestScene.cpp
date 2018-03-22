@@ -64,7 +64,7 @@ void TestScene::Update()
 	for (int i = 0; i < POKEMON_COUNT; i++) {
 		if (rattata[i].GetDied() == false) {
 			// rattata[i]
-			switch (rattata[i].GetSatus()) {
+			switch (rattata[i].GetStatus()) {
 			case STATUS_IDLE:
 				PokemonIdle(rattata[i], 2);
 				break;
@@ -133,7 +133,7 @@ void TestScene::Update()
 				player.GetY() + player.GetHeight()/4,
 				player.GetWidth()/2, player.GetHeight()/2))
 			&& rattata[i].GetDied() == false) {
-			if (rattata[i].GetSatus() != STATUS_HURT) {
+			if (rattata[i].GetStatus() != STATUS_HURT) {
 				switch (player.GetDirection())
 				{
 				case DIRECTION_DOWN:
@@ -177,10 +177,10 @@ void TestScene::Render()
 		player.GetAni(0)->FrameRender(GetMemDC(), player.GetX(), player.GetY(),
 			(int)player.GetMoveFrame(), player.GetDirection());
 
-		//rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
+		//rattata.GetAni(rattata.GetStatus())->FrameRender(GetMemDC(),
 		//	rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0);
 		//if (rattata.GetDied() == false) {
-		//	rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
+		//	rattata.GetAni(rattata.GetStatus())->FrameRender(GetMemDC(),
 		//		rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0,
 		//		rattata.GetAlpha());
 		//}
@@ -190,7 +190,7 @@ void TestScene::Render()
 
 		for (int i = 0; i < POKEMON_COUNT; i++) {
 			if (rattata[i].GetDied() == true) continue;
-			rattata[i].GetAni(rattata[i].GetSatus())->FrameRender(GetMemDC(),
+			rattata[i].GetAni(rattata[i].GetStatus())->FrameRender(GetMemDC(),
 				rattata[i].GetX(), rattata[i].GetY(), (int)rattata[i].GetMoveFrame(), 0,
 				rattata[i].GetAlpha());
 			sprintf_s(str, "Lv%d %s", rattata[i].GetLevel(), rattata[i].GetName().c_str());
@@ -413,7 +413,7 @@ void TestScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 	switch (pokemon.GetDirection())
 	{
 	case DIRECTION_DOWN:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(0);
 		}
@@ -424,7 +424,7 @@ void TestScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_UP:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum);
 		}
@@ -436,7 +436,7 @@ void TestScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_LEFT:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum * 2);
 		}
@@ -448,7 +448,7 @@ void TestScene::PokemonIdle(Pokemon & pokemon, int maxNum)
 		}
 		break;
 	case DIRECTION_RIGHT:
-		if (pokemon.GetSatus() != STATUS_IDLE) {
+		if (pokemon.GetStatus() != STATUS_IDLE) {
 			pokemon.SetStatus(STATUS_IDLE);
 			pokemon.SetMoveFrame(maxNum * 3);
 		}
@@ -466,7 +466,7 @@ void TestScene::PokemonMove(Pokemon & pokemon, int maxNum,
 	float speed, Direction dir, bool isStart)
 {
 	if (isStart) {
-		if (pokemon.GetSatus() != STATUS_MOVE)
+		if (pokemon.GetStatus() != STATUS_MOVE)
 			pokemon.SetStatus(STATUS_MOVE);
 		pokemon.SetDirection(dir);
 		switch (dir)
