@@ -6,6 +6,7 @@
 #include "Pokemon.h"
 
 #define SPEED 2.5f
+#define POKEMON_COUNT 15
 
 class TestScene : public GameNode
 {
@@ -19,7 +20,7 @@ private:
 	Image* effect[2];
 
 	Pokemon pokemon;
-	Pokemon enemy;
+	Pokemon enemy[POKEMON_COUNT];
 
 	Player player;
 

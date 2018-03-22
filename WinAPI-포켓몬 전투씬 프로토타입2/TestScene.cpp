@@ -45,13 +45,15 @@ HRESULT TestScene::Init()
 	//charmander[STATUS_SPECIAL_ATTACK] = IMAGE->FindImage("Charmander_special_attack");
 	//charmander[STATUS_HURT] = IMAGE->FindImage("Charmander_hurt");
 
-	enemy.InitAni(5);
-	enemy.SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
-	enemy.SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
-	enemy.SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
-	enemy.SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
-	enemy.SetAni(STATUS_SPECIAL_ATTACK,
-		IMAGE->FindImage("Rattata_special_attack"));
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		enemy[i].InitAni(5);
+		enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+		enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+		enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
+		enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+		enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
+			IMAGE->FindImage("Rattata_special_attack"));
+	}
 
 	effect[0] = IMAGE->FindImage("Effect_electricity");
 	effect[1] = IMAGE->FindImage("Effect_fire");
@@ -64,14 +66,15 @@ HRESULT TestScene::Init()
 	pokemon.SetStatus(STATUS_IDLE);
 	pokemon.SetAttackStatus(STATUS_ATTACK);
 
-	enemy.SetX(WINSIZEX / 2);
-	enemy.SetY(WINSIZEY / 2 - 100);
-	enemy.SetWidth(50);
-	enemy.SetHeight(50);
-	enemy.SetDirection(DIRECTION_DOWN);
-	enemy.SetStatus(STATUS_IDLE);
-	enemy.SetAttackStatus(STATUS_ATTACK);
-
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		enemy[i].SetX(WINSIZEX / 2);
+		enemy[i].SetY(-100 * i);
+		enemy[i].SetWidth(50);
+		enemy[i].SetHeight(50);
+		enemy[i].SetDirection(DIRECTION_DOWN);
+		enemy[i].SetStatus(STATUS_IDLE);
+		enemy[i].SetAttackStatus(STATUS_ATTACK);
+	}
 	return S_OK;
 }
 
@@ -88,148 +91,151 @@ void TestScene::Update()
 	//}
 
 	// enemy
-	if (enemy.GetDied() == false) {
-		switch (enemy.GetStatus())
-		{
-		case STATUS_IDLE:
-			PokemonIdle(enemy, 2);
-			if (GetDistance(
-				enemy.GetX(), enemy.GetY(), player.GetX(), player.GetY()) > 60) {
+	for (int i = 0; i < POKEMON_COUNT; i++) {
 
+		if (enemy[i].GetDied() == false) {
+			switch (enemy[i].GetStatus())
+			{
+			case STATUS_IDLE:
+				PokemonIdle(enemy[i], 2);
 				if (GetDistance(
-					enemy.GetX(), enemy.GetY(), pokemon.GetX(), pokemon.GetY()) <= 50)
-					PokemonAttack(enemy, 4, 2, true);
+					enemy[i].GetX(), enemy[i].GetY(), player.GetX(), player.GetY()) > 60) {
 
-				if (enemy.GetStatus() == STATUS_IDLE)
-					PokemonMove(enemy, 3, 2.5f, FindDirection(enemy, player), true);
-			}
-			else {
-				// 캐릭터 바라보게 하기
-				if (player.GetX() > enemy.GetX() + enemy.GetWidth())
-					enemy.SetDirection(DIRECTION_RIGHT);
-				if (player.GetX() + player.GetWidth() < enemy.GetX())
-					enemy.SetDirection(DIRECTION_LEFT);
-				if (player.GetY() > enemy.GetY() + enemy.GetHeight())
-					enemy.SetDirection(DIRECTION_DOWN);
-				if (player.GetY() + player.GetHeight() < enemy.GetY())
-					enemy.SetDirection(DIRECTION_UP);
-				//PokemonIdle(enemy, 2);
-				PokemonAttack(enemy, 4, 2, true);
-			}
-			break;
-		case STATUS_MOVE:
-			if (GetDistance(
-				enemy.GetX(), enemy.GetY(), player.GetX(), player.GetY()) > 60) {
+					if (GetDistance(
+						enemy[i].GetX(), enemy[i].GetY(), pokemon.GetX(), pokemon.GetY()) <= 50)
+						PokemonAttack(enemy[i], 4, 2, true);
 
+					if (enemy[i].GetStatus() == STATUS_IDLE)
+						PokemonMove(enemy[i], 3, 2.5f, FindDirection(enemy[i], player), true);
+				}
+				else {
+					// 캐릭터 바라보게 하기
+					if (player.GetX() > enemy[i].GetX() + enemy[i].GetWidth())
+						enemy[i].SetDirection(DIRECTION_RIGHT);
+					if (player.GetX() + player.GetWidth() < enemy[i].GetX())
+						enemy[i].SetDirection(DIRECTION_LEFT);
+					if (player.GetY() > enemy[i].GetY() + enemy[i].GetHeight())
+						enemy[i].SetDirection(DIRECTION_DOWN);
+					if (player.GetY() + player.GetHeight() < enemy[i].GetY())
+						enemy[i].SetDirection(DIRECTION_UP);
+					//PokemonIdle(enemy[i], 2);
+					PokemonAttack(enemy[i], 4, 2, true);
+				}
+				break;
+			case STATUS_MOVE:
 				if (GetDistance(
-					enemy.GetX(), enemy.GetY(), pokemon.GetX(), pokemon.GetY()) <= 50)
-					PokemonAttack(enemy, 4, 2, true);
+					enemy[i].GetX(), enemy[i].GetY(), player.GetX(), player.GetY()) > 60) {
 
-				if (enemy.GetStatus() == STATUS_MOVE)
-					PokemonMove(enemy, 3, 2.5f, FindDirection(enemy, player));
-			}
-			else {
-				// 캐릭터 바라보게 하기
-				if (player.GetX() > enemy.GetX() + enemy.GetWidth())
-					enemy.SetDirection(DIRECTION_RIGHT);
-				if (player.GetX() + player.GetWidth() < enemy.GetX())
-					enemy.SetDirection(DIRECTION_LEFT);
-				if (player.GetY() > enemy.GetY() + enemy.GetHeight())
-					enemy.SetDirection(DIRECTION_DOWN);
-				if (player.GetY() + player.GetHeight() < enemy.GetY())
-					enemy.SetDirection(DIRECTION_UP);
-				//PokemonIdle(enemy, 2);
-				PokemonAttack(enemy, 4, 2, true);
-			}
-			break;
-		case STATUS_ATTACK:
-			RECT temp2 = enemy.GetMeleeAttack().rc;
-			if (IntersectRect(&temp, &pokemon.GetRect(), &temp2)) {
-				pokemon.SetStatus(STATUS_HURT);
-				if (pokemon.GetMeleeAttack().isAttack == true)
-					pokemon.MeleeAttack(false);
-				// 포켓몬 마주보게 하기
-				switch (enemy.GetDirection())
-				{
-				case DIRECTION_DOWN:
-					pokemon.SetDirection(DIRECTION_UP);
-					pokemon.AddY(SPEED);
-					player.AddY(SPEED);
-					break;
-				case DIRECTION_UP:
-					pokemon.SetDirection(DIRECTION_DOWN);
-					pokemon.AddY(-SPEED);
-					player.AddY(-SPEED);
-					break;
-				case DIRECTION_LEFT:
-					pokemon.SetDirection(DIRECTION_RIGHT);
-					pokemon.AddX(-SPEED);
-					player.AddX(-SPEED);
-					break;
-				case DIRECTION_RIGHT:
-					pokemon.SetDirection(DIRECTION_LEFT);
-					pokemon.AddX(SPEED);
-					player.AddX(SPEED);
-					break;
+					if (GetDistance(
+						enemy[i].GetX(), enemy[i].GetY(), pokemon.GetX(), pokemon.GetY()) <= 50)
+						PokemonAttack(enemy[i], 4, 2, true);
+
+					if (enemy[i].GetStatus() == STATUS_MOVE)
+						PokemonMove(enemy[i], 3, 2.5f, FindDirection(enemy[i], player));
 				}
-				switch (pokemon.GetDirection())
-				{
-				case DIRECTION_DOWN:
-					pokemon.SetMoveFrame(0);
-					break;
-				case DIRECTION_UP:
-					pokemon.SetMoveFrame(1);
-					break;
-				case DIRECTION_LEFT:
-					pokemon.SetMoveFrame(2);
-					break;
-				case DIRECTION_RIGHT:
-					pokemon.SetMoveFrame(3);
-					break;
+				else {
+					// 캐릭터 바라보게 하기
+					if (player.GetX() > enemy[i].GetX() + enemy[i].GetWidth())
+						enemy[i].SetDirection(DIRECTION_RIGHT);
+					if (player.GetX() + player.GetWidth() < enemy[i].GetX())
+						enemy[i].SetDirection(DIRECTION_LEFT);
+					if (player.GetY() > enemy[i].GetY() + enemy[i].GetHeight())
+						enemy[i].SetDirection(DIRECTION_DOWN);
+					if (player.GetY() + player.GetHeight() < enemy[i].GetY())
+						enemy[i].SetDirection(DIRECTION_UP);
+					//PokemonIdle(enemy[i], 2);
+					PokemonAttack(enemy[i], 4, 2, true);
 				}
-			}
-			PokemonAttack(enemy, 4, 2);
-			break;
-		case STATUS_SPECIAL_ATTACK:
-			break;
-		case STATUS_HURT:
-			enemy.AddAlpha(-1);
-			if (enemy.GetAlpha() <= 0) {
-				enemy.SetDied(true);
-			}
+				break;
+			case STATUS_ATTACK:
+				RECT temp2 = enemy[i].GetMeleeAttack().rc;
+				if (IntersectRect(&temp, &pokemon.GetRect(), &temp2)) {
+					pokemon.SetStatus(STATUS_HURT);
+					if (pokemon.GetMeleeAttack().isAttack == true)
+						pokemon.MeleeAttack(false);
+					// 포켓몬 마주보게 하기
+					switch (enemy[i].GetDirection())
+					{
+					case DIRECTION_DOWN:
+						pokemon.SetDirection(DIRECTION_UP);
+						pokemon.AddY(SPEED);
+						player.AddY(SPEED);
+						break;
+					case DIRECTION_UP:
+						pokemon.SetDirection(DIRECTION_DOWN);
+						pokemon.AddY(-SPEED);
+						player.AddY(-SPEED);
+						break;
+					case DIRECTION_LEFT:
+						pokemon.SetDirection(DIRECTION_RIGHT);
+						pokemon.AddX(-SPEED);
+						player.AddX(-SPEED);
+						break;
+					case DIRECTION_RIGHT:
+						pokemon.SetDirection(DIRECTION_LEFT);
+						pokemon.AddX(SPEED);
+						player.AddX(SPEED);
+						break;
+					}
+					switch (pokemon.GetDirection())
+					{
+					case DIRECTION_DOWN:
+						pokemon.SetMoveFrame(0);
+						break;
+					case DIRECTION_UP:
+						pokemon.SetMoveFrame(1);
+						break;
+					case DIRECTION_LEFT:
+						pokemon.SetMoveFrame(2);
+						break;
+					case DIRECTION_RIGHT:
+						pokemon.SetMoveFrame(3);
+						break;
+					}
+				}
+				PokemonAttack(enemy[i], 4, 2);
+				break;
+			case STATUS_SPECIAL_ATTACK:
+				break;
+			case STATUS_HURT:
+				enemy[i].AddAlpha(-1);
+				if (enemy[i].GetAlpha() <= 0) {
+					enemy[i].SetDied(true);
+				}
 
-			//enemy.SetMoveFrame(enemy.GetMoveFrame() + 0.1f);
+				//enemy[i].SetMoveFrame(enemy[i].GetMoveFrame() + 0.1f);
 
-			//switch (enemy.GetDirection())
-			//	{
-			//	case DIRECTION_DOWN:
-			//		if (enemy.GetMoveFrame() >= 1) {
-			//			enemy.SetStatus(STATUS_IDLE);
-			//			enemy.SetMoveFrame(0);
-			//		}
-			//		break;
-			//	case DIRECTION_UP:
-			//		if (enemy.GetMoveFrame() >= 2) {
-			//			enemy.SetStatus(STATUS_IDLE);
-			//			enemy.SetMoveFrame(2);
-			//		}
-			//		break;
-			//	case DIRECTION_LEFT:
-			//		if (enemy.GetMoveFrame() >= 3) {
-			//			enemy.SetStatus(STATUS_IDLE);
-			//			enemy.SetMoveFrame(4);
-			//		}
-			//		break;
-			//	case DIRECTION_RIGHT:
-			//		if (enemy.GetMoveFrame() >= 4) {
-			//			enemy.SetStatus(STATUS_IDLE);
-			//			enemy.SetMoveFrame(6);
-			//		}
-			//		break;
-			//	}
-			break;
-		case STATUS_ATTACK2:
-			break;
+				//switch (enemy[i].GetDirection())
+				//	{
+				//	case DIRECTION_DOWN:
+				//		if (enemy[i].GetMoveFrame() >= 1) {
+				//			enemy[i].SetStatus(STATUS_IDLE);
+				//			enemy[i].SetMoveFrame(0);
+				//		}
+				//		break;
+				//	case DIRECTION_UP:
+				//		if (enemy[i].GetMoveFrame() >= 2) {
+				//			enemy[i].SetStatus(STATUS_IDLE);
+				//			enemy[i].SetMoveFrame(2);
+				//		}
+				//		break;
+				//	case DIRECTION_LEFT:
+				//		if (enemy[i].GetMoveFrame() >= 3) {
+				//			enemy[i].SetStatus(STATUS_IDLE);
+				//			enemy[i].SetMoveFrame(4);
+				//		}
+				//		break;
+				//	case DIRECTION_RIGHT:
+				//		if (enemy[i].GetMoveFrame() >= 4) {
+				//			enemy[i].SetStatus(STATUS_IDLE);
+				//			enemy[i].SetMoveFrame(6);
+				//		}
+				//		break;
+				//	}
+				break;
+			case STATUS_ATTACK2:
+				break;
+			}
 		}
 	}
 
@@ -246,46 +252,48 @@ void TestScene::Update()
 		break;
 	case STATUS_ATTACK:
 		//moveFrame += 0.1f;
-		if (enemy.GetDied() == false) {
-			RECT temp2 = pokemon.GetMeleeAttack().rc;
-			if (IntersectRect(&temp, &enemy.GetRect(), &temp2)) {
-				enemy.SetStatus(STATUS_HURT);
-				if (enemy.GetMeleeAttack().isAttack == true)
-					enemy.MeleeAttack(false);
-				// 포켓몬 마주보게 하기
-				switch (pokemon.GetDirection())
-				{
-				case DIRECTION_DOWN:
-					enemy.SetDirection(DIRECTION_UP);
-					enemy.AddY(SPEED);
-					break;
-				case DIRECTION_UP:
-					enemy.SetDirection(DIRECTION_DOWN);
-					enemy.AddY(-SPEED);
-					break;
-				case DIRECTION_LEFT:
-					enemy.SetDirection(DIRECTION_RIGHT);
-					enemy.AddX(-SPEED);
-					break;
-				case DIRECTION_RIGHT:
-					enemy.SetDirection(DIRECTION_LEFT);
-					enemy.AddX(SPEED);
-					break;
-				}
-				switch (enemy.GetDirection())
-				{
-				case DIRECTION_DOWN:
-					enemy.SetMoveFrame(0);
-					break;
-				case DIRECTION_UP:
-					enemy.SetMoveFrame(1);
-					break;
-				case DIRECTION_LEFT:
-					enemy.SetMoveFrame(2);
-					break;
-				case DIRECTION_RIGHT:
-					enemy.SetMoveFrame(3);
-					break;
+		for (int i = 0; i < POKEMON_COUNT; i++) {
+			if (enemy[i].GetDied() == false) {
+				RECT temp2 = pokemon.GetMeleeAttack().rc;
+				if (IntersectRect(&temp, &enemy[i].GetRect(), &temp2)) {
+					enemy[i].SetStatus(STATUS_HURT);
+					if (enemy[i].GetMeleeAttack().isAttack == true)
+						enemy[i].MeleeAttack(false);
+					// 포켓몬 마주보게 하기
+					switch (pokemon.GetDirection())
+					{
+					case DIRECTION_DOWN:
+						enemy[i].SetDirection(DIRECTION_UP);
+						enemy[i].AddY(SPEED);
+						break;
+					case DIRECTION_UP:
+						enemy[i].SetDirection(DIRECTION_DOWN);
+						enemy[i].AddY(-SPEED);
+						break;
+					case DIRECTION_LEFT:
+						enemy[i].SetDirection(DIRECTION_RIGHT);
+						enemy[i].AddX(-SPEED);
+						break;
+					case DIRECTION_RIGHT:
+						enemy[i].SetDirection(DIRECTION_LEFT);
+						enemy[i].AddX(SPEED);
+						break;
+					}
+					switch (enemy[i].GetDirection())
+					{
+					case DIRECTION_DOWN:
+						enemy[i].SetMoveFrame(0);
+						break;
+					case DIRECTION_UP:
+						enemy[i].SetMoveFrame(1);
+						break;
+					case DIRECTION_LEFT:
+						enemy[i].SetMoveFrame(2);
+						break;
+					case DIRECTION_RIGHT:
+						enemy[i].SetMoveFrame(3);
+						break;
+					}
 				}
 			}
 		}
@@ -379,41 +387,47 @@ void TestScene::Update()
 	for (int i = 0; i < BULLETMAX; i++) {
 		if (pokemon.GetBullet(i)->isFire == false) continue;
 
-		RECT bulletTemp = pokemon.GetBullet(i)->rc;
-		RECT temp2 = enemy.GetRect();
-		if (IntersectRect(&temp, &temp2, &bulletTemp)) {
-			pokemon.GetBullet(i)->isFire = false;
-			enemy.SetStatus(STATUS_HURT);
-			switch (pokemon.GetBullet(i)->dir)
-			{
-			case DIRECTION_DOWN:
-				enemy.SetDirection(DIRECTION_UP);
-				break;
-			case DIRECTION_UP:
-				enemy.SetDirection(DIRECTION_DOWN);
-				break;
-			case DIRECTION_LEFT:
-				enemy.SetDirection(DIRECTION_RIGHT);
-				break;
-			case DIRECTION_RIGHT:
-				enemy.SetDirection(DIRECTION_LEFT);
-				break;
-			}
+		for (int j = 0; j < POKEMON_COUNT; j++) {
+			if (enemy[j].GetDied() == true) continue;
+			// 죽어가는 시체 무시
+			if (enemy[j].GetAlpha() != 255) continue;
 
-			switch (enemy.GetDirection())
-			{
-			case DIRECTION_DOWN:
-				enemy.SetMoveFrame(0);
-				break;
-			case DIRECTION_UP:
-				enemy.SetMoveFrame(1);
-				break;
-			case DIRECTION_LEFT:
-				enemy.SetMoveFrame(2);
-				break;
-			case DIRECTION_RIGHT:
-				enemy.SetMoveFrame(3);
-				break;
+			RECT bulletTemp = pokemon.GetBullet(i)->rc;
+			RECT temp2 = enemy[j].GetRect();
+			if (IntersectRect(&temp, &temp2, &bulletTemp)) {
+				pokemon.GetBullet(i)->isFire = false;
+				enemy[j].SetStatus(STATUS_HURT);
+				switch (pokemon.GetBullet(i)->dir)
+				{
+				case DIRECTION_DOWN:
+					enemy[j].SetDirection(DIRECTION_UP);
+					break;
+				case DIRECTION_UP:
+					enemy[j].SetDirection(DIRECTION_DOWN);
+					break;
+				case DIRECTION_LEFT:
+					enemy[j].SetDirection(DIRECTION_RIGHT);
+					break;
+				case DIRECTION_RIGHT:
+					enemy[j].SetDirection(DIRECTION_LEFT);
+					break;
+				}
+
+				switch (enemy[j].GetDirection())
+				{
+				case DIRECTION_DOWN:
+					enemy[j].SetMoveFrame(0);
+					break;
+				case DIRECTION_UP:
+					enemy[j].SetMoveFrame(1);
+					break;
+				case DIRECTION_LEFT:
+					enemy[j].SetMoveFrame(2);
+					break;
+				case DIRECTION_RIGHT:
+					enemy[j].SetMoveFrame(3);
+					break;
+				}
 			}
 		}
 	}
@@ -455,9 +469,12 @@ void TestScene::Render()
 		pokemon.GetX(), pokemon.GetY(), (int)pokemon.GetMoveFrame(), 0);
 	//enemy.GetAni(enemy.GetStatus())->FrameRender(GetMemDC(),
 	//	enemy.GetX(), enemy.GetY(), (int)enemy.GetMoveFrame(), 0);
-	enemy.GetAni(enemy.GetStatus())->FrameRender(GetMemDC(),
-		enemy.GetX(), enemy.GetY(), (int)enemy.GetMoveFrame(), 0,
-		enemy.GetAlpha());
+
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		enemy[i].GetAni(enemy[i].GetStatus())->FrameRender(GetMemDC(),
+			enemy[i].GetX(), enemy[i].GetY(), (int)enemy[i].GetMoveFrame(), 0,
+			enemy[i].GetAlpha());
+	}
 
 	//charmander[enemy.GetStatus()]->FrameRender(GetMemDC(),
 	//	enemy.GetX(), enemy.GetY(), (int)enemy.GetMoveFrame(), 0);
@@ -473,8 +490,10 @@ void TestScene::Render()
 		if (pokemon.GetMeleeAttack().isAttack)
 			RectangleMake(GetMemDC(), pokemon.GetMeleeAttack().rc);
 		
-		if (enemy.GetMeleeAttack().isAttack)
-			RectangleMake(GetMemDC(), enemy.GetMeleeAttack().rc);
+		for (int i = 0; i < POKEMON_COUNT; i++) {
+			if (enemy[i].GetMeleeAttack().isAttack)
+				RectangleMake(GetMemDC(), enemy[i].GetMeleeAttack().rc);
+		}
 
 		for (int i = 0; i < BULLETMAX; i++) {
 			if (pokemon.GetBullet(i)->isFire == false) continue;
