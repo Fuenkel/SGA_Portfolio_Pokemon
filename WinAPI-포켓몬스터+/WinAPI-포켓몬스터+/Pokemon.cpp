@@ -5,11 +5,15 @@
 Pokemon::Pokemon()
 {
 	m_equipItem.itemKind = ITEM_EMPTY;
+	num = 0;
+	isDied = false;
+	alpha = 255;
 }
 
 
 Pokemon::~Pokemon()
 {
+	delete[] ani;
 }
 
 void Pokemon::EquipItem(int num)
@@ -37,4 +41,10 @@ void Pokemon::EquipItem(int num)
 		if (beforeItem.itemKind != ITEM_EMPTY)
 			GAME->GetInventory().AddItem(beforeItem);
 	}
+}
+
+void Pokemon::InitAni(int num)
+{
+	this->num = num;
+	ani = new Image*[num];
 }

@@ -4,11 +4,13 @@
 
 Player::Player()
 {
+	num = 0;
 }
 
 
 Player::~Player()
 {
+	delete[] ani;
 }
 
 void Player::Probe(Image * pixel, float bgX, float bgY, float winsizeX, float winsizeY)
@@ -80,6 +82,12 @@ void Player::Probe(Image * pixel, float bgX, float bgY, float winsizeX, float wi
 		}
 		break;
 	}
+}
+
+void Player::InitAni(int num)
+{
+	this->num = num;
+	ani = new Image*[num];
 }
 
 //void Player::InputPlayer()

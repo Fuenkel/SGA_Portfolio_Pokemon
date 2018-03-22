@@ -169,6 +169,7 @@
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Town1Scene.h" />
     <ClInclude Include="Town2Scene.h" />
+    <ClInclude Include="TravelScene.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WinAPI.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Town1Scene.cpp" />
     <ClCompile Include="Town2Scene.cpp" />
+    <ClCompile Include="TravelScene.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>

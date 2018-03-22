@@ -31,6 +31,8 @@ private:
 
 	bool isDrag;
 
+	int beforeTown;
+
 	RECT invenRc;
 	RECT statusBox;
 	RECT nextPokemonRc;
@@ -74,6 +76,9 @@ public:
 			index = 0;
 		SetPokemonIndex(index);
 	}
+
+	void SetBeforeTown(int num) { beforeTown = num; }
+	int GetBeforeTown() { return beforeTown; }
 };
 
 #define GAME GameManager::GetSingleton()

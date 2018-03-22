@@ -5,6 +5,7 @@
 #include "Town1Scene.h"
 #include "Town2Scene.h"
 #include "ShopScene.h"
+#include "TravelScene.h"
 
 MainGame::MainGame()
 {
@@ -36,9 +37,14 @@ HRESULT MainGame::Init()
 	IMAGE->AddImage("ShopPixel", "images/shopPixel.bmp", 0, 0,
 		WINSIZEX, WINSIZEY, 1, 1, false, RGB(255, 0, 255));
 
+	IMAGE->AddImage("Travel", "images/travel.bmp", 0, 0, WINSIZEX, WINSIZEY * 2, 1, 1,
+		false, RGB(255, 0, 255));
+
 	// player
 	IMAGE->AddImage("Player", "images/trainer.bmp", WINSIZEX / 2, WINSIZEY / 2,
 		70 * 3, 100 * 4, 3, 4, true, RGB(255, 200, 106));
+	IMAGE->AddImage("Player_travel", "images/trainer.bmp", WINSIZEX / 2, WINSIZEY / 2,
+		40 * 3, 50 * 4, 3, 4, true, RGB(255, 200, 106));
 
 	// item
 	IMAGE->AddImage("Item_ball", 
@@ -64,16 +70,26 @@ HRESULT MainGame::Init()
 	IMAGE->AddImage("Charmander_img", "images/charmander/charmander_img.bmp",
 		0, 0, 90, 130, 1, 1, true, RGB(182, 185, 184));
 
+	// rattata
+	IMAGE->AddImage("Rattata_idle", "images/rattata/idle_16x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 16, 50, 16, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Rattata_movement", "images/rattata/movement_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Rattata_hurt", "images/rattata/hurt_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+
 	//SCENE->AddScene("Test", new TestScene);
 	//SCENE->ChangeScene("Test");
 
 	SCENE->AddScene("Town1", new Town1Scene);
 	SCENE->AddScene("Town2", new Town2Scene);
 	SCENE->AddScene("Shop", new ShopScene);
+	SCENE->AddScene("Travel", new TravelScene);
 
 	SCENE->ChangeScene("Town1");
 	//SCENE->ChangeScene("Town2");
 	//SCENE->ChangeScene("Shop");
+	//SCENE->ChangeScene("Travel");
 
 	return S_OK;
 }

@@ -8,6 +8,9 @@ class Player : public Unit
 {
 private:
 	float m_probe;
+
+	Image** ani;
+	int num;
 public:
 	Player();
 	~Player();
@@ -17,5 +20,9 @@ public:
 	}
 	void Probe(Image* pixel, float bgX, float bgY, float winsizeX, float winsizeY);
 	//void InputPlayer();
+
+	void InitAni(int num);
+	void SetAni(int status, Image* img) { ani[status] = img; }
+	Image* GetAni(int status) { return ani[status]; }
 };
 

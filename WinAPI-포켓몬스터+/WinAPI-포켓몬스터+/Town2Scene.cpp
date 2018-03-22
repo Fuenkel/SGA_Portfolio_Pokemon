@@ -135,7 +135,9 @@ void Town2Scene::Update()
 		playerInfo.SetX(512);
 		playerInfo.SetY(550);
 		playerInfo.SetDirection(DIRECTION_UP);
-		SCENE->ChangeScene("Town1");
+		//SCENE->ChangeScene("Town1");
+		GAME->SetBeforeTown(2);
+		SCENE->ChangeScene("Travel");
 	}
 
 	if (IntersectRect(&temp, &sceneInfo[SCENE2_SHOP].rc, &playerInfo.GetRect())) {
@@ -390,6 +392,8 @@ void Town2Scene::Render()
 
 void Town2Scene::PlayerMove()
 {
+	bool isFrameMove = false;
+
 	// left
 	if (INPUT->GetKeyDown(VK_LEFT)) {
 		playerInfo.SetMoveFrame(0);
@@ -398,7 +402,9 @@ void Town2Scene::PlayerMove()
 	if (INPUT->GetKey(VK_LEFT)) {
 		if (playerInfo.GetDirection() != DIRECTION_LEFT)
 			playerInfo.SetDirection(DIRECTION_LEFT);
-		playerInfo.AddMoveFrame(0.1f);
+		
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 
 		//playerInfo.AddX(-2.5f);
 
@@ -429,7 +435,9 @@ void Town2Scene::PlayerMove()
 	if (INPUT->GetKey(VK_RIGHT)) {
 		if (playerInfo.GetDirection() != DIRECTION_RIGHT)
 			playerInfo.SetDirection(DIRECTION_RIGHT);
-		playerInfo.AddMoveFrame(0.1f);
+		
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 
 		//playerInfo.AddX(2.5f);
 
@@ -461,7 +469,8 @@ void Town2Scene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_UP)
 			playerInfo.SetDirection(DIRECTION_UP);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 		//playerInfo.AddY(-2.5f);
 
 		if (playerInfo.GetY() > WINSIZEY / 2) {
@@ -492,7 +501,8 @@ void Town2Scene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_DOWN)
 			playerInfo.SetDirection(DIRECTION_DOWN);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 		//playerInfo.AddY(2.5f);
 
 		if (playerInfo.GetY() < WINSIZEY / 2) {
@@ -513,6 +523,9 @@ void Town2Scene::PlayerMove()
 	if (INPUT->GetKeyUp(VK_DOWN)) {
 		playerInfo.SetMoveFrame(PLAYER_IDLE);
 	}
+
+	if (isFrameMove)
+		playerInfo.AddMoveFrame(0.1f);
 }
 
 void Town2Scene::OtherMove(Direction dir)

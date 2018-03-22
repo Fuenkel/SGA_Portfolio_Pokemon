@@ -37,6 +37,8 @@ void GameManager::Init()
 	isDrag = false;
 
 	pokemonIndex = 0;
+
+	beforeTown = 1;
 }
 
 void GameManager::Release()

@@ -43,6 +43,9 @@
     <Filter Include="GameScene\Shop">
       <UniqueIdentifier>{404d0e52-8c1c-4baf-a133-c2cca75b0edb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameScene\Travel">
+      <UniqueIdentifier>{f6f8e558-e8d1-46fd-854a-b1c569e169ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -120,6 +123,9 @@
     <ClInclude Include="Pokemon.h">
       <Filter>GameScene</Filter>
     </ClInclude>
+    <ClInclude Include="TravelScene.h">
+      <Filter>GameScene\Travel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -175,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Pokemon.cpp">
       <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="TravelScene.cpp">
+      <Filter>GameScene\Travel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -508,6 +508,8 @@ void ShopScene::Render()
 
 void ShopScene::PlayerMove()
 {
+	bool isFrameMove = false;
+
 	// left
 	if (INPUT->GetKeyDown(VK_LEFT)) {
 		playerInfo.SetMoveFrame(0);
@@ -517,7 +519,8 @@ void ShopScene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_LEFT)
 			playerInfo.SetDirection(DIRECTION_LEFT);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 
 		//playerInfo.AddX(-2.5f);
 
@@ -549,7 +552,8 @@ void ShopScene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_RIGHT)
 			playerInfo.SetDirection(DIRECTION_RIGHT);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 
 		//playerInfo.AddX(2.5f);
 
@@ -581,7 +585,8 @@ void ShopScene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_UP)
 			playerInfo.SetDirection(DIRECTION_UP);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 		//playerInfo.AddY(-2.5f);
 
 		if (playerInfo.GetY() > WINSIZEY / 2) {
@@ -612,7 +617,8 @@ void ShopScene::PlayerMove()
 		if (playerInfo.GetDirection() != DIRECTION_DOWN)
 			playerInfo.SetDirection(DIRECTION_DOWN);
 
-		playerInfo.AddMoveFrame(0.1f);
+		isFrameMove = true;
+		//playerInfo.AddMoveFrame(0.1f);
 		//playerInfo.AddY(2.5f);
 
 		if (playerInfo.GetY() < WINSIZEY / 2) {
@@ -633,6 +639,9 @@ void ShopScene::PlayerMove()
 	if (INPUT->GetKeyUp(VK_DOWN)) {
 		playerInfo.SetMoveFrame(PLAYER_IDLE);
 	}
+
+	if (isFrameMove)
+		playerInfo.AddMoveFrame(0.1f);
 }
 
 void ShopScene::OtherMove(Direction dir)

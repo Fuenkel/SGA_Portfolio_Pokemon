@@ -97,6 +97,7 @@ public:
 
 	// 알파 렌더
 	// alpha가 alpha값 이라고 생각 byte이므로 0 ~ 255 
+	// 0이 투명 255 다보이는거
 	void AlphaRender(HDC hdc, BYTE alpha);
 
 	void AlphaRender(HDC hdc, int destX, int destY, BYTE alpha);
