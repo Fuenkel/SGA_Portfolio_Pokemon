@@ -17,7 +17,7 @@ private:
 
 	Image* bg;
 	
-	Image* effect[2];
+	Image* effect[EFFECT_END];
 
 	Pokemon pokemon;
 	Pokemon enemy[POKEMON_COUNT];

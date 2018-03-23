@@ -42,7 +42,7 @@ HRESULT MainGame::Init()
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Charmander_hurt", "images/charmander/hurt_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
-	IMAGE->AddImage("Charmander_attack1", "images/charmander/attack1_24x1.bmp",
+	IMAGE->AddImage("Charmander_attack", "images/charmander/attack1_24x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Charmander_special_attack", "images/charmander/special_attack_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 8 * 50, 50, 8, 1, true, RGB(182, 185, 184));
@@ -70,6 +70,12 @@ HRESULT MainGame::Init()
 		WINSIZEX/2, WINSIZEY/2, 100 * 14, 100, 14, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Effect_fire", "images/charmander/fire_12x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 12 * 50, 50, 12, 1, true, RGB(182, 185, 184));
+
+	// ui
+	IMAGE->AddImage("UI_open", "images/ui_open.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 300, 300, 1, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("UI_close", "images/ui_close.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 300, 300, 1, 1, true, RGB(182, 185, 184));
 
 	SCENE->ChangeScene("Test");
 

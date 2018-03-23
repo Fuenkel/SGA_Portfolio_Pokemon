@@ -22,6 +22,12 @@ enum Status {
 	STATUS_ATTACK2
 };
 
+enum EffectKind {
+	EFFECT_ELECTRICITY,
+	EFFECT_FIRE,
+	EFFECT_END
+};
+
 #define BULLETMAX 10
 
 struct tagBullet {
@@ -50,9 +56,12 @@ private:
 	tagBullet m_bullet[BULLETMAX];
 	tagMeleeAttack m_melee;
 
-	Image* img;
-	Image** ani;
-	int num;
+	Image* portrait;
+	Image* model;
+	Image* ani[6];
+	int aniMaxNum[6];
+
+	int effectNum;
 
 	bool isDied;
 	float alpha;
@@ -68,16 +77,24 @@ public:
 	Status GetStatus() { return m_status; }
 	void SetStatus(Status status) { m_status = status; }
 
-	Image* GetImage() { return img; }
-	void SetImage(Image* img) { this->img = img; }
+	Image* GetPortrait() { return portrait; }
+	void SetPortrait(Image* portrait) { this->portrait = portrait; }
+
+	Image* GetModel() { return model; }
+	void SetModel(Image* model) { this->model = model; }
 
 	void Init(Direction dir, float x, float y, float width, float height) {
 		m_dir = dir; m_x = x; m_y = y; m_width = width; m_height = height;
 	}
 
-	void InitAni(int num);
+	void SetEffectNum(int num) { effectNum = num; }
+	int GetEffectNum() { return effectNum; }
+
 	void SetAni(Status status, Image* img) { ani[status] = img; }
 	Image* GetAni(Status status) { return ani[status]; }
+
+	void SetAniMaxNum(int index, int maxNum) { aniMaxNum[index] = maxNum; }
+	int GetAniMaxNum(int index) { return aniMaxNum[index]; }
 
 	void SetDied(bool isDied) { this->isDied = isDied; }
 	bool GetDied() { return isDied; }

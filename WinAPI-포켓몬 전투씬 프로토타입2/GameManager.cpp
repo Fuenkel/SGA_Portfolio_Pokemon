@@ -72,7 +72,22 @@ void GameManager::PokemonInit()
 	temp.SetSpeed(65);
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
-	temp.SetImage(IMAGE->FindImage("Charmander_img"));
+	temp.SetModel(IMAGE->FindImage("Charmander_img"));
+
+	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Charmander_idle"));
+	temp.SetAniMaxNum(STATUS_IDLE, 1);
+	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Charmander_movement"));
+	temp.SetAniMaxNum(STATUS_MOVE, 3);
+	temp.SetAni(STATUS_ATTACK, IMAGE->FindImage("Charmander_attack"));
+	temp.SetAniMaxNum(STATUS_ATTACK, 3);
+	temp.SetAni(STATUS_HURT, IMAGE->FindImage("Charmander_hurt"));
+	temp.SetAniMaxNum(STATUS_HURT, 1);
+	temp.SetAni(STATUS_SPECIAL_ATTACK,
+		IMAGE->FindImage("Charmander_special_attack"));
+	temp.SetAniMaxNum(STATUS_SPECIAL_ATTACK, 1);
+	temp.SetAni(STATUS_ATTACK2, IMAGE->FindImage("Charmander_attack2"));
+	temp.SetAniMaxNum(STATUS_ATTACK2, 4);
+	temp.SetEffectNum(EFFECT_FIRE);
 
 	this->pokemonList.push_back(temp);
 
@@ -87,7 +102,20 @@ void GameManager::PokemonInit()
 	temp.SetSpeed(90);
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
-	temp.SetImage(IMAGE->FindImage("Pikachu_img"));
+	temp.SetModel(IMAGE->FindImage("Pikachu_img"));
+
+	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Pikachu_idle"));
+	temp.SetAniMaxNum(STATUS_IDLE, 1);
+	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Pikachu_movement"));
+	temp.SetAniMaxNum(STATUS_MOVE, 3);
+	temp.SetAni(STATUS_ATTACK, IMAGE->FindImage("Pikachu_attack"));
+	temp.SetAniMaxNum(STATUS_ATTACK, 1);
+	temp.SetAni(STATUS_HURT, IMAGE->FindImage("Pikachu_hurt"));
+	temp.SetAniMaxNum(STATUS_HURT, 1);
+	temp.SetAni(STATUS_SPECIAL_ATTACK,
+		IMAGE->FindImage("Pikachu_special_attack"));
+	temp.SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
+	temp.SetEffectNum(EFFECT_ELECTRICITY);
 
 	this->pokemonList.push_back(temp);
 }
