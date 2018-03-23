@@ -527,8 +527,7 @@ void Image::AlphaRender(HDC hdc, BYTE alpha)
 
 		// 1. 출력 해야될 DC에 그려져 있는 내용을 블렌드 이미지에 그려준다
 		BitBlt(blendImage->hMemDC, 0, 0, blendImage->width, blendImage->height,
-			hdc, WINSIZEX, WINSIZEY, SRCCOPY); // 고속 복사 SRCCOPY
-
+			hdc, 0, 0, SRCCOPY); // 고속 복사 SRCCOPY
 
 											   // 2. 출력 해야될 이미지를 블렌드에 그려준다. (마젠타 값을 제거)
 		GdiTransparentBlt(

@@ -65,7 +65,8 @@ void MainGame::Render()
 	//==================   Debug   ====================
 	if (isDebug)
 	{
-
+		sprintf_s(str, "%d %d", g_ptMouse.x, g_ptMouse.y);
+		TextOut(GetMemDC(), 10, 10, str, strlen(str));
 	}
 	//=================================================
 	this->SetBackBuffer()->Render(GetHDC());

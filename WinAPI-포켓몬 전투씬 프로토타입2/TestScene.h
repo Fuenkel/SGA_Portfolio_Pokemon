@@ -6,7 +6,7 @@
 #include "Pokemon.h"
 
 #define SPEED 2.5f
-#define POKEMON_COUNT 15
+#define POKEMON_COUNT 1
 
 class TestScene : public GameNode
 {
@@ -16,7 +16,8 @@ private:
 	//float moveFrame;
 
 	Image* bg;
-	
+	Image* ui[2];
+
 	Image* effect[EFFECT_END];
 
 	Pokemon pokemon;
@@ -25,6 +26,23 @@ private:
 	Player player;
 
 	RECT temp;
+	char str[128];
+	//float width;
+
+	RECT hpBar[6];
+	float hpWidth[6];
+	int hpStatus[6];
+
+	HFONT hFont;
+	HFONT oldFont;
+
+	HBRUSH hBrush;
+	HBRUSH hOldBrush;
+
+	COLORREF fullHp;
+	COLORREF halfHp;
+	COLORREF littleHp;
+
 public:
 	TestScene();
 	~TestScene();
@@ -45,5 +63,8 @@ public:
 	void PokemonHurt(Pokemon& pokemon, int maxNum);
 
 	Direction FindDirection(Pokemon& pokemon, Unit& unit);
+
+	void ChangeHpBar();
+	void DrawUI();
 };
 

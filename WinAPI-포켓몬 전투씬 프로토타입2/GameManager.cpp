@@ -37,6 +37,9 @@ void GameManager::Init()
 	isDrag = false;
 
 	pokemonIndex = 0;
+	selectNum = 0;
+
+	playerLevel = 5;
 
 	beforeTown = 1;
 }
@@ -73,7 +76,7 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Charmander_img"));
-
+	temp.SetPortrait(IMAGE->FindImage("Charmander_portrait"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Charmander_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Charmander_movement"));
@@ -89,6 +92,10 @@ void GameManager::PokemonInit()
 	temp.SetAniMaxNum(STATUS_ATTACK2, 4);
 	temp.SetEffectNum(EFFECT_FIRE);
 
+	temp.SetAtk(5);
+	temp.SetSpAtk(10);
+
+	this->pokemonList.push_back(temp);
 	this->pokemonList.push_back(temp);
 
 	temp.SetName("ÇÇÄ«Ãò");
@@ -103,7 +110,7 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Pikachu_img"));
-
+	temp.SetPortrait(IMAGE->FindImage("Pikachu_portrait"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Pikachu_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Pikachu_movement"));
@@ -117,6 +124,19 @@ void GameManager::PokemonInit()
 	temp.SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
 	temp.SetEffectNum(EFFECT_ELECTRICITY);
 
+	temp.SetAtk(5);
+	temp.SetSpAtk(10);
+
 	this->pokemonList.push_back(temp);
+	this->pokemonList.push_back(temp);
+}
+
+bool GameManager::CheckGameOver()
+{
+	for (int i = 0; i < pokemonList.size(); i++)
+		if (pokemonList[i].GetDied() == false)
+			return false;
+
+	return true;
 }
 

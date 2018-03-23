@@ -6,6 +6,8 @@ class MainGame : public GameNode
 {
 private:
 	bool isDebug;
+
+	char str[128];
 public:
 	MainGame();
 	~MainGame();

@@ -19,9 +19,17 @@ HRESULT TestScene::Init()
 	
 	bg = IMAGE->FindImage("Battle");
 
+	ui[0] = IMAGE->FindImage("UI_open");
+	ui[1] = IMAGE->FindImage("UI_close");
+
 	player.SetAni(0, IMAGE->FindImage("Player_battle"));
+	player.SetPortrait(IMAGE->FindImage("Player_portrait"));
 	player.Init(DIRECTION_UP, WINSIZEX / 2, WINSIZEY / 2, 40, 50);
 	player.SetMoveFrame(PLAYER_IDLE);
+	player.SetLevel(GAME->GetPlayerLevel());
+	player.SetName("지우");
+	player.SetHp(100);
+	player.SetMaxHp(100);
 
 	//pikachu[STATUS_IDLE] = IMAGE->FindImage("Pikachu_idle");
 	//pikachu[STATUS_MOVE] = IMAGE->FindImage("Pikachu_movement");
@@ -29,7 +37,7 @@ HRESULT TestScene::Init()
 	//pikachu[STATUS_SPECIAL_ATTACK] = IMAGE->FindImage("Pikachu_special_attack");
 	//pikachu[STATUS_HURT] = IMAGE->FindImage("Pikachu_hurt");
 
-	pokemon = GAME->GetPokemon(1);
+	pokemon = GAME->GetPokemon(GAME->GetSelectNum());
 
 	//pokemon.InitAni(5);
 	//pokemon.SetAni(STATUS_IDLE, IMAGE->FindImage("Pikachu_idle"));
@@ -47,6 +55,7 @@ HRESULT TestScene::Init()
 	//charmander[STATUS_HURT] = IMAGE->FindImage("Charmander_hurt");
 
 	for (int i = 0; i < POKEMON_COUNT; i++) {
+		enemy[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
 		enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
 		enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
 		enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
@@ -58,15 +67,22 @@ HRESULT TestScene::Init()
 		enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
 			IMAGE->FindImage("Rattata_special_attack"));
 		enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
+		
+		// test
+		enemy[i].SetName("꼬렛");
+		enemy[i].SetLevel(5);
+		enemy[i].SetMaxHp(32);
+		enemy[i].SetHp(32);
+		enemy[i].SetAtk(5);
 	}
 
 	effect[EFFECT_ELECTRICITY] = IMAGE->FindImage("Effect_electricity");
 	effect[EFFECT_FIRE] = IMAGE->FindImage("Effect_fire");
 
-	pokemon.SetX(WINSIZEX / 2);
-	pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
 	pokemon.SetWidth(50);
 	pokemon.SetHeight(50);
+	pokemon.SetX(WINSIZEX / 2);
+	pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
 	pokemon.SetDirection(DIRECTION_UP);
 	pokemon.SetStatus(STATUS_IDLE);
 	pokemon.SetAttackStatus(STATUS_ATTACK);
@@ -80,6 +96,29 @@ HRESULT TestScene::Init()
 		enemy[i].SetStatus(STATUS_IDLE);
 		enemy[i].SetAttackStatus(STATUS_ATTACK);
 	}
+
+	// ui hpBar
+	// test
+	// pokemon
+	hpBar[0] = RectMake(71, 147, 185 - 71, 152 - 148);
+	hpBar[1] = RectMake(71 + 200, 147, 185 - 71, 152 - 148);
+	hpBar[2] = RectMake(WINSIZEX - 400 + 71, 147, 185 - 71, 152 - 148);
+	hpBar[3] = RectMake(WINSIZEX - 200 + 71, 147, 185 - 71, 152 - 148);
+	// player
+	hpBar[4] = RectMake(71, 740, 185 - 71, 152 - 148);
+	// enemy
+	hpBar[5] = RectMake(WINSIZEX - 200 + 71, 740, 185 - 71, 152 - 148);
+
+	for (int i = 0; i < 6; i++) {
+		hpWidth[i] = hpBar[i].right - hpBar[i].left;
+		hpStatus[i] = 0;
+	}
+
+	fullHp = RGB(112, 248, 168);
+	halfHp = RGB(248, 224, 56);
+	littleHp = RGB(208, 40, 40);
+
+	//width = hpBar[0].right - hpBar[0].left;
 	return S_OK;
 }
 
@@ -94,6 +133,21 @@ void TestScene::Update()
 	//	if (moveFrame == IMAGE->FindImage("Pikachu_attack")->GetMaxFrameX())
 	//		moveFrame = 0;
 	//}
+
+	// hpBar test
+	//if (INPUT->GetKeyDown('Q'))
+	//	GAME->GetPokemon(0).AddHp(-1);
+	//if (INPUT->GetKeyDown('W'))
+	//	GAME->GetPokemon(1).AddHp(-1);
+	//if (INPUT->GetKeyDown('E'))
+	//	GAME->GetPokemon(2).AddHp(-1);
+	//if (INPUT->GetKeyDown('R'))
+	//	GAME->GetPokemon(3).AddHp(-1);
+	//if (INPUT->GetKeyDown('T'))
+	//	player.AddHp(-1);
+	
+	// test위해 모두 정지
+	//return;
 
 	// enemy
 	for (int i = 0; i < POKEMON_COUNT; i++) {
@@ -139,7 +193,7 @@ void TestScene::Update()
 					enemy[i].GetX(), enemy[i].GetY(), player.GetX(), player.GetY()) > 60) {
 
 					if (GetDistance(
-						enemy[i].GetX(), enemy[i].GetY(), pokemon.GetX(), pokemon.GetY()) <= 50)
+						enemy[i].GetX(), enemy[i].GetY(), pokemon.GetX(), pokemon.GetY()) <= 60)
 						PokemonAttack(enemy[i], 
 							enemy[i].GetAniMaxNum(STATUS_ATTACK),
 							enemy[i].GetAniMaxNum(STATUS_IDLE), true);
@@ -167,7 +221,107 @@ void TestScene::Update()
 				break;
 			case STATUS_ATTACK:
 				RECT temp2 = enemy[i].GetMeleeAttack().rc;
+				// 플레이어를 공격할 때
+				if (IntersectRect(&temp, &temp2, &player.GetRect())) {
+
+					if (enemy[i].GetMeleeAttack().isAttack) {
+						player.AddHp(-enemy[i].GetAtk());
+						if (player.GetHp() <= 0)
+							player.SetHp(0);
+					}
+					enemy[i].MeleeAttack(false);
+
+					if (pokemon.GetMeleeAttack().isAttack == true)
+						pokemon.MeleeAttack(false);
+
+					switch (enemy[i].GetDirection())
+					{
+					case DIRECTION_DOWN:
+						pokemon.AddY(SPEED);
+						player.AddY(SPEED);
+
+						if (pokemon.GetY() > WINSIZEY || player.GetY() > WINSIZEY)
+						{
+							player.Init(DIRECTION_UP, 
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
+						break;
+					case DIRECTION_UP:
+						pokemon.AddY(-SPEED);
+						player.AddY(-SPEED);
+
+						if (pokemon.GetY() < 0 || player.GetY() < 0)
+						{
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
+						break;
+					case DIRECTION_LEFT:
+						pokemon.AddX(-SPEED);
+						player.AddX(-SPEED);
+
+						if (pokemon.GetX() < 0 || player.GetX() < 0) {
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
+						break;
+					case DIRECTION_RIGHT:
+						pokemon.AddX(SPEED);
+						player.AddX(SPEED);
+
+						if (pokemon.GetX() > WINSIZEX || player.GetX() > WINSIZEX) {
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
+						break;
+					}
+				}
+				// 포켓몬을 공격할 때
 				if (IntersectRect(&temp, &pokemon.GetRect(), &temp2)) {
+		
+					if (enemy[i].GetMeleeAttack().isAttack) {
+  						GAME->GetPokemon(GAME->GetSelectNum()).AddHp(-enemy[i].GetAtk());
+						if (GAME->GetPokemon(GAME->GetSelectNum()).GetHp() <= 0) {
+							GAME->GetPokemon(GAME->GetSelectNum()).SetHp(0);
+							GAME->GetPokemon(GAME->GetSelectNum()).SetDied(true);
+
+							if (GAME->CheckGameOver()) {
+
+							}
+							else {
+								float tempX = pokemon.GetX();
+								float tempY = pokemon.GetY();
+								Status tempAttackStatus = pokemon.GetAttackStatus();
+								GAME->NextSelectNum();
+								pokemon = GAME->GetPokemon(GAME->GetSelectNum());
+								pokemon.SetX(tempX);
+								pokemon.SetY(tempY);
+								pokemon.SetWidth(50);
+								pokemon.SetHeight(50);
+								pokemon.SetDirection(player.GetDirection());
+								pokemon.SetStatus(STATUS_IDLE);
+								pokemon.SetAttackStatus(tempAttackStatus);
+							}
+						}
+					}
+					enemy[i].MeleeAttack(false);
+
 					pokemon.SetStatus(STATUS_HURT);
 					if (pokemon.GetMeleeAttack().isAttack == true)
 						pokemon.MeleeAttack(false);
@@ -178,21 +332,59 @@ void TestScene::Update()
 						pokemon.SetDirection(DIRECTION_UP);
 						pokemon.AddY(SPEED);
 						player.AddY(SPEED);
+
+						if (pokemon.GetY() > WINSIZEY ||player.GetY() > WINSIZEY)
+						{
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
 						break;
 					case DIRECTION_UP:
 						pokemon.SetDirection(DIRECTION_DOWN);
 						pokemon.AddY(-SPEED);
 						player.AddY(-SPEED);
+
+						if (pokemon.GetY() < 0 || player.GetY() < 0)
+						{
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
 						break;
 					case DIRECTION_LEFT:
 						pokemon.SetDirection(DIRECTION_RIGHT);
 						pokemon.AddX(-SPEED);
 						player.AddX(-SPEED);
+
+						if (pokemon.GetX() < 0 || player.GetX() < 0) {
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
 						break;
 					case DIRECTION_RIGHT:
 						pokemon.SetDirection(DIRECTION_LEFT);
 						pokemon.AddX(SPEED);
 						player.AddX(SPEED);
+
+						if (pokemon.GetX() > WINSIZEX || player.GetX() > WINSIZEX) {
+							player.Init(DIRECTION_UP,
+								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
+							pokemon.SetX(WINSIZEX / 2);
+							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
+							pokemon.SetDirection(DIRECTION_UP);
+							pokemon.SetStatus(STATUS_IDLE);
+						}
 						break;
 					}
 					switch (pokemon.GetDirection())
@@ -219,40 +411,48 @@ void TestScene::Update()
 			case STATUS_SPECIAL_ATTACK:
 				break;
 			case STATUS_HURT:
-				enemy[i].AddAlpha(-1);
-				if (enemy[i].GetAlpha() <= 0) {
-					enemy[i].SetDied(true);
+				if (enemy[i].GetHp() <= 0) {
+					enemy[i].AddAlpha(-1);
+					if (enemy[i].GetAlpha() <= 0) {
+						enemy[i].SetDied(true);
+					}
 				}
 
-				//enemy[i].SetMoveFrame(enemy[i].GetMoveFrame() + 0.1f);
+				if (enemy[i].GetHp() > 0) {
+					enemy[i].SetMoveFrame(enemy[i].GetMoveFrame() + 0.1f);
 
-				//switch (enemy[i].GetDirection())
-				//	{
-				//	case DIRECTION_DOWN:
-				//		if (enemy[i].GetMoveFrame() >= 1) {
-				//			enemy[i].SetStatus(STATUS_IDLE);
-				//			enemy[i].SetMoveFrame(0);
-				//		}
-				//		break;
-				//	case DIRECTION_UP:
-				//		if (enemy[i].GetMoveFrame() >= 2) {
-				//			enemy[i].SetStatus(STATUS_IDLE);
-				//			enemy[i].SetMoveFrame(2);
-				//		}
-				//		break;
-				//	case DIRECTION_LEFT:
-				//		if (enemy[i].GetMoveFrame() >= 3) {
-				//			enemy[i].SetStatus(STATUS_IDLE);
-				//			enemy[i].SetMoveFrame(4);
-				//		}
-				//		break;
-				//	case DIRECTION_RIGHT:
-				//		if (enemy[i].GetMoveFrame() >= 4) {
-				//			enemy[i].SetStatus(STATUS_IDLE);
-				//			enemy[i].SetMoveFrame(6);
-				//		}
-				//		break;
-				//	}
+					switch (enemy[i].GetDirection())
+					{
+					case DIRECTION_DOWN:
+						if (enemy[i].GetMoveFrame() >= 1) {
+							//enemy[i].SetStatus(STATUS_IDLE);
+							//enemy[i].SetMoveFrame(0);
+							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+						}
+						break;
+					case DIRECTION_UP:
+						if (enemy[i].GetMoveFrame() >= 2) {
+							//enemy[i].SetStatus(STATUS_IDLE);
+							//enemy[i].SetMoveFrame(2);
+							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+						}
+						break;
+					case DIRECTION_LEFT:
+						if (enemy[i].GetMoveFrame() >= 3) {
+							//enemy[i].SetStatus(STATUS_IDLE);
+							//enemy[i].SetMoveFrame(4);
+							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+						}
+						break;
+					case DIRECTION_RIGHT:
+						if (enemy[i].GetMoveFrame() >= 4) {
+							//enemy[i].SetStatus(STATUS_IDLE);
+							//enemy[i].SetMoveFrame(6);
+							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+						}
+						break;
+					}
+				}
 				break;
 			case STATUS_ATTACK2:
 				break;
@@ -277,6 +477,15 @@ void TestScene::Update()
 			if (enemy[i].GetDied() == false) {
 				RECT temp2 = pokemon.GetMeleeAttack().rc;
 				if (IntersectRect(&temp, &enemy[i].GetRect(), &temp2)) {
+
+					if (pokemon.GetMeleeAttack().isAttack) {
+     						enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
+						if (enemy[i].GetHp() <= 0) {
+							enemy[i].SetHp(0);
+						}
+					}
+					pokemon.MeleeAttack(false);
+
 					enemy[i].SetStatus(STATUS_HURT);
 					if (enemy[i].GetMeleeAttack().isAttack == true)
 						enemy[i].MeleeAttack(false);
@@ -426,6 +635,11 @@ void TestScene::Update()
 			RECT bulletTemp = pokemon.GetBullet(i)->rc;
 			RECT temp2 = enemy[j].GetRect();
 			if (IntersectRect(&temp, &temp2, &bulletTemp)) {
+				enemy[i].AddHp(-pokemon.GetSpAtk());
+				if (enemy[i].GetHp() <= 0) {
+					enemy[i].SetHp(0);
+				}
+
 				pokemon.GetBullet(i)->isFire = false;
 				enemy[j].SetStatus(STATUS_HURT);
 				switch (pokemon.GetBullet(i)->dir)
@@ -466,12 +680,39 @@ void TestScene::Update()
 		}
 	}
 
+	// hpBar Change
+	//hpBar[0].right = hpBar[0].left + width 
+	//	* GAME->GetPokemon(0).GetHp() / GAME->GetPokemon(0).GetMaxHp();
+	ChangeHpBar();
+
 	if (INPUT->GetKeyDown('X')) {
 		if (pokemon.GetAttackStatus() == STATUS_ATTACK) {
 			pokemon.SetAttackStatus(STATUS_SPECIAL_ATTACK);
 		}
 		else if (pokemon.GetAttackStatus() == STATUS_SPECIAL_ATTACK) {
 			pokemon.SetAttackStatus(STATUS_ATTACK);
+		}
+	}
+
+	if (INPUT->GetKeyDown('Z') 
+		&& pokemon.GetStatus() == STATUS_IDLE) {
+		float tempX = pokemon.GetX();
+		float tempY = pokemon.GetY();
+		Status tempAttackStatus = pokemon.GetAttackStatus();
+
+		if (GAME->CheckGameOver()) {
+
+		}
+		else {
+			GAME->NextSelectNum();
+			pokemon = GAME->GetPokemon(GAME->GetSelectNum());
+			pokemon.SetX(tempX);
+			pokemon.SetY(tempY);
+			pokemon.SetWidth(50);
+			pokemon.SetHeight(50);
+			pokemon.SetDirection(player.GetDirection());
+			pokemon.SetStatus(STATUS_IDLE);
+			pokemon.SetAttackStatus(tempAttackStatus);
 		}
 	}
 
@@ -484,6 +725,8 @@ void TestScene::Render()
 {
 	//IMAGE->FrameRender("BackGround", GetMemDC(), 0, 0, 0, 0);
 	bg->Render(GetMemDC(), -WINSIZEX/4, -WINSIZEY/4);
+
+	DrawUI();
 
 	player.GetAni(0)->FrameRender(GetMemDC(),
 		player.GetX(), player.GetY(), 
@@ -624,28 +867,32 @@ void TestScene::Move()
 {
 	bool isFrameMove = false;
 
-	if (INPUT->GetKey(VK_DOWN)) { 
+	if (INPUT->GetKey(VK_DOWN) && 
+		pokemon.GetY() + pokemon.GetHeight() < WINSIZEY) { 
 		player.AddY(SPEED);
 		isFrameMove = true;
 		//pokemon.SetY(pokemon.GetY() + SPEED); 
 		pokemon.SetX(player.GetX() + 5);
 		pokemon.SetY(player.GetY() + player.GetHeight());
 	}
-	if (INPUT->GetKey(VK_UP)) {
+	if (INPUT->GetKey(VK_UP) &&
+		pokemon.GetY() > 0) {
 		player.AddY(-SPEED);
 		isFrameMove = true;
 		//pokemon.SetY(pokemon.GetY() - SPEED); 
 		pokemon.SetX(player.GetX());
 		pokemon.SetY(player.GetY() - pokemon.GetHeight());
 	}
-	if (INPUT->GetKey(VK_LEFT)) { 
+	if (INPUT->GetKey(VK_LEFT) &&
+		pokemon.GetX() > 0) { 
 		player.AddX(-SPEED);
 		isFrameMove = true;
 		//pokemon.SetX(pokemon.GetX() - SPEED); 
 		pokemon.SetX(player.GetX() - pokemon.GetWidth());
 		pokemon.SetY(player.GetY() + 10);
 	}
-	if (INPUT->GetKey(VK_RIGHT)) { 
+	if (INPUT->GetKey(VK_RIGHT) &&
+		pokemon.GetX() + pokemon.GetWidth() < WINSIZEX) { 
 		player.AddX(SPEED);
 		isFrameMove = true;
 		//pokemon.SetX(pokemon.GetX() + SPEED); 
@@ -1031,4 +1278,262 @@ Direction TestScene::FindDirection(Pokemon& pokemon, Unit& unit)
 		else
 			return DIRECTION_UP;
 	}
+}
+
+void TestScene::ChangeHpBar()
+{
+	for (int i = 0; i < 6; i++) {
+		switch (i) {
+		case 0:
+			hpBar[i].right = hpBar[i].left + hpWidth[i]
+				* GAME->GetPokemon(i).GetHp() / GAME->GetPokemon(i).GetMaxHp();
+
+			if ((float)GAME->GetPokemon(i).GetHp()
+				/ GAME->GetPokemon(i).GetMaxHp()
+				<= 0.1f)
+				hpStatus[i] = 2;
+			else if ((float)GAME->GetPokemon(i).GetHp()
+				/ GAME->GetPokemon(i).GetMaxHp()
+				<= 0.5f)
+				hpStatus[i] = 1;
+			else
+				hpStatus[i] = 0;
+
+			break;
+		case 1:
+			if (GAME->GetPokemonCount() > i) {
+				hpBar[i].right = hpBar[i].left + hpWidth[i]
+					* GAME->GetPokemon(i).GetHp() / GAME->GetPokemon(i).GetMaxHp();
+
+				if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.1f)
+					hpStatus[i] = 2;
+				else if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.5f)
+					hpStatus[i] = 1;
+				else
+					hpStatus[i] = 0;
+			}
+			break;
+		case 2:
+			if (GAME->GetPokemonCount() > i) {
+				hpBar[i].right = hpBar[i].left + hpWidth[i]
+					* GAME->GetPokemon(i).GetHp() / GAME->GetPokemon(i).GetMaxHp();
+
+				if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.1f)
+					hpStatus[i] = 2;
+				else if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.5f)
+					hpStatus[i] = 1;
+				else
+					hpStatus[i] = 0;
+			}
+			break;
+		case 3:
+			if (GAME->GetPokemonCount() > i) {
+				hpBar[i].right = hpBar[i].left + hpWidth[i]
+					* GAME->GetPokemon(i).GetHp() / GAME->GetPokemon(i).GetMaxHp();
+
+				if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.1f)
+					hpStatus[i] = 2;
+				else if ((float)GAME->GetPokemon(i).GetHp()
+					/ GAME->GetPokemon(i).GetMaxHp()
+					<= 0.5f)
+					hpStatus[i] = 1;
+				else
+					hpStatus[i] = 0;
+			}
+			break;
+		case 4:
+			hpBar[i].right = hpBar[i].left + hpWidth[i]
+				* player.GetHp() / player.GetMaxHp();
+
+			if ((float)player.GetHp() / player.GetMaxHp()
+				<= 0.1f)
+				hpStatus[i] = 2;
+			else if ((float)player.GetHp() / player.GetMaxHp()
+				<= 0.5f)
+				hpStatus[i] = 1;
+			else
+				hpStatus[i] = 0;
+			break;
+		case 5:
+
+			break;
+		}
+	}
+}
+
+void TestScene::DrawUI()
+{
+	float alpha = 225;
+
+	SetBkMode(GetMemDC(), TRANSPARENT);
+	SetTextColor(GetMemDC(), RGB(255, 255, 255));
+
+	BeginCreateFont(GetMemDC(), &hFont, 20);
+	oldFont = (HFONT)SelectObject(GetMemDC(), hFont);
+
+	//ui[0]->Render(GetMemDC());
+	//ui[0]->AlphaRender(GetMemDC(), 255);
+	// pokemon
+	for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+		if (i == 0) {
+			if (i == GAME->GetSelectNum())
+				ui[0]->AlphaRender(GetMemDC(), 0, 75, alpha);
+			else
+				ui[1]->AlphaRender(GetMemDC(), 0, 75, alpha);
+
+			GAME->GetPokemon(i).GetPortrait()->
+				AlphaRender(GetMemDC(), 70, 0, alpha);
+
+			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
+			TextOut(GetMemDC(), 90, 105, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetLevel());
+			TextOut(GetMemDC(), 135, 123, str, strlen(str));
+		}
+		if (i == 1) {
+			if (i == GAME->GetSelectNum())
+				ui[0]->AlphaRender(GetMemDC(), 200, 75, alpha);
+			else
+				ui[1]->AlphaRender(GetMemDC(), 200, 75, alpha);
+
+			GAME->GetPokemon(i).GetPortrait()->
+				AlphaRender(GetMemDC(), 270, 0, alpha);
+
+			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
+			TextOut(GetMemDC(), 90 + 200, 105, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetLevel());
+			TextOut(GetMemDC(), 135 + 200, 123, str, strlen(str));
+		}
+		if (i == 2) {
+			if (i == GAME->GetSelectNum())
+				ui[0]->AlphaRender(GetMemDC(), WINSIZEX - 400, 75, alpha);
+			else
+				ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 400, 75, alpha);
+
+			GAME->GetPokemon(i).GetPortrait()->
+				AlphaRender(GetMemDC(), WINSIZEX - 330, 0, alpha);
+
+			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
+			TextOut(GetMemDC(), WINSIZEX - 400 + 90, 105, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetLevel());
+			TextOut(GetMemDC(), WINSIZEX - 400 + 135, 123, str, strlen(str));
+		}
+		if (i == 3) {
+			if (i == GAME->GetSelectNum())
+				ui[0]->AlphaRender(GetMemDC(), WINSIZEX - 200, 75, alpha);
+			else
+				ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 200, 75, alpha);
+
+			GAME->GetPokemon(i).GetPortrait()->
+				AlphaRender(GetMemDC(), WINSIZEX - 130, 0, alpha);
+
+			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
+			TextOut(GetMemDC(), WINSIZEX - 200 + 90, 105, str, strlen(str));
+
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetLevel());
+			TextOut(GetMemDC(), WINSIZEX - 200 + 135, 123, str, strlen(str));
+		}
+	}
+	// player
+	ui[1]->AlphaRender(GetMemDC(), 0, WINSIZEY - 100, alpha);
+	player.GetPortrait()->AlphaRender(
+		GetMemDC(), 70, WINSIZEY - 175, alpha);
+
+	sprintf_s(str, "%s", player.GetName().c_str());
+	TextOut(GetMemDC(), 100, 696, str, strlen(str));
+
+	sprintf_s(str, "%d", player.GetLevel());
+	TextOut(GetMemDC(), 135, 715, str, strlen(str));
+
+	// enemy
+	ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 200, WINSIZEY - 100, alpha);
+	enemy[0].GetPortrait()->AlphaRender(
+		GetMemDC(), WINSIZEX - 130, WINSIZEY - 175, alpha);
+
+	sprintf_s(str, "%s", enemy[0].GetName().c_str());
+	TextOut(GetMemDC(), WINSIZEX - 200 + 100, 696, str, strlen(str));
+
+	sprintf_s(str, "%d", enemy[0].GetLevel());
+	TextOut(GetMemDC(), WINSIZEX - 200 + 135, 715, str, strlen(str));
+
+	SetTextColor(GetMemDC(), RGB(0, 0, 0));
+
+	SelectObject(GetMemDC(), oldFont);
+	DeleteObject(hFont);
+
+	// hpBar
+	for (int i = 0; i < 6; i++) {
+		switch (hpStatus[i]) {
+		case 0:
+			BeginSolidColor(GetMemDC(), &hBrush, fullHp);
+			break;
+		case 1:
+			BeginSolidColor(GetMemDC(), &hBrush, halfHp);
+			break;
+		case 2:
+			BeginSolidColor(GetMemDC(), &hBrush, littleHp);
+			break;
+		}
+		hOldBrush = (HBRUSH)SelectObject(GetMemDC(), hBrush);
+
+		RectangleMake(GetMemDC(), hpBar[i]);
+
+		SelectObject(GetMemDC(), hOldBrush);
+		DeleteObject(hBrush);
+
+	}
+
+
+	// hp , maxHp
+
+	for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+		if (i == 0) {
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetHp());
+			TextOut(GetMemDC(), 112, 155, str, strlen(str));
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetMaxHp());
+			TextOut(GetMemDC(), 155, 155, str, strlen(str));
+		}
+		if (i == 1) {
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetHp());
+			TextOut(GetMemDC(), 112 + 200, 155, str, strlen(str));
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetMaxHp());
+			TextOut(GetMemDC(), 155 + 200, 155, str, strlen(str));
+		}
+		if (i == 2) {
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetHp());
+			TextOut(GetMemDC(), WINSIZEX - 400 + 112, 155, str, strlen(str));
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetMaxHp());
+			TextOut(GetMemDC(), WINSIZEX - 400 + 155, 155, str, strlen(str));
+		}
+		if (i == 3) {
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetHp());
+			TextOut(GetMemDC(), WINSIZEX - 200 + 112, 155, str, strlen(str));
+			sprintf_s(str, "%d", GAME->GetPokemon(i).GetMaxHp());
+			TextOut(GetMemDC(), WINSIZEX - 200 + 155, 155, str, strlen(str));
+		}
+	}
+
+	// player
+	sprintf_s(str, "%d", player.GetHp());
+	TextOut(GetMemDC(), 112, WINSIZEY - 175 + 155, str, strlen(str));
+	sprintf_s(str, "%d", player.GetMaxHp());
+	TextOut(GetMemDC(), 155, WINSIZEY - 175 + 155, str, strlen(str));
+
+	// enemy
+	sprintf_s(str, "%d", enemy[0].GetHp());
+	TextOut(GetMemDC(), WINSIZEX - 200 + 112, WINSIZEY - 175 + 155, str, strlen(str));
+	sprintf_s(str, "%d", enemy[0].GetMaxHp());
+	TextOut(GetMemDC(), WINSIZEX - 200 + 155, WINSIZEY - 175 + 155, str, strlen(str));
 }

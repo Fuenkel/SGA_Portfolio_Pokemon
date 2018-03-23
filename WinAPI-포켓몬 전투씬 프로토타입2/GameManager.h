@@ -25,6 +25,7 @@ private:
 	tagItemInfo currentItem;
 
 	int pokemonIndex;
+	int selectNum;
 
 	bool showInven;
 	bool showStatus;
@@ -32,6 +33,8 @@ private:
 	bool isDrag;
 
 	int beforeTown;
+
+	int playerLevel;
 
 	RECT invenRc;
 	RECT statusBox;
@@ -65,7 +68,21 @@ public:
 	void PokemonInput(Pokemon pokemon) { pokemonList.push_back(pokemon); }
 
 	Pokemon& GetPokemon(int i) { return pokemonList[i]; }
+	int GetPokemonCount() { return pokemonList.size(); }
 
+	void SetSelectNum(int num) { selectNum = num; }
+	int GetSelectNum() { return selectNum; }
+	int NextSelectNum() {
+		int num = GetSelectNum();
+		num++;
+
+		if (this->pokemonList.size() == num)
+			num = 0;
+		if (pokemonList[num].GetDied())
+			NextSelectNum();
+		SetSelectNum(num);
+		return num;
+	}
 
 	void SetPokemonIndex(int i) { pokemonIndex = i; }
 	int GetPokemonIndex() { return pokemonIndex; }
@@ -77,8 +94,14 @@ public:
 		SetPokemonIndex(index);
 	}
 
+	void SetPlayerLevel(int level) { playerLevel = level; }
+	int GetPlayerLevel() { return playerLevel; }
+	void AddPlayerLevel(int num) { playerLevel += num; }
+
 	void SetBeforeTown(int num) { beforeTown = num; }
 	int GetBeforeTown() { return beforeTown; }
+
+	bool CheckGameOver();
 };
 
 #define GAME GameManager::GetSingleton()

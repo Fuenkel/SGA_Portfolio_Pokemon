@@ -165,7 +165,7 @@ void Pokemon::BulletMove()
 				break;
 			case DIRECTION_RIGHT:
 				if (m_bullet[i].moveFrame >= 12)
-					m_bullet[i].moveFrame = 3;
+					m_bullet[i].moveFrame = 9;
 				break;
 			}
 			break;
