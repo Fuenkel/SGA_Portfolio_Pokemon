@@ -55,6 +55,48 @@ HRESULT MainGame::Init()
 	IMAGE->AddImage("Charmander_attack2", "images/charmander/attack2_32x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 32, 50, 32, 1, true, RGB(182, 185, 184));
 
+	// squirtle img
+	IMAGE->AddImage("Squirtle_portrait", "images/squirtle/portrait.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Squirtle_idle", "images/squirtle/idle_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Squirtle_movement", "images/squirtle/movement_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Squirtle_hurt", "images/squirtle/hurt_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Squirtle_attack", "images/squirtle/attack_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Squirtle_special_attack", "images/squirtle/special_attack_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 24 * 50, 50, 24, 1, true, RGB(182, 185, 184));
+
+	// bulbasaur img
+	IMAGE->AddImage("Bulbasaur_portrait", "images/bulbasaur/portrait.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Bulbasaur_idle", "images/bulbasaur/idle_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Bulbasaur_movement", "images/bulbasaur/movement_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Bulbasaur_hurt", "images/bulbasaur/hurt_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Bulbasaur_attack", "images/bulbasaur/attack_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Bulbasaur_special_attack", "images/bulbasaur/special_attack_16x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 16 * 50, 50, 16, 1, true, RGB(182, 185, 184));
+	
+	// pidgey img
+	IMAGE->AddImage("Pidgey_portrait", "images/pidgey/portrait.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Pidgey_idle", "images/pidgey/idle_16x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 16, 50, 16, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Pidgey_movement", "images/pidgey/movement_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Pidgey_hurt", "images/pidgey/hurt_8x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Pidgey_attack", "images/pidgey/attack_24x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 50 * 24, 50, 24, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Pidgey_special_attack", "images/pidgey/special_attack_16x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 16 * 50, 50, 16, 1, true, RGB(182, 185, 184));
+
 	// rattata img
 	IMAGE->AddImage("Rattata_portrait", "images/rattata/portrait.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
@@ -78,6 +120,10 @@ HRESULT MainGame::Init()
 		WINSIZEX/2, WINSIZEY/2, 100 * 14, 100, 14, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Effect_fire", "images/charmander/fire_12x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 12 * 50, 50, 12, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Effect_water", "images/squirtle/water_16x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 16 * 50, 50, 16, 1, true, RGB(182, 185, 184));
+	IMAGE->AddImage("Effect_grass", "images/bulbasaur/grass_20x1.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 20 * 25, 25, 20, 1, true, RGB(182, 185, 184));
 
 	// ui
 	IMAGE->AddImage("UI_open", "images/ui_open.bmp",

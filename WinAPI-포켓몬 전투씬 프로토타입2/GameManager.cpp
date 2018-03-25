@@ -92,10 +92,9 @@ void GameManager::PokemonInit()
 	temp.SetAniMaxNum(STATUS_ATTACK2, 4);
 	temp.SetEffectNum(EFFECT_FIRE);
 
-	temp.SetAtk(5);
+	temp.SetAtk(3);
 	temp.SetSpAtk(10);
 
-	this->pokemonList.push_back(temp);
 	this->pokemonList.push_back(temp);
 
 	temp.SetName("ÇÇÄ«Ãò");
@@ -125,9 +124,70 @@ void GameManager::PokemonInit()
 	temp.SetEffectNum(EFFECT_ELECTRICITY);
 
 	temp.SetAtk(5);
+	temp.SetSpAtk(8);
+
+	this->pokemonList.push_back(temp);
+
+	temp.SetName("²¿ºÎ±â");
+	temp.SetLevel(5);
+	temp.SetMaxHp(44);
+	temp.SetHp(44);
+	temp.SetAtk(48);
+	temp.SetDef(65);
+	temp.SetSpAtk(50);
+	temp.SetSpDef(64);
+	temp.SetSpeed(43);
+	temp.SetExp(0);
+	temp.SetMaxExp(300);
+	temp.SetModel(IMAGE->FindImage("Squirtle_img"));
+	temp.SetPortrait(IMAGE->FindImage("Squirtle_portrait"));
+	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Squirtle_idle"));
+	temp.SetAniMaxNum(STATUS_IDLE, 1);
+	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Squirtle_movement"));
+	temp.SetAniMaxNum(STATUS_MOVE, 3);
+	temp.SetAni(STATUS_ATTACK, IMAGE->FindImage("Squirtle_attack"));
+	temp.SetAniMaxNum(STATUS_ATTACK, 3);
+	temp.SetAni(STATUS_HURT, IMAGE->FindImage("Squirtle_hurt"));
+	temp.SetAniMaxNum(STATUS_HURT, 1);
+	temp.SetAni(STATUS_SPECIAL_ATTACK,
+		IMAGE->FindImage("Squirtle_special_attack"));
+	temp.SetAniMaxNum(STATUS_SPECIAL_ATTACK, 3);
+	temp.SetEffectNum(EFFECT_WATER);
+
+	temp.SetAtk(2);
 	temp.SetSpAtk(10);
 
 	this->pokemonList.push_back(temp);
+
+	temp.SetName("ÀÌ»óÇØ¾¾");
+	temp.SetLevel(5);
+	temp.SetMaxHp(45);
+	temp.SetHp(45);
+	temp.SetAtk(49);
+	temp.SetDef(49);
+	temp.SetSpAtk(65);
+	temp.SetSpDef(65);
+	temp.SetSpeed(45);
+	temp.SetExp(0);
+	temp.SetMaxExp(300);
+	temp.SetModel(IMAGE->FindImage("Bulbasaur_img"));
+	temp.SetPortrait(IMAGE->FindImage("Bulbasaur_portrait"));
+	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Bulbasaur_idle"));
+	temp.SetAniMaxNum(STATUS_IDLE, 1);
+	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Bulbasaur_movement"));
+	temp.SetAniMaxNum(STATUS_MOVE, 3);
+	temp.SetAni(STATUS_ATTACK, IMAGE->FindImage("Bulbasaur_attack"));
+	temp.SetAniMaxNum(STATUS_ATTACK, 3);
+	temp.SetAni(STATUS_HURT, IMAGE->FindImage("Bulbasaur_hurt"));
+	temp.SetAniMaxNum(STATUS_HURT, 1);
+	temp.SetAni(STATUS_SPECIAL_ATTACK,
+		IMAGE->FindImage("Bulbasaur_special_attack"));
+	temp.SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
+	temp.SetEffectNum(EFFECT_GRASS);
+
+	temp.SetAtk(2);
+	temp.SetSpAtk(12);
+
 	this->pokemonList.push_back(temp);
 }
 

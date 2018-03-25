@@ -55,31 +55,59 @@ HRESULT TestScene::Init()
 	//charmander[STATUS_HURT] = IMAGE->FindImage("Charmander_hurt");
 
 	for (int i = 0; i < POKEMON_COUNT; i++) {
-		enemy[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
-		enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
-		enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
-		enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
-		enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
-		enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
-		enemy[i].SetAniMaxNum(STATUS_ATTACK, 4);
-		enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
-		enemy[i].SetAniMaxNum(STATUS_HURT, 1);
-		enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
-			IMAGE->FindImage("Rattata_special_attack"));
-		enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
+		if (i % 2 == 0) {
+			enemy[i].SetPortrait(IMAGE->FindImage("Pidgey_portrait"));
+			enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Pidgey_idle"));
+			enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
+			enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Pidgey_movement"));
+			enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
+			enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Pidgey_attack"));
+			enemy[i].SetAniMaxNum(STATUS_ATTACK, 3);
+			enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Pidgey_hurt"));
+			enemy[i].SetAniMaxNum(STATUS_HURT, 1);
+			enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
+				IMAGE->FindImage("Pidgey_special_attack"));
+			enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
 
-		// test
-		sprintf_s(str, "部房_%d", i+1);
+			// test
+			sprintf_s(str, "备备_%d", i + 1);
 
-		enemy[i].SetName(str);
-		enemy[i].SetLevel(5);
-		enemy[i].SetMaxHp(32);
-		enemy[i].SetHp(32);
-		enemy[i].SetAtk(5);
+			enemy[i].SetName(str);
+			enemy[i].SetLevel(5);
+			enemy[i].SetMaxHp(28);
+			enemy[i].SetHp(28);
+			enemy[i].SetAtk(4);
+		}
+		else {
+			enemy[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
+			enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+			enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
+			enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+			enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
+			enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
+			enemy[i].SetAniMaxNum(STATUS_ATTACK, 4);
+			enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+			enemy[i].SetAniMaxNum(STATUS_HURT, 1);
+			enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
+				IMAGE->FindImage("Rattata_special_attack"));
+			enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
+
+			// test
+			sprintf_s(str, "部房_%d", i + 1);
+
+			enemy[i].SetName(str);
+			enemy[i].SetLevel(5);
+			enemy[i].SetMaxHp(32);
+			enemy[i].SetHp(32);
+			enemy[i].SetAtk(5);
+
+		}
 	}
 
 	effect[EFFECT_ELECTRICITY] = IMAGE->FindImage("Effect_electricity");
 	effect[EFFECT_FIRE] = IMAGE->FindImage("Effect_fire");
+	effect[EFFECT_WATER] = IMAGE->FindImage("Effect_water");
+	effect[EFFECT_GRASS] = IMAGE->FindImage("Effect_grass");
 
 	pokemon.SetWidth(50);
 	pokemon.SetHeight(50);
@@ -157,6 +185,38 @@ void TestScene::Update()
 	
 	// test困秦 葛滴 沥瘤
 	//return;
+
+	if (INPUT->GetKeyDown('X')) {
+		if (pokemon.GetAttackStatus() == STATUS_ATTACK) {
+			pokemon.SetAttackStatus(STATUS_SPECIAL_ATTACK);
+		}
+		else if (pokemon.GetAttackStatus() == STATUS_SPECIAL_ATTACK) {
+			pokemon.SetAttackStatus(STATUS_ATTACK);
+		}
+	}
+
+	if (INPUT->GetKeyDown('Z')
+		&& pokemon.GetStatus() == STATUS_IDLE) {
+		float tempX = pokemon.GetX();
+		float tempY = pokemon.GetY();
+		Status tempAttackStatus = pokemon.GetAttackStatus();
+
+		if (GAME->CheckGameOver()) {
+
+		}
+		else {
+			GAME->NextSelectNum();
+			pokemon = GAME->GetPokemon(GAME->GetSelectNum());
+			pokemon.SetX(tempX);
+			pokemon.SetY(tempY);
+			pokemon.SetWidth(50);
+			pokemon.SetHeight(50);
+			pokemon.SetDirection(player.GetDirection());
+			pokemon.SetStatus(STATUS_IDLE);
+			pokemon.SetAttackStatus(tempAttackStatus);
+		}
+	}
+
 
 	// enemy
 	for (int i = 0; i < POKEMON_COUNT; i++) {
@@ -415,7 +475,9 @@ void TestScene::Update()
 						break;
 					}
 				}
-				PokemonAttack(enemy[i], 4, 2);
+				PokemonAttack(enemy[i],
+					enemy[i].GetAniMaxNum(STATUS_ATTACK),
+					enemy[i].GetAniMaxNum(STATUS_IDLE));
 				break;
 			case STATUS_SPECIAL_ATTACK:
 				break;
@@ -696,36 +758,6 @@ void TestScene::Update()
 	//	* GAME->GetPokemon(0).GetHp() / GAME->GetPokemon(0).GetMaxHp();
 	ChangeHpBar();
 
-	if (INPUT->GetKeyDown('X')) {
-		if (pokemon.GetAttackStatus() == STATUS_ATTACK) {
-			pokemon.SetAttackStatus(STATUS_SPECIAL_ATTACK);
-		}
-		else if (pokemon.GetAttackStatus() == STATUS_SPECIAL_ATTACK) {
-			pokemon.SetAttackStatus(STATUS_ATTACK);
-		}
-	}
-
-	if (INPUT->GetKeyDown('Z') 
-		&& pokemon.GetStatus() == STATUS_IDLE) {
-		float tempX = pokemon.GetX();
-		float tempY = pokemon.GetY();
-		Status tempAttackStatus = pokemon.GetAttackStatus();
-
-		if (GAME->CheckGameOver()) {
-
-		}
-		else {
-			GAME->NextSelectNum();
-			pokemon = GAME->GetPokemon(GAME->GetSelectNum());
-			pokemon.SetX(tempX);
-			pokemon.SetY(tempY);
-			pokemon.SetWidth(50);
-			pokemon.SetHeight(50);
-			pokemon.SetDirection(player.GetDirection());
-			pokemon.SetStatus(STATUS_IDLE);
-			pokemon.SetAttackStatus(tempAttackStatus);
-		}
-	}
 
 	if (INPUT->GetKeyDown(VK_TAB)) {
 		isDebug = !isDebug;
@@ -801,6 +833,14 @@ void TestScene::Render()
 				pokemon.GetBullet(i)->x, pokemon.GetBullet(i)->y,
 				(int)pokemon.GetBullet(i)->moveFrame, 0);
 			break;
+		case EFFECT_WATER:
+			effect[pokemon.GetEffectNum()]->FrameRender(GetMemDC(),
+				pokemon.GetBullet(i)->x, pokemon.GetBullet(i)->y,
+				(int)pokemon.GetBullet(i)->moveFrame, 0);
+		case EFFECT_GRASS:
+			effect[pokemon.GetEffectNum()]->FrameRender(GetMemDC(),
+				pokemon.GetBullet(i)->x + 12.5f, pokemon.GetBullet(i)->y + 12.5f,
+				(int)pokemon.GetBullet(i)->moveFrame, 0);
 		case EFFECT_END:
 			break;
 		}

@@ -106,6 +106,26 @@ void Pokemon::BulletFire()
 				break;
 			}
 			break;
+		case EFFECT_WATER:
+			switch (m_bullet[i].dir)
+			{
+			case DIRECTION_DOWN:
+				m_bullet[i].moveFrame = 0;
+				break;
+			case DIRECTION_UP:
+				m_bullet[i].moveFrame = 2;
+				break;
+			case DIRECTION_LEFT:
+				m_bullet[i].moveFrame = 4;
+				break;
+			case DIRECTION_RIGHT:
+				m_bullet[i].moveFrame = 6;
+				break;
+			}
+			break;
+		case EFFECT_GRASS:
+			m_bullet[i].moveFrame = 0;
+			break;
 		case EFFECT_END:
 			break;
 		default:
@@ -168,6 +188,33 @@ void Pokemon::BulletMove()
 					m_bullet[i].moveFrame = 9;
 				break;
 			}
+			break;
+		case EFFECT_WATER:
+			m_bullet[i].moveFrame += 0.1f;
+			switch (m_bullet[i].dir)
+			{
+			case DIRECTION_DOWN:
+				if (m_bullet[i].moveFrame >= 2)
+					m_bullet[i].moveFrame = 0;
+				break;
+			case DIRECTION_UP:
+				if (m_bullet[i].moveFrame >= 4)
+					m_bullet[i].moveFrame = 2;
+				break;
+			case DIRECTION_LEFT:
+				if (m_bullet[i].moveFrame >= 6)
+					m_bullet[i].moveFrame = 4;
+				break;
+			case DIRECTION_RIGHT:
+				if (m_bullet[i].moveFrame >= 8)
+					m_bullet[i].moveFrame = 6;
+				break;
+			}
+			break;
+		case EFFECT_GRASS:
+			m_bullet[i].moveFrame += 0.25f;
+			if (m_bullet[i].moveFrame >= 20)
+				m_bullet[i].moveFrame = 0;
 			break;
 		case EFFECT_END:
 			break;

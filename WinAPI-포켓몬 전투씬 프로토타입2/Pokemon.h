@@ -25,6 +25,8 @@ enum Status {
 enum EffectKind {
 	EFFECT_ELECTRICITY,
 	EFFECT_FIRE,
+	EFFECT_WATER,
+	EFFECT_GRASS,
 	EFFECT_END
 };
 
