@@ -35,6 +35,7 @@ HRESULT TravelScene::Init()
 		pokemon[i].SetMoveFrame(0);
 		pokemon[i].SetName("²¿·¿");
 		pokemon[i].SetLevel(RND->GetFromInto(1, 8));
+		pokemon[i].SetAlpha(255);
 		
 		pokemon[i].SetDied(false);
 

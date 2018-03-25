@@ -194,11 +194,11 @@ HRESULT MainGame::Init()
 	SCENE->AddScene("Travel", new TravelScene);
 	SCENE->AddScene("Battle", new BattleScene);
 
-	//SCENE->ChangeScene("Town1");
+	SCENE->ChangeScene("Town1");
 	//SCENE->ChangeScene("Town2");
 	//SCENE->ChangeScene("Shop");
 	//SCENE->ChangeScene("Travel");
-	SCENE->ChangeScene("Battle");
+	//SCENE->ChangeScene("Battle");
 
 	return S_OK;
 }
