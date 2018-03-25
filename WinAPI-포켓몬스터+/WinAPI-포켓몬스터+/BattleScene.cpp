@@ -196,6 +196,7 @@ void BattleScene::Update()
 		for (int i = 0; i < GAME->GetPokemonCount(); i++) {
 			if (GAME->GetPokemon(i).GetDied()) {
 				GAME->GetPokemon(i).SetDied(false);
+				GAME->GetPokemon(i).SetPortraitNum(0);
 				GAME->GetPokemon(i).SetHp(1);
 			}
 		}
@@ -320,6 +321,7 @@ void BattleScene::Update()
 							for (int i = 0; i < GAME->GetPokemonCount(); i++) {
 								if (GAME->GetPokemon(i).GetDied()) {
 									GAME->GetPokemon(i).SetDied(false);
+									GAME->GetPokemon(i).SetPortraitNum(0);
 									GAME->GetPokemon(i).SetHp(1);
 								}
 							}
@@ -406,12 +408,15 @@ void BattleScene::Update()
 							GAME->GetPokemon(GAME->GetSelectNum()).SetHp(0);
 							GAME->GetPokemon(GAME->GetSelectNum()).SetDied(true);
 
+							GAME->GetPokemon(GAME->GetSelectNum()).SetPortraitNum(1);
+
 							if (GameOver()) {
 								// 포켓몬 혹시 죽었으면 살리고 피 1로
 								for (int i = 0; i < GAME->GetPokemonCount(); i++) {
 									if (GAME->GetPokemon(i).GetDied()) {
 										GAME->GetPokemon(i).SetDied(false);
 										GAME->GetPokemon(i).SetHp(1);
+										GAME->GetPokemon(i).SetPortraitNum(0);
 									}
 								}
 
@@ -1544,7 +1549,8 @@ void BattleScene::DrawUI()
 			else
 				ui[1]->AlphaRender(GetMemDC(), 0, 75, alpha);
 
-			GAME->GetPokemon(i).GetPortrait()->
+			GAME->GetPokemon(i).GetPortrait(
+				GAME->GetPokemon(i).GetPortraitNum())->
 				AlphaRender(GetMemDC(), 70, 0, alpha);
 
 			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
@@ -1559,7 +1565,8 @@ void BattleScene::DrawUI()
 			else
 				ui[1]->AlphaRender(GetMemDC(), 200, 75, alpha);
 
-			GAME->GetPokemon(i).GetPortrait()->
+			GAME->GetPokemon(i).GetPortrait(
+				GAME->GetPokemon(i).GetPortraitNum())->
 				AlphaRender(GetMemDC(), 270, 0, alpha);
 
 			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
@@ -1574,7 +1581,8 @@ void BattleScene::DrawUI()
 			else
 				ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 400, 75, alpha);
 
-			GAME->GetPokemon(i).GetPortrait()->
+			GAME->GetPokemon(i).GetPortrait(
+				GAME->GetPokemon(i).GetPortraitNum())->
 				AlphaRender(GetMemDC(), WINSIZEX - 330, 0, alpha);
 
 			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
@@ -1589,7 +1597,8 @@ void BattleScene::DrawUI()
 			else
 				ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 200, 75, alpha);
 
-			GAME->GetPokemon(i).GetPortrait()->
+			GAME->GetPokemon(i).GetPortrait(
+				GAME->GetPokemon(i).GetPortraitNum())->
 				AlphaRender(GetMemDC(), WINSIZEX - 130, 0, alpha);
 
 			sprintf_s(str, "%s", GAME->GetPokemon(i).GetName().c_str());
@@ -1612,7 +1621,7 @@ void BattleScene::DrawUI()
 
 	// enemy
 	ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 200, WINSIZEY - 100, alpha);
-	enemy[currentEnemy].GetPortrait()->AlphaRender(
+	enemy[currentEnemy].GetPortrait(0)->AlphaRender(
 		GetMemDC(), WINSIZEX - 130, WINSIZEY - 175, alpha);
 
 	sprintf_s(str, "%s", enemy[currentEnemy].GetName().c_str());

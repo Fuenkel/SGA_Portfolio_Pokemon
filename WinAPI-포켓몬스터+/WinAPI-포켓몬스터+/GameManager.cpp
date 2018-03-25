@@ -77,7 +77,8 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Charmander_img"));
-	temp.SetPortrait(IMAGE->FindImage("Charmander_portrait"));
+	temp.SetPortrait(0, IMAGE->FindImage("Charmander_portrait"));
+	temp.SetPortrait(1, IMAGE->FindImage("Charmander_portrait2"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Charmander_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Charmander_movement"));
@@ -110,7 +111,8 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Pikachu_img"));
-	temp.SetPortrait(IMAGE->FindImage("Pikachu_portrait"));
+	temp.SetPortrait(0, IMAGE->FindImage("Pikachu_portrait"));
+	temp.SetPortrait(1, IMAGE->FindImage("Pikachu_portrait2"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Pikachu_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Pikachu_movement"));
@@ -141,7 +143,8 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Squirtle_img"));
-	temp.SetPortrait(IMAGE->FindImage("Squirtle_portrait"));
+	temp.SetPortrait(0, IMAGE->FindImage("Squirtle_portrait"));
+	temp.SetPortrait(1, IMAGE->FindImage("Squirtle_portrait2"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Squirtle_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Squirtle_movement"));
@@ -172,7 +175,8 @@ void GameManager::PokemonInit()
 	temp.SetExp(0);
 	temp.SetMaxExp(300);
 	temp.SetModel(IMAGE->FindImage("Bulbasaur_img"));
-	temp.SetPortrait(IMAGE->FindImage("Bulbasaur_portrait"));
+	temp.SetPortrait(0, IMAGE->FindImage("Bulbasaur_portrait"));
+	temp.SetPortrait(1, IMAGE->FindImage("Bulbasaur_portrait2"));
 	temp.SetAni(STATUS_IDLE, IMAGE->FindImage("Bulbasaur_idle"));
 	temp.SetAniMaxNum(STATUS_IDLE, 1);
 	temp.SetAni(STATUS_MOVE, IMAGE->FindImage("Bulbasaur_movement"));

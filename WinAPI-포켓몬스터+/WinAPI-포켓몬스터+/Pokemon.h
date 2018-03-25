@@ -49,11 +49,12 @@ private:
 	tagBullet m_bullet[BULLETMAX];
 	tagMeleeAttack m_melee;
 
-	Image* portrait;
+	Image* portrait[2];
 	Image* model;
 	Image* ani[6];
 	int aniMaxNum[6];
 
+	int portraitNum;
 	int effectNum;
 
 	bool isDied;
@@ -70,8 +71,8 @@ public:
 	void SetStatus(Status status) { m_status = status; }
 	Status GetStatus() { return m_status; }
 
-	Image* GetPortrait() { return portrait; }
-	void SetPortrait(Image* portrait) { this->portrait = portrait; }
+	Image* GetPortrait(int i) { return portrait[i]; }
+	void SetPortrait(int i, Image* portrait) { this->portrait[i] = portrait; }
 
 	Image* GetModel() { return model; }
 	void SetModel(Image* model) { this->model = model; }
@@ -105,5 +106,8 @@ public:
 
 	void MeleeAttack(bool isAttack);
 	tagMeleeAttack GetMeleeAttack() { return m_melee; }
+
+	void SetPortraitNum(int num) { this->portraitNum = num; }
+	int GetPortraitNum() { return portraitNum; }
 };
 

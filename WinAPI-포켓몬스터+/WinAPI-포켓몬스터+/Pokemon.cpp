@@ -16,6 +16,7 @@ Pokemon::Pokemon()
 	m_moveFrame = 0;
 
 	effectNum = EFFECT_END;
+	portraitNum = 0;
 }
 
 

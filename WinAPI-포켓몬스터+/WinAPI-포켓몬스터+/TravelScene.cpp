@@ -32,7 +32,7 @@ HRESULT TravelScene::Init()
 		//pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
 		//pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
 		if (i % 2 == 0) {
-			pokemon[i].SetPortrait(IMAGE->FindImage("Pidgey_portrait"));
+			pokemon[i].SetPortrait(0, IMAGE->FindImage("Pidgey_portrait"));
 			pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Pidgey_idle"));
 			pokemon[i].SetAniMaxNum(STATUS_IDLE, 2);
 			pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Pidgey_movement"));
@@ -53,7 +53,7 @@ HRESULT TravelScene::Init()
 			pokemon[i].SetAtk(4);
 		}
 		else {
-			pokemon[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
+			pokemon[i].SetPortrait(0, IMAGE->FindImage("Rattata_portrait"));
 			pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
 			pokemon[i].SetAniMaxNum(STATUS_IDLE, 2);
 			pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));

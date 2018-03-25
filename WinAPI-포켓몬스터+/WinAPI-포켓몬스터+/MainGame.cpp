@@ -86,6 +86,8 @@ HRESULT MainGame::Init()
 	// pikachu img
 	IMAGE->AddImage("Pikachu_portrait", "images/pikachu/portrait.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Pikachu_portrait2", "images/pikachu/portrait2.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
 	IMAGE->AddImage("Pikachu_idle", "images/pikachu/idle_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 400, 50, 8, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Pikachu_movement", "images/pikachu/movement_24x1.bmp",
@@ -99,6 +101,8 @@ HRESULT MainGame::Init()
 
 	// charmander img
 	IMAGE->AddImage("Charmander_portrait", "images/charmander/portrait.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Charmander_portrait2", "images/charmander/portrait2.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
 	IMAGE->AddImage("Charmander_idle", "images/charmander/idle_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
@@ -116,6 +120,8 @@ HRESULT MainGame::Init()
 	// squirtle img
 	IMAGE->AddImage("Squirtle_portrait", "images/squirtle/portrait.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Squirtle_portrait2", "images/squirtle/portrait2.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
 	IMAGE->AddImage("Squirtle_idle", "images/squirtle/idle_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
 	IMAGE->AddImage("Squirtle_movement", "images/squirtle/movement_24x1.bmp",
@@ -129,6 +135,8 @@ HRESULT MainGame::Init()
 
 	// bulbasaur img
 	IMAGE->AddImage("Bulbasaur_portrait", "images/bulbasaur/portrait.bmp",
+		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("Bulbasaur_portrait2", "images/bulbasaur/portrait2.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 100, 100, 1, 1, false, RGB(255, 0, 255));
 	IMAGE->AddImage("Bulbasaur_idle", "images/bulbasaur/idle_8x1.bmp",
 		WINSIZEX / 2, WINSIZEY / 2, 50 * 8, 50, 8, 1, true, RGB(182, 185, 184));
