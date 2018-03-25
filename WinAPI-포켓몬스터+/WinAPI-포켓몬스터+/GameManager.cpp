@@ -36,6 +36,9 @@ void GameManager::Init()
 	showStatus = false;
 	isDrag = false;
 
+	isOver = false;
+	isStartBattle = false;
+
 	pokemonIndex = 0;
 	selectNum = 0;
 	playerLevel = 5;
@@ -187,10 +190,5 @@ void GameManager::PokemonInit()
 	temp.SetSpAtk(12);
 
 	this->pokemonList.push_back(temp);
-}
-
-bool GameManager::CheckGameOver()
-{
-	return false;
 }
 

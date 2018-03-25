@@ -71,5 +71,8 @@ public:
 
 	void ChangeHpBar();
 	void DrawUI();
+
+	bool GameOver();
+	bool GameWin();
 };
 

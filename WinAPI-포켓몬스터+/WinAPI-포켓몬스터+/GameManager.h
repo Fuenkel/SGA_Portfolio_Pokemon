@@ -23,6 +23,7 @@ private:
 	vector<Pokemon> pokemonList;
 
 	tagItemInfo currentItem;
+	Pokemon currentEnemy;
 
 	int pokemonIndex;
 	int selectNum;
@@ -39,6 +40,9 @@ private:
 	RECT invenRc;
 	RECT statusBox;
 	RECT nextPokemonRc;
+
+	bool isOver;
+	bool isStartBattle;
 public:
 	GameManager();
 	~GameManager();
@@ -101,7 +105,14 @@ public:
 	void SetBeforeTown(int num) { beforeTown = num; }
 	int GetBeforeTown() { return beforeTown; }
 
-	bool CheckGameOver();
+	void SetIsOver(bool isOver) { this->isOver = isOver; }
+	bool GetIsOver() { return isOver; }
+
+	void SetCurrentPokemon(Pokemon enemy) { this->currentEnemy = enemy; }
+	Pokemon GetCurrentPokemon() { return currentEnemy; }
+
+	void SetIsStartBattle(bool isStart) { this->isStartBattle = isStart; }
+	bool GetIsStartBattle() { return isStartBattle; }
 };
 
 #define GAME GameManager::GetSingleton()

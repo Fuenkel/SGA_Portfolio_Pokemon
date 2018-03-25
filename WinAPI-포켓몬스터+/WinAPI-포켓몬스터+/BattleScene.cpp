@@ -55,53 +55,56 @@ HRESULT BattleScene::Init()
 	//charmander[STATUS_HURT] = IMAGE->FindImage("Charmander_hurt");
 
 	for (int i = 0; i < POKEMON_COUNT; i++) {
-		if (i % 2 == 0) {
-			enemy[i].SetPortrait(IMAGE->FindImage("Pidgey_portrait"));
-			enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Pidgey_idle"));
-			enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
-			enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Pidgey_movement"));
-			enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
-			enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Pidgey_attack"));
-			enemy[i].SetAniMaxNum(STATUS_ATTACK, 3);
-			enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Pidgey_hurt"));
-			enemy[i].SetAniMaxNum(STATUS_HURT, 1);
-			enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
-				IMAGE->FindImage("Pidgey_special_attack"));
-			enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
+		//if (i % 2 == 0) {
+		//	enemy[i].SetPortrait(IMAGE->FindImage("Pidgey_portrait"));
+		//	enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Pidgey_idle"));
+		//	enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
+		//	enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Pidgey_movement"));
+		//	enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
+		//	enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Pidgey_attack"));
+		//	enemy[i].SetAniMaxNum(STATUS_ATTACK, 3);
+		//	enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Pidgey_hurt"));
+		//	enemy[i].SetAniMaxNum(STATUS_HURT, 1);
+		//	enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
+		//		IMAGE->FindImage("Pidgey_special_attack"));
+		//	enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
+		//	// test
+		//	sprintf_s(str, "구구_%d", i + 1);
+		//	enemy[i].SetName(str);
+		//	enemy[i].SetLevel(5);
+		//	enemy[i].SetMaxHp(28);
+		//	enemy[i].SetHp(28);
+		//	enemy[i].SetAtk(4);
+		//}
 
-			// test
-			sprintf_s(str, "구구_%d", i + 1);
+		//else {
+		//	enemy[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
+		//	enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+		//	enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
+		//	enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+		//	enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
+		//	enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
+		//	enemy[i].SetAniMaxNum(STATUS_ATTACK, 4);
+		//	enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+		//	enemy[i].SetAniMaxNum(STATUS_HURT, 1);
+		//	enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
+		//		IMAGE->FindImage("Rattata_special_attack"));
+		//	enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
 
-			enemy[i].SetName(str);
-			enemy[i].SetLevel(5);
-			enemy[i].SetMaxHp(28);
-			enemy[i].SetHp(28);
-			enemy[i].SetAtk(4);
-		}
-		else {
-			enemy[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
-			enemy[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
-			enemy[i].SetAniMaxNum(STATUS_IDLE, 2);
-			enemy[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
-			enemy[i].SetAniMaxNum(STATUS_MOVE, 3);
-			enemy[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
-			enemy[i].SetAniMaxNum(STATUS_ATTACK, 4);
-			enemy[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
-			enemy[i].SetAniMaxNum(STATUS_HURT, 1);
-			enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
-				IMAGE->FindImage("Rattata_special_attack"));
-			enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
+		//	// test
+		//	sprintf_s(str, "꼬렛_%d", i + 1);
 
-			// test
-			sprintf_s(str, "꼬렛_%d", i + 1);
+		//	enemy[i].SetName(str);
+		//	enemy[i].SetLevel(5);
+		//	enemy[i].SetMaxHp(32);
+		//	enemy[i].SetHp(32);
+		//	enemy[i].SetAtk(5);
+		//}
 
-			enemy[i].SetName(str);
-			enemy[i].SetLevel(5);
-			enemy[i].SetMaxHp(32);
-			enemy[i].SetHp(32);
-			enemy[i].SetAtk(5);
+		enemy[i] = GAME->GetCurrentPokemon();
 
-		}
+		sprintf_s(str, "%s_%d", enemy[i].GetName().c_str(), i + 1);
+		enemy[i].SetName(str);
 	}
 
 	effect[EFFECT_ELECTRICITY] = IMAGE->FindImage("Effect_electricity");
@@ -127,6 +130,8 @@ HRESULT BattleScene::Init()
 		enemy[i].SetDirection(DIRECTION_DOWN);
 		enemy[i].SetStatus(STATUS_IDLE);
 		enemy[i].SetAttackStatus(STATUS_ATTACK);
+		enemy[i].SetDied(false);
+		enemy[i].SetAlpha(255);
 
 		enemyHpBar[i] = RectMake(enemy[i].GetX(), enemy[i].GetY() - 4,
 			enemy[i].GetWidth(), 4);
@@ -186,6 +191,22 @@ void BattleScene::Update()
 	// test위해 모두 정지
 	//return;
 
+	if (GameWin()) {
+		// 포켓몬 혹시 죽었으면 살리고 피 1로
+		for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+			if (GAME->GetPokemon(i).GetDied()) {
+				GAME->GetPokemon(i).SetDied(false);
+				GAME->GetPokemon(i).SetHp(1);
+			}
+		}
+
+		GAME->SetIsStartBattle(false);
+
+		SCENE->ChangeScene("Travel");
+
+		Init();
+	}
+
 	if (INPUT->GetKeyDown('X')) {
 		if (pokemon.GetAttackStatus() == STATUS_ATTACK) {
 			pokemon.SetAttackStatus(STATUS_SPECIAL_ATTACK);
@@ -201,22 +222,16 @@ void BattleScene::Update()
 		float tempY = pokemon.GetY();
 		Status tempAttackStatus = pokemon.GetAttackStatus();
 
-		if (GAME->CheckGameOver()) {
-
-		}
-		else {
-			GAME->NextSelectNum();
-			pokemon = GAME->GetPokemon(GAME->GetSelectNum());
-			pokemon.SetX(tempX);
-			pokemon.SetY(tempY);
-			pokemon.SetWidth(50);
-			pokemon.SetHeight(50);
-			pokemon.SetDirection(player.GetDirection());
-			pokemon.SetStatus(STATUS_IDLE);
-			pokemon.SetAttackStatus(tempAttackStatus);
-		}
+		GAME->NextSelectNum();
+		pokemon = GAME->GetPokemon(GAME->GetSelectNum());
+		pokemon.SetX(tempX);
+		pokemon.SetY(tempY);
+		pokemon.SetWidth(50);
+		pokemon.SetHeight(50);
+		pokemon.SetDirection(player.GetDirection());
+		pokemon.SetStatus(STATUS_IDLE);
+		pokemon.SetAttackStatus(tempAttackStatus);
 	}
-
 
 	// enemy
 	for (int i = 0; i < POKEMON_COUNT; i++) {
@@ -295,8 +310,29 @@ void BattleScene::Update()
 
 					if (enemy[i].GetMeleeAttack().isAttack) {
 						player.AddHp(-enemy[i].GetAtk());
-						if (player.GetHp() <= 0)
-							player.SetHp(0);
+
+						// 플레이어가 죽는 경우
+						if (player.GetHp() <= 0) {
+							// 플레이어 hp 초기화
+							player.SetHp(player.GetMaxHp());
+
+							// 포켓몬 혹시 죽었으면 살리고 피 1로
+							for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+								if (GAME->GetPokemon(i).GetDied()) {
+									GAME->GetPokemon(i).SetDied(false);
+									GAME->GetPokemon(i).SetHp(1);
+								}
+							}
+
+							GAME->SetIsStartBattle(false);
+
+							if (GAME->GetBeforeTown() == 1)
+								SCENE->ChangeScene("Town1");
+							else if (GAME->GetBeforeTown() == 2)
+								SCENE->ChangeScene("Town2");
+
+							Init();
+						}
 					}
 					enemy[i].MeleeAttack(false);
 
@@ -370,8 +406,23 @@ void BattleScene::Update()
 							GAME->GetPokemon(GAME->GetSelectNum()).SetHp(0);
 							GAME->GetPokemon(GAME->GetSelectNum()).SetDied(true);
 
-							if (GAME->CheckGameOver()) {
+							if (GameOver()) {
+								// 포켓몬 혹시 죽었으면 살리고 피 1로
+								for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+									if (GAME->GetPokemon(i).GetDied()) {
+										GAME->GetPokemon(i).SetDied(false);
+										GAME->GetPokemon(i).SetHp(1);
+									}
+								}
 
+								GAME->SetIsStartBattle(false);
+
+								if (GAME->GetBeforeTown() == 1)
+									SCENE->ChangeScene("Town1");
+								else if (GAME->GetBeforeTown() == 2)
+									SCENE->ChangeScene("Town2");
+
+								Init();
 							}
 							else {
 								float tempX = pokemon.GetX();
@@ -766,6 +817,11 @@ void BattleScene::Update()
 
 void BattleScene::Render()
 {
+	if (GAME->GetIsStartBattle() == false) {
+		GAME->SetIsStartBattle(true);
+		Init();
+	}
+
 	//IMAGE->FrameRender("BackGround", GetMemDC(), 0, 0, 0, 0);
 	bg->Render(GetMemDC(), -WINSIZEX / 4, -WINSIZEY / 4);
 
@@ -1631,4 +1687,33 @@ void BattleScene::DrawUI()
 	TextOut(GetMemDC(), WINSIZEX - 200 + 112, WINSIZEY - 175 + 155, str, strlen(str));
 	sprintf_s(str, "%d", enemy[currentEnemy].GetMaxHp());
 	TextOut(GetMemDC(), WINSIZEX - 200 + 155, WINSIZEY - 175 + 155, str, strlen(str));
+}
+
+bool BattleScene::GameOver()
+{
+	bool isOver = true;
+	for (int i = 0; i < GAME->GetPokemonCount(); i++) {
+		if (GAME->GetPokemon(i).GetDied() == false) {
+			isOver = false;
+			break;
+		}
+	}
+
+	if(isOver)
+		GAME->SetIsOver(true);
+
+	return isOver;
+}
+
+bool BattleScene::GameWin()
+{
+	bool isWin = true;
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		if (enemy[i].GetDied() == false) {
+			isWin = false;
+			break;
+		}
+	}
+
+	return isWin;
 }

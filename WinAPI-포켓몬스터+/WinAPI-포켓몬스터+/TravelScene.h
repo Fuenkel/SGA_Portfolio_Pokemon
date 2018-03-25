@@ -13,6 +13,7 @@ class TravelScene : public GameNode
 private:
 	bool isDebug;
 	bool isExit;
+	bool isChangeScene;
 
 	Image * bg;
 

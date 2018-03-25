@@ -15,6 +15,7 @@ HRESULT TravelScene::Init()
 {
 	isDebug = false;
 	isExit = false;
+	isChangeScene = false;
 
 	bgY = 0;
 
@@ -27,17 +28,57 @@ HRESULT TravelScene::Init()
 	for (int i = 0; i < POKEMON_COUNT; i++) {
 		pattern[i] = DIRECTION_LEFT;
 
-		pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
-		pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
-		pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+		//pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+		//pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+		//pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+		if (i % 2 == 0) {
+			pokemon[i].SetPortrait(IMAGE->FindImage("Pidgey_portrait"));
+			pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Pidgey_idle"));
+			pokemon[i].SetAniMaxNum(STATUS_IDLE, 2);
+			pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Pidgey_movement"));
+			pokemon[i].SetAniMaxNum(STATUS_MOVE, 3);
+			pokemon[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Pidgey_attack"));
+			pokemon[i].SetAniMaxNum(STATUS_ATTACK, 3);
+			pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Pidgey_hurt"));
+			pokemon[i].SetAniMaxNum(STATUS_HURT, 1);
+			pokemon[i].SetAni(STATUS_SPECIAL_ATTACK,
+				IMAGE->FindImage("Pidgey_special_attack"));
+			pokemon[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 2);
+
+			pokemon[i].SetName("备备");
+			pokemon[i].SetLevel(RND->GetFromInto(1, 8));
+			//pokemon[i].SetLevel(5);
+			pokemon[i].SetMaxHp(28);
+			pokemon[i].SetHp(28);
+			pokemon[i].SetAtk(4);
+		}
+		else {
+			pokemon[i].SetPortrait(IMAGE->FindImage("Rattata_portrait"));
+			pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
+			pokemon[i].SetAniMaxNum(STATUS_IDLE, 2);
+			pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
+			pokemon[i].SetAniMaxNum(STATUS_MOVE, 3);
+			pokemon[i].SetAni(STATUS_ATTACK, IMAGE->FindImage("Rattata_attack"));
+			pokemon[i].SetAniMaxNum(STATUS_ATTACK, 4);
+			pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));
+			pokemon[i].SetAniMaxNum(STATUS_HURT, 1);
+			pokemon[i].SetAni(STATUS_SPECIAL_ATTACK,
+				IMAGE->FindImage("Rattata_special_attack"));
+			pokemon[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
+
+			pokemon[i].SetName("部房");
+			pokemon[i].SetLevel(RND->GetFromInto(1, 8));
+			//pokemon[i].SetLevel(5);
+			pokemon[i].SetMaxHp(32);
+			pokemon[i].SetHp(32);
+			pokemon[i].SetAtk(5);
+		}
+
 		pokemon[i].Init(DIRECTION_DOWN, WINSIZEX + i * 100, i * 50, 50, 50);
 		pokemon[i].SetStatus(STATUS_IDLE);
 		pokemon[i].SetMoveFrame(0);
-		pokemon[i].SetName("部房");
-		pokemon[i].SetLevel(RND->GetFromInto(1, 8));
-		pokemon[i].SetAlpha(255);
-		
 		pokemon[i].SetDied(false);
+		pokemon[i].SetAlpha(255);
 
 		PokemonMove(pokemon[i], 3, 2.5f, pattern[i], true);
 	}
@@ -55,6 +96,16 @@ void TravelScene::Release()
 
 void TravelScene::Update()
 {
+	if (GAME->GetIsOver()) {
+		GAME->SetIsOver(false);
+		Init();
+	}
+
+	if (isChangeScene) {
+		SCENE->ChangeScene("Battle");
+		isChangeScene = false;
+	}
+
 	PlayerMove();
 	BgMove();
 
@@ -130,6 +181,9 @@ void TravelScene::Update()
 				player.GetY() + player.GetHeight() / 4,
 				player.GetWidth() / 2, player.GetHeight() / 2))
 			&& pokemon[i].GetDied() == false) {
+
+			GAME->SetCurrentPokemon(pokemon[i]);
+
 			if (pokemon[i].GetStatus() != STATUS_HURT) {
 				switch (player.GetDirection())
 				{
@@ -148,6 +202,9 @@ void TravelScene::Update()
 				}
 				pokemon[i].SetMoveFrame(pokemon[i].GetDirection());
 				pokemon[i].SetStatus(STATUS_HURT);
+
+				isChangeScene = true;
+				return;
 			}
 		}
 	}
