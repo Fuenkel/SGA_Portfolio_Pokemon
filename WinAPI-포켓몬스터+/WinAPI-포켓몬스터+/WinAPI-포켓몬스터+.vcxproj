@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BattleScene.h" />
     <ClInclude Include="CommonMacroFunction.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameNode.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="WinAPI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="Image.cpp" />

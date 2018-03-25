@@ -41,7 +41,7 @@ inline RECT RectMakeCenter(int x, int y, int width, int height) {
 
 inline void BeginSolidColor(HDC hdc, HBRUSH* brush, COLORREF color) {
 	*brush = CreateSolidBrush(color);
-	*brush = (HBRUSH)SelectObject(hdc, *brush);
+	//*brush = (HBRUSH)SelectObject(hdc, *brush);
 }
 
 inline void BeginCreateFont(HDC hdc, HFONT* font, int size, string style = "±Ã¼­") {

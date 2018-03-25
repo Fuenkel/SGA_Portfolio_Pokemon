@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "TestScene.h"
+#include "BattleScene.h"
 
 
-TestScene::TestScene()
+BattleScene::BattleScene()
 {
 }
 
 
-TestScene::~TestScene()
+BattleScene::~BattleScene()
 {
 }
 
-HRESULT TestScene::Init()
+HRESULT BattleScene::Init()
 {
 	isDebug = false;
 
 	//moveFrame = 0;
-	
+
 	bg = IMAGE->FindImage("Battle");
 
 	ui[0] = IMAGE->FindImage("UI_open");
@@ -159,11 +159,11 @@ HRESULT TestScene::Init()
 	return S_OK;
 }
 
-void TestScene::Release()
+void BattleScene::Release()
 {
 }
 
-void TestScene::Update()
+void BattleScene::Update()
 {
 	//if (INPUT->GetKeyDown(VK_SPACE)) {
 	//	moveFrame++;
@@ -182,7 +182,7 @@ void TestScene::Update()
 	//	GAME->GetPokemon(3).AddHp(-1);
 	//if (INPUT->GetKeyDown('T'))
 	//	player.AddHp(-1);
-	
+
 	// test위해 모두 정지
 	//return;
 
@@ -230,15 +230,15 @@ void TestScene::Update()
 					enemy[i].GetX(), enemy[i].GetY(), player.GetX(), player.GetY()) > 60) {
 
 					if (GetDistance(
-						enemy[i].GetX(), enemy[i].GetY(), 
+						enemy[i].GetX(), enemy[i].GetY(),
 						pokemon.GetX(), pokemon.GetY()) <= 50)
-						PokemonAttack(enemy[i], 
-							enemy[i].GetAniMaxNum(STATUS_ATTACK), 
+						PokemonAttack(enemy[i],
+							enemy[i].GetAniMaxNum(STATUS_ATTACK),
 							enemy[i].GetAniMaxNum(STATUS_IDLE), true);
 
 					if (enemy[i].GetStatus() == STATUS_IDLE)
-						PokemonMove(enemy[i], 
-							enemy[i].GetAniMaxNum(STATUS_MOVE), 
+						PokemonMove(enemy[i],
+							enemy[i].GetAniMaxNum(STATUS_MOVE),
 							2.5f, FindDirection(enemy[i], player), true);
 				}
 				else {
@@ -252,7 +252,7 @@ void TestScene::Update()
 					if (player.GetY() + player.GetHeight() < enemy[i].GetY())
 						enemy[i].SetDirection(DIRECTION_UP);
 					//PokemonIdle(enemy[i], 2);
-					PokemonAttack(enemy[i], 
+					PokemonAttack(enemy[i],
 						enemy[i].GetAniMaxNum(STATUS_ATTACK),
 						enemy[i].GetAniMaxNum(STATUS_IDLE), true);
 				}
@@ -263,13 +263,13 @@ void TestScene::Update()
 
 					if (GetDistance(
 						enemy[i].GetX(), enemy[i].GetY(), pokemon.GetX(), pokemon.GetY()) <= 60)
-						PokemonAttack(enemy[i], 
+						PokemonAttack(enemy[i],
 							enemy[i].GetAniMaxNum(STATUS_ATTACK),
 							enemy[i].GetAniMaxNum(STATUS_IDLE), true);
 
 					if (enemy[i].GetStatus() == STATUS_MOVE)
-						PokemonMove(enemy[i], 
-							enemy[i].GetAniMaxNum(STATUS_MOVE), 
+						PokemonMove(enemy[i],
+							enemy[i].GetAniMaxNum(STATUS_MOVE),
 							2.5f, FindDirection(enemy[i], player));
 				}
 				else {
@@ -283,7 +283,7 @@ void TestScene::Update()
 					if (player.GetY() + player.GetHeight() < enemy[i].GetY())
 						enemy[i].SetDirection(DIRECTION_UP);
 					//PokemonIdle(enemy[i], 2);
-					PokemonAttack(enemy[i], 
+					PokemonAttack(enemy[i],
 						enemy[i].GetAniMaxNum(STATUS_ATTACK),
 						enemy[i].GetAniMaxNum(STATUS_IDLE), true);
 				}
@@ -311,7 +311,7 @@ void TestScene::Update()
 
 						if (pokemon.GetY() > WINSIZEY || player.GetY() > WINSIZEY)
 						{
-							player.Init(DIRECTION_UP, 
+							player.Init(DIRECTION_UP,
 								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
 							pokemon.SetX(WINSIZEX / 2);
 							pokemon.SetY(WINSIZEY / 2 - player.GetHeight());
@@ -363,9 +363,9 @@ void TestScene::Update()
 				}
 				// 포켓몬을 공격할 때
 				if (IntersectRect(&temp, &pokemon.GetRect(), &temp2)) {
-		
+
 					if (enemy[i].GetMeleeAttack().isAttack) {
-  						GAME->GetPokemon(GAME->GetSelectNum()).AddHp(-enemy[i].GetAtk());
+						GAME->GetPokemon(GAME->GetSelectNum()).AddHp(-enemy[i].GetAtk());
 						if (GAME->GetPokemon(GAME->GetSelectNum()).GetHp() <= 0) {
 							GAME->GetPokemon(GAME->GetSelectNum()).SetHp(0);
 							GAME->GetPokemon(GAME->GetSelectNum()).SetDied(true);
@@ -402,7 +402,7 @@ void TestScene::Update()
 						pokemon.AddY(SPEED);
 						player.AddY(SPEED);
 
-						if (pokemon.GetY() > WINSIZEY ||player.GetY() > WINSIZEY)
+						if (pokemon.GetY() > WINSIZEY || player.GetY() > WINSIZEY)
 						{
 							player.Init(DIRECTION_UP,
 								WINSIZEX / 2, WINSIZEY / 2, 40, 50);
@@ -498,7 +498,7 @@ void TestScene::Update()
 						if (enemy[i].GetMoveFrame() >= 1) {
 							//enemy[i].SetStatus(STATUS_IDLE);
 							//enemy[i].SetMoveFrame(0);
- 							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
 						}
 						break;
 					case DIRECTION_UP:
@@ -540,7 +540,7 @@ void TestScene::Update()
 		break;
 	case STATUS_MOVE:
 		Move();
-		Attack(); 
+		Attack();
 		break;
 	case STATUS_ATTACK:
 		//moveFrame += 0.1f;
@@ -551,7 +551,7 @@ void TestScene::Update()
 					currentEnemy = i;
 
 					if (enemy[i].GetStatus() != STATUS_HURT) {
-     						enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
+						enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
 						if (enemy[i].GetHp() <= 0) {
 							enemy[i].SetHp(0);
 						}
@@ -606,7 +606,7 @@ void TestScene::Update()
 		{
 		case DIRECTION_DOWN:
 			//if (moveFrame >= 1) {
-			if(pokemon.GetMoveFrame() >= pokemon.GetAniMaxNum(STATUS_ATTACK)) {
+			if (pokemon.GetMoveFrame() >= pokemon.GetAniMaxNum(STATUS_ATTACK)) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 0;
 				pokemon.SetMoveFrame(0);
@@ -615,8 +615,8 @@ void TestScene::Update()
 			break;
 		case DIRECTION_UP:
 			//if (moveFrame >= 2) {
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_ATTACK) * 2) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_ATTACK) * 2) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 1;
 				pokemon.SetMoveFrame(pokemon.GetAniMaxNum(STATUS_IDLE));
@@ -625,8 +625,8 @@ void TestScene::Update()
 			break;
 		case DIRECTION_LEFT:
 			//if (moveFrame >= 3) {
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_ATTACK) * 3) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_ATTACK) * 3) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 2;
 				pokemon.SetMoveFrame(pokemon.GetAniMaxNum(STATUS_IDLE) * 2);
@@ -635,8 +635,8 @@ void TestScene::Update()
 			break;
 		case DIRECTION_RIGHT:
 			//if (moveFrame >= 4) {
-			if(pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_ATTACK) * 4) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_ATTACK) * 4) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 3;
 				pokemon.SetMoveFrame(pokemon.GetAniMaxNum(STATUS_IDLE) * 3);
@@ -652,8 +652,8 @@ void TestScene::Update()
 		{
 		case DIRECTION_DOWN:
 			//if (moveFrame >= 2) {
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK)) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK)) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 0;
 				pokemon.SetMoveFrame(0);
@@ -661,8 +661,8 @@ void TestScene::Update()
 			break;
 		case DIRECTION_UP:
 			//if (moveFrame >= 4) {
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK) * 2) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK) * 2) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 1;
 				pokemon.SetMoveFrame(pokemon.GetAniMaxNum(STATUS_IDLE));
@@ -670,7 +670,7 @@ void TestScene::Update()
 			break;
 		case DIRECTION_LEFT:
 			//if (moveFrame >= 6) {
-			if (pokemon.GetMoveFrame() >= 
+			if (pokemon.GetMoveFrame() >=
 				pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK) * 3) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 2;
@@ -679,8 +679,8 @@ void TestScene::Update()
 			break;
 		case DIRECTION_RIGHT:
 			//if (moveFrame >= 8) {
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK) * 4) {
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_SPECIAL_ATTACK) * 4) {
 				pokemon.SetStatus(STATUS_IDLE);
 				//moveFrame = 3;
 				pokemon.SetMoveFrame(pokemon.GetAniMaxNum(STATUS_IDLE) * 3);
@@ -764,15 +764,15 @@ void TestScene::Update()
 	}
 }
 
-void TestScene::Render()
+void BattleScene::Render()
 {
 	//IMAGE->FrameRender("BackGround", GetMemDC(), 0, 0, 0, 0);
-	bg->Render(GetMemDC(), -WINSIZEX/4, -WINSIZEY/4);
+	bg->Render(GetMemDC(), -WINSIZEX / 4, -WINSIZEY / 4);
 
 	DrawUI();
 
 	player.GetAni(0)->FrameRender(GetMemDC(),
-		player.GetX(), player.GetY(), 
+		player.GetX(), player.GetY(),
 		(int)player.GetMoveFrame(), player.GetDirection());
 
 	//IMAGE->FrameRender(  "Pikachu_attack", GetMemDC(),
@@ -820,7 +820,7 @@ void TestScene::Render()
 
 	for (int i = 0; i < BULLETMAX; i++) {
 		if (pokemon.GetBullet(i)->isFire == false) continue;
-		
+
 		switch (pokemon.GetEffectNum())
 		{
 		case EFFECT_ELECTRICITY:
@@ -846,12 +846,12 @@ void TestScene::Render()
 		case EFFECT_END:
 			break;
 		}
-	} 
+	}
 
 	if (isDebug) {
-		if (pokemon.GetMeleeAttack().isAttack)	
+		if (pokemon.GetMeleeAttack().isAttack)
 			RectangleMake(GetMemDC(), pokemon.GetMeleeAttack().rc);
-		
+
 		for (int i = 0; i < POKEMON_COUNT; i++) {
 			if (enemy[i].GetMeleeAttack().isAttack)
 				RectangleMake(GetMemDC(), enemy[i].GetMeleeAttack().rc);
@@ -866,7 +866,7 @@ void TestScene::Render()
 	}
 }
 
-void TestScene::Idle()
+void BattleScene::Idle()
 {
 	switch (player.GetDirection())
 	{
@@ -933,12 +933,12 @@ void TestScene::Idle()
 	}
 }
 
-void TestScene::Move()
+void BattleScene::Move()
 {
 	bool isFrameMove = false;
 
-	if (INPUT->GetKey(VK_DOWN) && 
-		pokemon.GetY() + pokemon.GetHeight() < WINSIZEY) { 
+	if (INPUT->GetKey(VK_DOWN) &&
+		pokemon.GetY() + pokemon.GetHeight() < WINSIZEY) {
 		player.AddY(SPEED);
 		isFrameMove = true;
 		//pokemon.SetY(pokemon.GetY() + SPEED); 
@@ -954,7 +954,7 @@ void TestScene::Move()
 		pokemon.SetY(player.GetY() - pokemon.GetHeight());
 	}
 	if (INPUT->GetKey(VK_LEFT) &&
-		pokemon.GetX() > 0) { 
+		pokemon.GetX() > 0) {
 		player.AddX(-SPEED);
 		isFrameMove = true;
 		//pokemon.SetX(pokemon.GetX() - SPEED); 
@@ -962,7 +962,7 @@ void TestScene::Move()
 		pokemon.SetY(player.GetY() + 10);
 	}
 	if (INPUT->GetKey(VK_RIGHT) &&
-		pokemon.GetX() + pokemon.GetWidth() < WINSIZEX) { 
+		pokemon.GetX() + pokemon.GetWidth() < WINSIZEX) {
 		player.AddX(SPEED);
 		isFrameMove = true;
 		//pokemon.SetX(pokemon.GetX() + SPEED); 
@@ -987,7 +987,7 @@ void TestScene::Move()
 	}
 	if (INPUT->GetKeyUp(VK_UP)) {
 		player.SetMoveFrame(PLAYER_IDLE);
-		
+
 		pokemon.SetStatus(STATUS_IDLE);
 		pokemon.SetDirection(DIRECTION_UP);
 		//moveFrame = 1;
@@ -1005,7 +1005,7 @@ void TestScene::Move()
 	}
 	if (INPUT->GetKeyUp(VK_RIGHT)) {
 		player.SetMoveFrame(PLAYER_IDLE);
-		
+
 		pokemon.SetStatus(STATUS_IDLE);
 		pokemon.SetDirection(DIRECTION_RIGHT);
 		//moveFrame = 3;
@@ -1020,15 +1020,15 @@ void TestScene::Move()
 		{
 		case DIRECTION_DOWN:
 			//if (moveFrame > 2)
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_MOVE))
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_MOVE))
 				//moveFrame = 0;
 				pokemon.SetMoveFrame(0);
 			break;
 		case DIRECTION_UP:
 			//if (moveFrame > 5)
-			if (pokemon.GetMoveFrame() >= 
-					pokemon.GetAniMaxNum(STATUS_MOVE) * 2)
+			if (pokemon.GetMoveFrame() >=
+				pokemon.GetAniMaxNum(STATUS_MOVE) * 2)
 				//moveFrame = 3;
 				pokemon.SetMoveFrame(
 					pokemon.GetAniMaxNum(STATUS_MOVE));
@@ -1043,7 +1043,7 @@ void TestScene::Move()
 			break;
 		case DIRECTION_RIGHT:
 			//if (moveFrame > 11)
-			if (pokemon.GetMoveFrame() >= 
+			if (pokemon.GetMoveFrame() >=
 				pokemon.GetAniMaxNum(STATUS_MOVE) * 4)
 				//moveFrame = 9;
 				pokemon.SetMoveFrame(
@@ -1053,7 +1053,7 @@ void TestScene::Move()
 	}
 }
 
-void TestScene::Attack()
+void BattleScene::Attack()
 {
 	if (INPUT->GetKeyDown(VK_SPACE)) {
 		pokemon.SetStatus(pokemon.GetAttackStatus());
@@ -1125,7 +1125,8 @@ void TestScene::Attack()
 	}
 }
 
-void TestScene::PokemonIdle(Pokemon& pokemon, int maxNum) {
+void BattleScene::PokemonIdle(Pokemon & pokemon, int maxNum)
+{
 	float moveFrame = 0.05f;
 
 	switch (pokemon.GetDirection())
@@ -1180,8 +1181,8 @@ void TestScene::PokemonIdle(Pokemon& pokemon, int maxNum) {
 	}
 }
 
-void TestScene::PokemonMove(Pokemon& pokemon, int maxNum,
-	float speed, Direction dir, bool isStart) {
+void BattleScene::PokemonMove(Pokemon & pokemon, int maxNum, float speed, Direction dir, bool isStart)
+{
 	if (isStart) {
 		if (pokemon.GetStatus() != STATUS_MOVE)
 			pokemon.SetStatus(STATUS_MOVE);
@@ -1238,7 +1239,7 @@ void TestScene::PokemonMove(Pokemon& pokemon, int maxNum,
 	}
 }
 
-void TestScene::PokemonAttack(Pokemon & pokemon, int maxNum, int idleMaxNum, bool isStart)
+void BattleScene::PokemonAttack(Pokemon & pokemon, int maxNum, int idleMaxNum, bool isStart)
 {
 	if (isStart) {
 		pokemon.SetStatus(pokemon.GetAttackStatus());
@@ -1298,7 +1299,7 @@ void TestScene::PokemonAttack(Pokemon & pokemon, int maxNum, int idleMaxNum, boo
 	}
 }
 
-void TestScene::PokemonHurt(Pokemon & pokemon, int maxNum)
+void BattleScene::PokemonHurt(Pokemon & pokemon, int maxNum)
 {
 	pokemon.AddMoveFrame(0.1f);
 	switch (pokemon.GetDirection())
@@ -1330,7 +1331,7 @@ void TestScene::PokemonHurt(Pokemon & pokemon, int maxNum)
 	}
 }
 
-Direction TestScene::FindDirection(Pokemon& pokemon, Unit& unit)
+Direction BattleScene::FindDirection(Pokemon & pokemon, Unit & unit)
 {
 	if (abs(pokemon.GetX() - player.GetX()) > 10) {
 		if (pokemon.GetX() < player.GetX()) {
@@ -1349,7 +1350,7 @@ Direction TestScene::FindDirection(Pokemon& pokemon, Unit& unit)
 	}
 }
 
-void TestScene::ChangeHpBar()
+void BattleScene::ChangeHpBar()
 {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -1467,7 +1468,7 @@ void TestScene::ChangeHpBar()
 	}
 }
 
-void TestScene::DrawUI()
+void BattleScene::DrawUI()
 {
 	float alpha = 225;
 

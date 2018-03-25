@@ -159,7 +159,6 @@ void Pokemon::BulletMove()
 
 		m_bullet[i].rc = RectMake(m_bullet[i].x, m_bullet[i].y, 50, 50);
 
-		
 		switch (effectNum)
 		{
 		case EFFECT_ELECTRICITY:

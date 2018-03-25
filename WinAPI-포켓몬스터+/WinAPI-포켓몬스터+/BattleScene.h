@@ -8,7 +8,7 @@
 #define SPEED 2.5f
 #define POKEMON_COUNT 1
 
-class TestScene : public GameNode
+class BattleScene : public GameNode
 {
 private:
 	bool isDebug;
@@ -49,8 +49,8 @@ private:
 	COLORREF halfHp;
 	COLORREF littleHp;
 public:
-	TestScene();
-	~TestScene();
+	BattleScene();
+	~BattleScene();
 
 	virtual HRESULT Init() override;
 	virtual void Release() override;

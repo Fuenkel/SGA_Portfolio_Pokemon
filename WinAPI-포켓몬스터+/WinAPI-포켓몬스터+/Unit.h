@@ -73,6 +73,8 @@ public:
 	int GetSpeed() { return m_speed; }
 	void SetSpeed(int speed) { m_speed = speed; }
 
+	void AddHp(int num) { m_hp += num; }
+
 	void SetMoveFrame(float moveFrame) { m_moveFrame = moveFrame; }
 	float GetMoveFrame() { return m_moveFrame; }
 	void AddMoveFrame(float moveFrame) { m_moveFrame += moveFrame; }

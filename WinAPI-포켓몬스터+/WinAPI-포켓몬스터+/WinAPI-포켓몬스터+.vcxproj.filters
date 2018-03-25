@@ -46,6 +46,9 @@
     <Filter Include="GameScene\Travel">
       <UniqueIdentifier>{f6f8e558-e8d1-46fd-854a-b1c569e169ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameScene\Battle">
+      <UniqueIdentifier>{eaef23fc-600c-42a6-83a0-bc35fe832a02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="TravelScene.h">
       <Filter>GameScene\Travel</Filter>
     </ClInclude>
+    <ClInclude Include="BattleScene.h">
+      <Filter>GameScene\Battle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -184,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="TravelScene.cpp">
       <Filter>GameScene\Travel</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>GameScene\Battle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

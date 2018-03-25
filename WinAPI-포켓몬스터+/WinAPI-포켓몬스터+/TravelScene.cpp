@@ -20,7 +20,6 @@ HRESULT TravelScene::Init()
 
 	bg = IMAGE->FindImage("Travel");
 
-	player.InitAni(1);
 	player.SetAni(0, IMAGE->FindImage("Player_travel"));
 	player.Init(DIRECTION_UP, WINSIZEX / 2, WINSIZEY - 100, 40, 50);
 	player.SetMoveFrame(PLAYER_IDLE);
@@ -28,7 +27,6 @@ HRESULT TravelScene::Init()
 	for (int i = 0; i < POKEMON_COUNT; i++) {
 		pattern[i] = DIRECTION_LEFT;
 
-		pokemon[i].InitAni(3);
 		pokemon[i].SetAni(STATUS_IDLE, IMAGE->FindImage("Rattata_idle"));
 		pokemon[i].SetAni(STATUS_MOVE, IMAGE->FindImage("Rattata_movement"));
 		pokemon[i].SetAni(STATUS_HURT, IMAGE->FindImage("Rattata_hurt"));

@@ -9,8 +9,10 @@ class Player : public Unit
 private:
 	float m_probe;
 
-	Image** ani;
-	int num;
+	Image* portrait;
+	Image* ani[6];
+
+	int aniMaxNum[6];
 public:
 	Player();
 	~Player();
@@ -21,8 +23,13 @@ public:
 	void Probe(Image* pixel, float bgX, float bgY, float winsizeX, float winsizeY);
 	//void InputPlayer();
 
-	void InitAni(int num);
 	void SetAni(int status, Image* img) { ani[status] = img; }
 	Image* GetAni(int status) { return ani[status]; }
+
+	void SetAniMaxNum(int index, int maxNum) { aniMaxNum[index] = maxNum; }
+	int GetAniMaxNum(int index) { return aniMaxNum[index]; }
+
+	Image* GetPortrait() { return portrait; }
+	void SetPortrait(Image* portrait) { this->portrait = portrait; }
 };
 

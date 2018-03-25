@@ -182,7 +182,7 @@ void Town2Scene::Render()
 			status->AlphaRender(GetMemDC(), 50, 100, 225);
 
 			GAME->GetPokemon(GAME->GetPokemonIndex()).
-				GetImage()->Render(GetMemDC(), 138, 236);
+				GetPortrait()->Render(GetMemDC(), 138, 236);
 
 			sprintf_s(str, "%d", GAME->GetPokemon(
 				GAME->GetPokemonIndex()).GetLevel());

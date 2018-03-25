@@ -13,6 +13,30 @@ enum Status {
 	STATUS_ATTACK2
 };
 
+enum EffectKind {
+	EFFECT_ELECTRICITY,
+	EFFECT_FIRE,
+	EFFECT_WATER,
+	EFFECT_GRASS,
+	EFFECT_END
+};
+
+#define BULLETMAX 10
+
+struct tagBullet {
+	RECT rc;
+	Direction dir;
+	bool isFire;
+	float moveFrame;
+	float x, y;
+};
+
+struct tagMeleeAttack {
+	RECT rc;
+	Direction dir;
+	bool isAttack;
+};
+
 class Pokemon : public Unit
 {
 private:
@@ -20,9 +44,17 @@ private:
 
 	Status m_status;
 
-	Image* img;
-	Image** ani;
-	int num;
+	Status m_attackStatus;
+
+	tagBullet m_bullet[BULLETMAX];
+	tagMeleeAttack m_melee;
+
+	Image* portrait;
+	Image* model;
+	Image* ani[6];
+	int aniMaxNum[6];
+
+	int effectNum;
 
 	bool isDied;
 	float alpha;
@@ -38,16 +70,24 @@ public:
 	void SetStatus(Status status) { m_status = status; }
 	Status GetStatus() { return m_status; }
 
-	Image* GetImage() { return img; }
-	void SetImage(Image* img) { this->img = img; }
+	Image* GetPortrait() { return portrait; }
+	void SetPortrait(Image* portrait) { this->portrait = portrait; }
+
+	Image* GetModel() { return model; }
+	void SetModel(Image* model) { this->model = model; }
 
 	void Init(Direction dir, float x, float y, float width, float height) {
 		m_dir = dir; m_x = x; m_y = y; m_width = width; m_height = height;
 	}
 
-	void InitAni(int num);
+	void SetEffectNum(int num) { effectNum = num; }
+	int GetEffectNum() { return effectNum; }
+
 	void SetAni(Status status, Image* img) { ani[status] = img; }
 	Image* GetAni(Status status) { return ani[status]; }
+
+	void SetAniMaxNum(int index, int maxNum) { aniMaxNum[index] = maxNum; }
+	int GetAniMaxNum(int index) { return aniMaxNum[index]; }
 
 	void SetDied(bool isDied) { this->isDied = isDied; }
 	bool GetDied() { return isDied; }
@@ -55,5 +95,15 @@ public:
 	void SetAlpha(float alpha) { this->alpha = alpha; }
 	float GetAlpha() { return alpha; }
 	void AddAlpha(float num) { alpha += num; }
+
+	Status GetAttackStatus() { return m_attackStatus; }
+	void SetAttackStatus(Status status) { m_attackStatus = status; }
+
+	void BulletFire();
+	void BulletMove();
+	tagBullet* GetBullet(int i) { return &m_bullet[i]; }
+
+	void MeleeAttack(bool isAttack);
+	tagMeleeAttack GetMeleeAttack() { return m_melee; }
 };
 
