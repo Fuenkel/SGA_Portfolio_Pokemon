@@ -22,6 +22,9 @@ HRESULT MainGame::Init()
 	GameNode::Init();
 	isDebug = false;
 
+	IMAGE->AddImage("Intro", "images/intro.bmp", 0, 0,
+		WINSIZEX, WINSIZEY, 1, 1, false, RGB(255, 0, 255));
+
 	// bg
 	IMAGE->AddImage("Town1", "images/town1.bmp", 0, 0,
 		WINSIZEX * 2, WINSIZEY * 2, 1, 1, false, RGB(255, 0, 255));
@@ -202,7 +205,7 @@ HRESULT MainGame::Init()
 	SCENE->AddScene("Travel", new TravelScene);
 	SCENE->AddScene("Battle", new BattleScene);
 
-	SCENE->ChangeScene("Town1");
+	//SCENE->ChangeScene("Town1");
 	//SCENE->ChangeScene("Town2");
 	//SCENE->ChangeScene("Shop");
 	//SCENE->ChangeScene("Travel");
@@ -222,6 +225,14 @@ void MainGame::Update()
 
 	SCENE->Update();
 
+	if (INPUT->GetKeyDown(VK_RETURN)) {
+		SCENE->ChangeScene("Town1");
+		//SCENE->ChangeScene("Town2");
+		//SCENE->ChangeScene("Shop");
+		//SCENE->ChangeScene("Travel");
+		//SCENE->ChangeScene("Battle");
+	}
+
 	//====================== Debug =====================//
 	if (INPUT->GetKeyDown(VK_F11)) {
 		isDebug = !isDebug;
@@ -234,6 +245,8 @@ void MainGame::Render()
 	PatBlt(GetMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
 	{
+		IMAGE->FindImage("Intro")->Render(GetMemDC());
+
 		SCENE->Render();
 	}
 	//==================   Debug   ====================
