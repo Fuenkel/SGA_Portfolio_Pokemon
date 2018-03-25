@@ -48,9 +48,11 @@ HRESULT TravelScene::Init()
 			pokemon[i].SetName("备备");
 			pokemon[i].SetLevel(RND->GetFromInto(1, 8));
 			//pokemon[i].SetLevel(5);
-			pokemon[i].SetMaxHp(28);
-			pokemon[i].SetHp(28);
-			pokemon[i].SetAtk(4);
+			pokemon[i].SetMaxHp(pokemon[i].GetLevel() * 5 - 2);
+			pokemon[i].SetHp(pokemon[i].GetLevel() * 5 - 2);
+			pokemon[i].SetAtk(pokemon[i].GetLevel() - 1);
+			pokemon[i].SetDef(0);
+			pokemon[i].SetSpDef(0);
 		}
 		else {
 			pokemon[i].SetPortrait(0, IMAGE->FindImage("Rattata_portrait"));
@@ -69,9 +71,11 @@ HRESULT TravelScene::Init()
 			pokemon[i].SetName("部房");
 			pokemon[i].SetLevel(RND->GetFromInto(1, 8));
 			//pokemon[i].SetLevel(5);
-			pokemon[i].SetMaxHp(32);
-			pokemon[i].SetHp(32);
-			pokemon[i].SetAtk(5);
+			pokemon[i].SetMaxHp(pokemon[i].GetLevel() * 6 + 2);
+			pokemon[i].SetHp(pokemon[i].GetLevel() * 6 + 2);
+			pokemon[i].SetAtk(pokemon[i].GetLevel());
+			pokemon[i].SetDef(0);
+			pokemon[i].SetSpDef(0);
 		}
 
 		pokemon[i].Init(DIRECTION_DOWN, WINSIZEX + i * 100, i * 50, 50, 50);

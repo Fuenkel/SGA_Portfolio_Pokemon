@@ -69,6 +69,8 @@ public:
 
 	Direction FindDirection(Pokemon& pokemon, Unit& unit);
 
+	int CalculateAttack(Pokemon attacker, Pokemon defender, Status status);
+
 	void ChangeHpBar();
 	void DrawUI();
 

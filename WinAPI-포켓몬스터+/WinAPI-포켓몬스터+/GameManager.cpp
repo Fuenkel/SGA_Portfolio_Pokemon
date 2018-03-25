@@ -97,6 +97,12 @@ void GameManager::PokemonInit()
 	temp.SetAtk(3);
 	temp.SetSpAtk(10);
 
+	temp.SetAtk(3);
+	temp.SetDef(0);
+	temp.SetSpAtk(10);
+	temp.SetSpDef(3);
+	temp.SetSpeed(65);
+
 	this->pokemonList.push_back(temp);
 
 	temp.SetName("ÇÇÄ«Ãò");
@@ -129,6 +135,12 @@ void GameManager::PokemonInit()
 	temp.SetAtk(5);
 	temp.SetSpAtk(8);
 
+	temp.SetAtk(5);
+	temp.SetDef(0);
+	temp.SetSpAtk(8);
+	temp.SetSpDef(0);
+	temp.SetSpeed(90);
+
 	this->pokemonList.push_back(temp);
 
 	temp.SetName("²¿ºÎ±â");
@@ -159,7 +171,10 @@ void GameManager::PokemonInit()
 	temp.SetEffectNum(EFFECT_WATER);
 
 	temp.SetAtk(2);
+	temp.SetDef(3);
 	temp.SetSpAtk(10);
+	temp.SetSpDef(3);
+	temp.SetSpeed(43);
 
 	this->pokemonList.push_back(temp);
 
@@ -191,7 +206,10 @@ void GameManager::PokemonInit()
 	temp.SetEffectNum(EFFECT_GRASS);
 
 	temp.SetAtk(2);
+	temp.SetDef(1);
 	temp.SetSpAtk(12);
+	temp.SetSpDef(2);
+	temp.SetSpeed(45);
 
 	this->pokemonList.push_back(temp);
 }

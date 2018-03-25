@@ -403,7 +403,13 @@ void BattleScene::Update()
 				if (IntersectRect(&temp, &pokemon.GetRect(), &temp2)) {
 
 					if (enemy[i].GetMeleeAttack().isAttack) {
-						GAME->GetPokemon(GAME->GetSelectNum()).AddHp(-enemy[i].GetAtk());
+						//GAME->GetPokemon(GAME->GetSelectNum()).AddHp(-enemy[i].GetAtk());
+						GAME->GetPokemon(GAME->GetSelectNum()).AddHp(
+							CalculateAttack(
+								enemy[i], 
+								GAME->GetPokemon(GAME->GetSelectNum()),
+								STATUS_ATTACK));
+
 						if (GAME->GetPokemon(GAME->GetSelectNum()).GetHp() <= 0) {
 							GAME->GetPokemon(GAME->GetSelectNum()).SetHp(0);
 							GAME->GetPokemon(GAME->GetSelectNum()).SetDied(true);
@@ -607,7 +613,14 @@ void BattleScene::Update()
 					currentEnemy = i;
 
 					if (enemy[i].GetStatus() != STATUS_HURT) {
-						enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
+
+						//enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
+						enemy[i].AddHp(
+							CalculateAttack(
+								GAME->GetPokemon(GAME->GetSelectNum()),
+								enemy[i],
+								STATUS_ATTACK));
+						
 						if (enemy[i].GetHp() <= 0) {
 							enemy[i].SetHp(0);
 						}
@@ -764,7 +777,13 @@ void BattleScene::Update()
 			if (IntersectRect(&temp, &temp2, &bulletTemp)) {
 				currentEnemy = j;
 
-				enemy[i].AddHp(-pokemon.GetSpAtk());
+				//enemy[i].AddHp(-pokemon.GetSpAtk());
+				enemy[i].AddHp(
+						CalculateAttack(
+							GAME->GetPokemon(GAME->GetSelectNum()),
+							enemy[i],
+							STATUS_SPECIAL_ATTACK));
+
 				if (enemy[i].GetHp() <= 0) {
 					enemy[i].SetHp(0);
 				}
@@ -1409,6 +1428,32 @@ Direction BattleScene::FindDirection(Pokemon & pokemon, Unit & unit)
 		else
 			return DIRECTION_UP;
 	}
+}
+
+int BattleScene::CalculateAttack(Pokemon attacker, Pokemon defender, Status status)
+{
+	int result;
+
+	if (status == STATUS_ATTACK) {
+		result = attacker.GetAtk() - defender.GetDef();
+		if (attacker.GetEquipItem().itemKind == BOOSTER_PLUSPOWER)
+			result += attacker.GetEquipItem().attribute;
+		if (defender.GetEquipItem().itemKind == BOOSTER_DEFENDUP)
+			result -= defender.GetEquipItem().attribute;
+		if (result < 0)
+			result = 0;
+	}
+	else if (status == STATUS_SPECIAL_ATTACK) {
+		result = attacker.GetSpAtk() - defender.GetSpDef();
+		if(attacker.GetEquipItem().itemKind == BOOSTER_SPECIALUP)
+			result += attacker.GetEquipItem().attribute;
+		if (defender.GetEquipItem().itemKind == BOOSTER_SPECIALGUARD)
+			result -= defender.GetEquipItem().attribute;
+		if (result < 0)
+			result = 0;
+	}
+
+	return -result;
 }
 
 void BattleScene::ChangeHpBar()
