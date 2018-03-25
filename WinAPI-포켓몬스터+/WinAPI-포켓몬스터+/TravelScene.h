@@ -30,6 +30,9 @@ private:
 
 	Player player;
 	Pokemon pokemon[POKEMON_COUNT];
+
+	HFONT hFont;
+	HFONT oldFont;
 public:
 	TravelScene();
 	~TravelScene();

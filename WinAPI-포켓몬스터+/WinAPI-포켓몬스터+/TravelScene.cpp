@@ -82,7 +82,7 @@ HRESULT TravelScene::Init()
 
 		PokemonMove(pokemon[i], 3, 2.5f, pattern[i], true);
 	}
-	distance = 21000;
+	distance = 10000;
 	speed = 0;
 
 	exit = RectMake(WINSIZEX / 2 - 100, 0, 200, 30);
@@ -233,8 +233,21 @@ void TravelScene::Render()
 		bg->LoopRender(GetMemDC(), &RectMake(0, 0, WINSIZEX, WINSIZEY),
 			0, bgY);
 
+		SetBkMode(GetMemDC(), TRANSPARENT);
+		SetTextColor(GetMemDC(), RGB(255, 255, 255));
+
+		BeginCreateFont(GetMemDC(), &hFont, 50);
+		oldFont = (HFONT)SelectObject(GetMemDC(), hFont);
+
+		sprintf_s(str, "%dm", (int)distance);
+		TextOut(GetMemDC(), WINSIZEX/2 - 75, 200, str, strlen(str));
+
+		SelectObject(GetMemDC(), oldFont);
+		DeleteObject(hFont);
+
 		player.GetAni(0)->FrameRender(GetMemDC(), player.GetX(), player.GetY(),
 			(int)player.GetMoveFrame(), player.GetDirection());
+
 
 		//rattata.GetAni(rattata.GetSatus())->FrameRender(GetMemDC(),
 		//	rattata.GetX(), rattata.GetY(), (int)rattata.GetMoveFrame(), 0);
@@ -244,8 +257,7 @@ void TravelScene::Render()
 		//		rattata.GetAlpha());
 		//}
 
-		SetBkMode(GetMemDC(), TRANSPARENT);
-		SetTextColor(GetMemDC(), RGB(255, 255, 255));
+
 
 		for (int i = 0; i < POKEMON_COUNT; i++) {
 			if (pokemon[i].GetDied() == true) continue;
@@ -257,11 +269,14 @@ void TravelScene::Render()
 				pokemon[i].GetX() - 10, pokemon[i].GetY() - 10, str, strlen(str));
 		}
 
-		sprintf_s(str, "distance : %dm", (int)distance);
-		TextOut(GetMemDC(), WINSIZEX - 200, WINSIZEY - 100, str, strlen(str));
+		BeginCreateFont(GetMemDC(), &hFont, 25);
+		oldFont = (HFONT)SelectObject(GetMemDC(), hFont);
 
 		sprintf_s(str, "speed : %dkm/h", (int)speed + 1);
 		TextOut(GetMemDC(), WINSIZEX - 200, WINSIZEY - 50, str, strlen(str));
+
+		SelectObject(GetMemDC(), oldFont);
+		DeleteObject(hFont);
 
 		SetTextColor(GetMemDC(), RGB(0, 0, 0));
 	}
