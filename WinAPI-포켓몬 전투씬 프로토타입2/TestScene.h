@@ -33,6 +33,12 @@ private:
 	float hpWidth[6];
 	int hpStatus[6];
 
+	RECT enemyHpBar[POKEMON_COUNT];
+	float enemyHpWidth[POKEMON_COUNT];
+	int enemyHpStatus[POKEMON_COUNT];
+
+	int currentEnemy;
+
 	HFONT hFont;
 	HFONT oldFont;
 

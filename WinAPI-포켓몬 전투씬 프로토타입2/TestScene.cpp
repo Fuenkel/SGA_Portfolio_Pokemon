@@ -67,9 +67,11 @@ HRESULT TestScene::Init()
 		enemy[i].SetAni(STATUS_SPECIAL_ATTACK,
 			IMAGE->FindImage("Rattata_special_attack"));
 		enemy[i].SetAniMaxNum(STATUS_SPECIAL_ATTACK, 4);
-		
+
 		// test
-		enemy[i].SetName("部房");
+		sprintf_s(str, "部房_%d", i+1);
+
+		enemy[i].SetName(str);
 		enemy[i].SetLevel(5);
 		enemy[i].SetMaxHp(32);
 		enemy[i].SetHp(32);
@@ -87,6 +89,8 @@ HRESULT TestScene::Init()
 	pokemon.SetStatus(STATUS_IDLE);
 	pokemon.SetAttackStatus(STATUS_ATTACK);
 
+	currentEnemy = 0;
+
 	for (int i = 0; i < POKEMON_COUNT; i++) {
 		enemy[i].SetX(WINSIZEX / 2);
 		enemy[i].SetY(-100 * i);
@@ -95,6 +99,11 @@ HRESULT TestScene::Init()
 		enemy[i].SetDirection(DIRECTION_DOWN);
 		enemy[i].SetStatus(STATUS_IDLE);
 		enemy[i].SetAttackStatus(STATUS_ATTACK);
+
+		enemyHpBar[i] = RectMake(enemy[i].GetX(), enemy[i].GetY() - 4,
+			enemy[i].GetWidth(), 4);
+		enemyHpWidth[i] = enemyHpBar[i].right - enemyHpBar[i].left;
+		enemyHpStatus[i] = 0;
 	}
 
 	// ui hpBar
@@ -427,7 +436,7 @@ void TestScene::Update()
 						if (enemy[i].GetMoveFrame() >= 1) {
 							//enemy[i].SetStatus(STATUS_IDLE);
 							//enemy[i].SetMoveFrame(0);
-							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
+ 							PokemonIdle(enemy[i], enemy[i].GetAniMaxNum(STATUS_IDLE));
 						}
 						break;
 					case DIRECTION_UP:
@@ -477,14 +486,14 @@ void TestScene::Update()
 			if (enemy[i].GetDied() == false) {
 				RECT temp2 = pokemon.GetMeleeAttack().rc;
 				if (IntersectRect(&temp, &enemy[i].GetRect(), &temp2)) {
+					currentEnemy = i;
 
-					if (pokemon.GetMeleeAttack().isAttack) {
+					if (enemy[i].GetStatus() != STATUS_HURT) {
      						enemy[i].AddHp(-GAME->GetPokemon(GAME->GetSelectNum()).GetAtk());
 						if (enemy[i].GetHp() <= 0) {
 							enemy[i].SetHp(0);
 						}
 					}
-					pokemon.MeleeAttack(false);
 
 					enemy[i].SetStatus(STATUS_HURT);
 					if (enemy[i].GetMeleeAttack().isAttack == true)
@@ -635,6 +644,8 @@ void TestScene::Update()
 			RECT bulletTemp = pokemon.GetBullet(i)->rc;
 			RECT temp2 = enemy[j].GetRect();
 			if (IntersectRect(&temp, &temp2, &bulletTemp)) {
+				currentEnemy = j;
+
 				enemy[i].AddHp(-pokemon.GetSpAtk());
 				if (enemy[i].GetHp() <= 0) {
 					enemy[i].SetHp(0);
@@ -751,6 +762,25 @@ void TestScene::Render()
 		enemy[i].GetAni(enemy[i].GetStatus())->FrameRender(GetMemDC(),
 			enemy[i].GetX(), enemy[i].GetY(), (int)enemy[i].GetMoveFrame(), 0,
 			enemy[i].GetAlpha());
+
+		switch (enemyHpStatus[i]) {
+		case 0:
+			BeginSolidColor(GetMemDC(), &hBrush, fullHp);
+			break;
+		case 1:
+			BeginSolidColor(GetMemDC(), &hBrush, halfHp);
+			break;
+		case 2:
+			BeginSolidColor(GetMemDC(), &hBrush, littleHp);
+			break;
+		}
+		hOldBrush = (HBRUSH)SelectObject(GetMemDC(), hBrush);
+
+		RectangleMake(GetMemDC(), enemyHpBar[i]);
+
+		SelectObject(GetMemDC(), hOldBrush);
+		DeleteObject(hBrush);
+
 	}
 
 	//charmander[enemy.GetStatus()]->FrameRender(GetMemDC(),
@@ -1365,9 +1395,36 @@ void TestScene::ChangeHpBar()
 				hpStatus[i] = 0;
 			break;
 		case 5:
+			hpBar[i].right = hpBar[i].left + hpWidth[i]
+				* enemy[currentEnemy].GetHp() / enemy[currentEnemy].GetMaxHp();
 
+			if ((float)enemy[currentEnemy].GetHp() / enemy[currentEnemy].GetMaxHp()
+				<= 0.1f)
+				hpStatus[i] = 2;
+			else if ((float)enemy[currentEnemy].GetHp() / enemy[currentEnemy].GetMaxHp()
+				<= 0.5f)
+				hpStatus[i] = 1;
+			else
+				hpStatus[i] = 0;
 			break;
 		}
+	}
+
+	for (int i = 0; i < POKEMON_COUNT; i++) {
+		enemyHpBar[i] = RectMake(enemy[i].GetX(), enemy[i].GetY() - 5,
+			enemy[i].GetWidth(), 5);
+
+		enemyHpBar[i].right = enemyHpBar[i].left + enemyHpWidth[i]
+			* enemy[i].GetHp() / enemy[i].GetMaxHp();
+
+		if ((float)enemy[i].GetHp() / enemy[i].GetMaxHp()
+			<= 0.1f)
+			enemyHpStatus[i] = 2;
+		else if ((float)enemy[i].GetHp() / enemy[i].GetMaxHp()
+			<= 0.5f)
+			enemyHpStatus[i] = 1;
+		else
+			enemyHpStatus[i] = 0;
 	}
 }
 
@@ -1459,13 +1516,13 @@ void TestScene::DrawUI()
 
 	// enemy
 	ui[1]->AlphaRender(GetMemDC(), WINSIZEX - 200, WINSIZEY - 100, alpha);
-	enemy[0].GetPortrait()->AlphaRender(
+	enemy[currentEnemy].GetPortrait()->AlphaRender(
 		GetMemDC(), WINSIZEX - 130, WINSIZEY - 175, alpha);
 
-	sprintf_s(str, "%s", enemy[0].GetName().c_str());
+	sprintf_s(str, "%s", enemy[currentEnemy].GetName().c_str());
 	TextOut(GetMemDC(), WINSIZEX - 200 + 100, 696, str, strlen(str));
 
-	sprintf_s(str, "%d", enemy[0].GetLevel());
+	sprintf_s(str, "%d", enemy[currentEnemy].GetLevel());
 	TextOut(GetMemDC(), WINSIZEX - 200 + 135, 715, str, strlen(str));
 
 	SetTextColor(GetMemDC(), RGB(0, 0, 0));
@@ -1532,8 +1589,8 @@ void TestScene::DrawUI()
 	TextOut(GetMemDC(), 155, WINSIZEY - 175 + 155, str, strlen(str));
 
 	// enemy
-	sprintf_s(str, "%d", enemy[0].GetHp());
+	sprintf_s(str, "%d", enemy[currentEnemy].GetHp());
 	TextOut(GetMemDC(), WINSIZEX - 200 + 112, WINSIZEY - 175 + 155, str, strlen(str));
-	sprintf_s(str, "%d", enemy[0].GetMaxHp());
+	sprintf_s(str, "%d", enemy[currentEnemy].GetMaxHp());
 	TextOut(GetMemDC(), WINSIZEX - 200 + 155, WINSIZEY - 175 + 155, str, strlen(str));
 }
