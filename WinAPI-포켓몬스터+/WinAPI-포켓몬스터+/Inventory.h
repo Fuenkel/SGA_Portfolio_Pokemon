@@ -18,6 +18,7 @@ public:
 	void ItemSetup();
 	void AddItem(tagItemInfo item);
 	tagItemInfo SellItem(int num, int& gold);
+	void UseItem(int num);
 
 	void DeleteItem(int num);
 	tagItemInfo GetItem(int num) { return m_vItem[num]; }

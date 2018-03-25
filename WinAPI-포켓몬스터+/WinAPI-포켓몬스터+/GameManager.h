@@ -83,7 +83,13 @@ public:
 		if (this->pokemonList.size() == num)
 			num = 0;
 		if (pokemonList[num].GetDied())
-			NextSelectNum();
+		{
+			while (pokemonList[num].GetDied()) {
+				num++;
+				if (this->pokemonList.size() == num)
+					num = 0;
+			}
+		}
 		SetSelectNum(num);
 		return num;
 	}

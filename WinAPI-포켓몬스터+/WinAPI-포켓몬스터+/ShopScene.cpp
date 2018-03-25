@@ -85,7 +85,7 @@ void ShopScene::Update()
 
 	if (INPUT->GetKeyDown(VK_SPACE) &&
 		IntersectRect(&temp, &shopperBox,
-			&RectMake(playerInfo.GetX(), playerInfo.GetY(), 
+			&RectMake(playerInfo.GetX(), playerInfo.GetY(),
 				playerInfo.GetWidth(), playerInfo.GetHeight()))) {
 		playerInfo.SetX(480);
 		playerInfo.SetY(255);
@@ -108,13 +108,32 @@ void ShopScene::Update()
 			// 아이템 해제 시작
 			if (PtInRect(&GAME->GetStatusBox(), g_ptMouse)) {
 				isDrag = true;
-				GAME->GetCurrentItem() = 
+				GAME->GetCurrentItem() =
 					GAME->GetPokemon(GAME->GetPokemonIndex()).GetEquipItem();
 			}
 
-			// 아이템 장착 시작
+			// 아이템 클릭 시
 			for (int i = 0; i < ITEMCOUNT; i++) {
 				if (PtInRect(&GAME->GetInvenInfo(i).invenBox, g_ptMouse)) {
+					// 회복약 사용
+					if (GAME->GetInvenInfo(i).item.itemKind == ITEM_POTION) {
+						if (
+							GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp()
+							!= GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp()) {
+							GAME->GetInventory().UseItem(i);
+							GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
+								GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp() +
+								GAME->GetInvenInfo(i).item.attribute
+							);
+							if (GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp()
+									> GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp()) {
+								GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
+									GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp());
+							}
+						}
+					}
+
+					// 아이템 장착
 					if (GAME->GetInvenInfo(i).item.itemKind >= BOOSTER_CRITICALCUTTER) {
 						isDrag = true;
 						GAME->GetCurrentItem() = GAME->GetInvenInfo(i).item;
@@ -190,12 +209,12 @@ void ShopScene::Update()
 	//}
 
 	// 아이템 판매
-	if (INPUT->GetKeyDown(VK_RBUTTON) 
+	if (INPUT->GetKeyDown(VK_RBUTTON)
 		&& GAME->GetShowInven() == true && showShop == true) {
 		for (int i = 0; i < ITEMCOUNT; i++) {
 			if (PtInRect(&GAME->GetInvenInfo(i).invenBox, g_ptMouse)) {
 				if (GAME->GetInvenInfo(i).item.itemKind == ITEM_EMPTY) continue;
-				shop.AddItem(GAME->GetInventory().SellItem(i, 
+				shop.AddItem(GAME->GetInventory().SellItem(i,
 					GAME->GetInventory().GetGold()));
 				UpdateItem();
 			}
@@ -255,39 +274,39 @@ void ShopScene::Render()
 
 			SetTextColor(GetMemDC(), RGB(0, 0, 0));
 			sprintf_s(str, "%d / %d",
-				GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp(), 
+				GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp(),
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp());
 			TextOut(GetMemDC(), 430, 165, str, strlen(str));
 
-			sprintf_s(str, "%d", 
+			sprintf_s(str, "%d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetAtk());
 			TextOut(GetMemDC(), 495, 225, str, strlen(str));
 
-			sprintf_s(str, "%d", 
+			sprintf_s(str, "%d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetDef());
 			TextOut(GetMemDC(), 495, 265, str, strlen(str));
 
-			sprintf_s(str, "%d", 
+			sprintf_s(str, "%d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpAtk());
 			TextOut(GetMemDC(), 495, 305, str, strlen(str));
 
-			sprintf_s(str, "%d", 
+			sprintf_s(str, "%d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpDef());
 			TextOut(GetMemDC(), 495, 345, str, strlen(str));
 
-			sprintf_s(str, "%d", 
+			sprintf_s(str, "%d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetSpeed());
 			TextOut(GetMemDC(), 495, 385, str, strlen(str));
 
-			sprintf_s(str, "%8d", 
+			sprintf_s(str, "%8d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetExp());
 			TextOut(GetMemDC(), 430, 425, str, strlen(str));
 
-			sprintf_s(str, "%8d", 
+			sprintf_s(str, "%8d",
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxExp());
 			TextOut(GetMemDC(), 430, 465, str, strlen(str));
 
-			tagItemInfo tempItem = 
+			tagItemInfo tempItem =
 				GAME->GetPokemon(GAME->GetPokemonIndex()).GetEquipItem();
 
 			SetTextColor(GetMemDC(), RGB(255, 0, 0));
@@ -403,11 +422,11 @@ void ShopScene::Render()
 				switch (GAME->GetInvenInfo(i).item.itemKind)
 				{
 				case ITEM_MONSTERBALL:
-					ball->FrameRender(GetMemDC(), 
+					ball->FrameRender(GetMemDC(),
 						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y);
 					break;
 				case ITEM_POTION:
-					potion->FrameRender(GetMemDC(), 
+					potion->FrameRender(GetMemDC(),
 						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y);
 					break;
 				case ITEM_ANTIDOTE:
@@ -416,7 +435,7 @@ void ShopScene::Render()
 				case ITEM_ICEHEAL:
 				case ITEM_AWAKENING:
 				case ITEM_FULLHEAL:
-					potion2->FrameRender(GetMemDC(), 
+					potion2->FrameRender(GetMemDC(),
 						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y,
 						GAME->GetInvenInfo(i).item.itemKind - 3, 0);
 					break;
@@ -427,22 +446,22 @@ void ShopScene::Render()
 				case BOOSTER_SPECIALGUARD:
 				case BOOSTER_CRITICALCUTTER:
 				case BOOSTER_EFFECTGUARD:
-					booster->FrameRender(GetMemDC(), 
+					booster->FrameRender(GetMemDC(),
 						GAME->GetInvenInfo(i).x, GAME->GetInvenInfo(i).y,
 						GAME->GetInvenInfo(i).item.itemKind - 9, 0);
 					break;
 				}
-				TextOut(GetMemDC(), 
+				TextOut(GetMemDC(),
 					GAME->GetInvenInfo(i).x + 50, GAME->GetInvenInfo(i).y + 10,
-					GAME->GetInvenInfo(i).item.name.c_str(), 
+					GAME->GetInvenInfo(i).item.name.c_str(),
 					strlen(GAME->GetInvenInfo(i).item.name.c_str()));
 				sprintf_s(str, "%d원", GAME->GetInvenInfo(i).item.price);
-				TextOut(GetMemDC(), 
+				TextOut(GetMemDC(),
 					GAME->GetInvenInfo(i).x + 200, GAME->GetInvenInfo(i).y + 10,
 					str, strlen(str));
 				if (GAME->GetInvenInfo(i).item.count != 0)
 					sprintf_s(str, "%d개", GAME->GetInvenInfo(i).item.count);
-				TextOut(GetMemDC(), 
+				TextOut(GetMemDC(),
 					GAME->GetInvenInfo(i).x + 275, GAME->GetInvenInfo(i).y + 10,
 					str, strlen(str));
 			}

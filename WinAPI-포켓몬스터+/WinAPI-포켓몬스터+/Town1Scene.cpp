@@ -82,9 +82,30 @@ void Town1Scene::Update()
 					GAME->GetPokemon(GAME->GetPokemonIndex()).GetEquipItem();
 			}
 
-			// 아이템 장착 시작
+			// 아이템 장착 시작 및 아이템 사용
 			for (int i = 0; i < ITEMCOUNT; i++) {
+
+				// 아이템 클릭 시
 				if (PtInRect(&GAME->GetInvenInfo(i).invenBox, g_ptMouse)) {
+					// 회복약 사용
+					if (GAME->GetInvenInfo(i).item.itemKind == ITEM_POTION) {
+						if (
+							GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp()
+							!= GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp()) {
+							GAME->GetInventory().UseItem(i);
+							GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
+								GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp() +
+								GAME->GetInvenInfo(i).item.attribute
+							);
+							if (GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp()
+			> GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp()) {
+								GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
+									GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp());
+							}
+						}
+					}
+
+					// 아이템 장착
 					if (GAME->GetInvenInfo(i).item.itemKind >= BOOSTER_CRITICALCUTTER) {
 						isDrag = true;
 						GAME->GetCurrentItem() = GAME->GetInvenInfo(i).item;

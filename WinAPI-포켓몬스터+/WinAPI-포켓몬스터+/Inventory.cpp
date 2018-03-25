@@ -23,6 +23,15 @@ void Inventory::ItemSetup()
 
 	m_vItem.push_back(item);
 
+	item.itemKind = ITEM_POTION;
+	item.name = "상처약";
+	item.price = 300;
+	item.attribute = 20;
+	item.description = "HP를 20 회복 시킨다.";
+	item.count = 5;
+
+	m_vItem.push_back(item);
+
 	item.itemKind = BOOSTER_PLUSPOWER;
 	item.name = "플러스파워";
 	item.price = 500;
@@ -59,14 +68,14 @@ void Inventory::ItemSetup()
 
 	m_vItem.push_back(item);
 
-	item.itemKind = BOOSTER_SPEEDUP;
-	item.name = "스피드업";
-	item.price = 350;
-	item.attribute = 5;
-	item.description = "포켓몬의 스피드가 5 올라간다.";
-	item.count = 1;
+	//item.itemKind = BOOSTER_SPEEDUP;
+	//item.name = "스피드업";
+	//item.price = 350;
+	//item.attribute = 5;
+	//item.description = "포켓몬의 스피드가 5 올라간다.";
+	//item.count = 1;
 
-	m_vItem.push_back(item);
+	//m_vItem.push_back(item);
 
 	// 이미지 없어서 안쓰기로
 	//item.itemKind = BOOSTER_ACCURACY;
@@ -78,23 +87,23 @@ void Inventory::ItemSetup()
 
 	//m_vItem.push_back(item);
 
-	item.itemKind = BOOSTER_CRITICALCUTTER;
-	item.name = "크리티컬커터";
-	item.price = 350;
-	item.attribute = 5;
-	item.description = "포켓몬의 크리컬확률이 5 올라간다.";
-	item.count = 1;
+	//item.itemKind = BOOSTER_CRITICALCUTTER;
+	//item.name = "크리티컬커터";
+	//item.price = 350;
+	//item.attribute = 5;
+	//item.description = "포켓몬의 크리컬확률이 5 올라간다.";
+	//item.count = 1;
 
-	m_vItem.push_back(item);
+	//m_vItem.push_back(item);
 
-	item.itemKind = BOOSTER_EFFECTGUARD;
-	item.name = "이펙트가드";
-	item.price = 700;
-	item.attribute = 1;
-	item.description = "포켓몬의 능력치가 내려가지 않는다.";
-	item.count = 1;
+	//item.itemKind = BOOSTER_EFFECTGUARD;
+	//item.name = "이펙트가드";
+	//item.price = 700;
+	//item.attribute = 1;
+	//item.description = "포켓몬의 능력치가 내려가지 않는다.";
+	//item.count = 1;
 
-	m_vItem.push_back(item);
+	//m_vItem.push_back(item);
 
 	//this->m_equipItem.itemKind = ITEM_EMPTY;
 }
@@ -137,6 +146,18 @@ tagItemInfo Inventory::SellItem(int num, int & gold)
 	gold += sellPrice;
 
 	return sellItem;
+}
+
+void Inventory::UseItem(int num)
+{
+	tagItemInfo useItem;
+	m_viItem = m_vItem.begin() + num;
+	useItem = *m_viItem;
+
+	if (m_viItem->count > 1)
+		m_viItem->count--;
+	else
+		m_vItem.erase(m_viItem);
 }
 
 void Inventory::DeleteItem(int num)
