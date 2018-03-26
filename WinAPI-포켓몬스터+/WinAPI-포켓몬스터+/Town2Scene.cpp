@@ -104,13 +104,16 @@ void Town2Scene::Update()
 							GAME->GetInventory().UseItem(i);
 							GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
 								GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp() +
-								GAME->GetInvenInfo(i).item.attribute
-							);
+								GAME->GetInvenInfo(i).item.attribute);
+
+							UpdateItem();
+
 							if (GAME->GetPokemon(GAME->GetPokemonIndex()).GetHp()
 			> GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp()) {
 								GAME->GetPokemon(GAME->GetPokemonIndex()).SetHp(
 									GAME->GetPokemon(GAME->GetPokemonIndex()).GetMaxHp());
 							}
+
 						}
 					}
 

@@ -68,7 +68,7 @@ void GameManager::PokemonInit()
 	temp.SetName("ÆÄÀÌ¸®");
 	temp.SetLevel(5);
 	temp.SetMaxHp(39);
-	temp.SetHp(39);
+	temp.SetHp(1);
 	temp.SetAtk(52);
 	temp.SetDef(43);
 	temp.SetSpAtk(60);

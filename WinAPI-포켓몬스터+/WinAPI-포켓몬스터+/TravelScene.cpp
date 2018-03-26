@@ -100,10 +100,6 @@ void TravelScene::Release()
 
 void TravelScene::Update()
 {
-	if (GAME->GetIsOver()) {
-		GAME->SetIsOver(false);
-		Init();
-	}
 
 	if (isChangeScene) {
 		SCENE->ChangeScene("Battle");
@@ -231,6 +227,11 @@ void TravelScene::Update()
 
 void TravelScene::Render()
 {
+	if (GAME->GetIsOver()) {
+		GAME->SetIsOver(false);
+		Init();
+	}
+
 	//=================================================
 	{
 		//bg->Render(GetMemDC());

@@ -6,7 +6,7 @@
 #include "Pokemon.h"
 
 #define SPEED 2.5f
-#define POKEMON_COUNT 10
+#define POKEMON_COUNT 3
 
 class BattleScene : public GameNode
 {

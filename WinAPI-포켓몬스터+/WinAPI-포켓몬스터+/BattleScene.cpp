@@ -327,6 +327,7 @@ void BattleScene::Update()
 							}
 
 							GAME->SetIsStartBattle(false);
+							GAME->SetIsOver(true);
 
 							if (GAME->GetBeforeTown() == 1)
 								SCENE->ChangeScene("Town1");
@@ -427,6 +428,7 @@ void BattleScene::Update()
 								}
 
 								GAME->SetIsStartBattle(false);
+								GAME->SetIsOver(true);
 
 								if (GAME->GetBeforeTown() == 1)
 									SCENE->ChangeScene("Town1");
@@ -778,14 +780,14 @@ void BattleScene::Update()
 				currentEnemy = j;
 
 				//enemy[i].AddHp(-pokemon.GetSpAtk());
-				enemy[i].AddHp(
+     				enemy[j].AddHp(
 						CalculateAttack(
 							GAME->GetPokemon(GAME->GetSelectNum()),
 							enemy[i],
 							STATUS_SPECIAL_ATTACK));
 
-				if (enemy[i].GetHp() <= 0) {
-					enemy[i].SetHp(0);
+				if (enemy[j].GetHp() <= 0) {
+					enemy[j].SetHp(0);
 				}
 
 				pokemon.GetBullet(i)->isFire = false;
